@@ -1,7 +1,8 @@
 import unittest
 import re
-from logger import logHandler 
-from logger.common import Constants
+import os
+from logger.logHandler import LogHandler 
+from logger.common.Constants import Constants
 
 class TestLogHandler(unittest.TestCase):
 
@@ -26,7 +27,7 @@ class TestLogHandler(unittest.TestCase):
   def test_appendLog(self):
     self.logHandler.appendLog(TestLogHandler.MSG)
     fileHandler = open(Constants.LOGDIR + "/" + TestLogHandler.SERVICE + "/" + TestLogHandler.FILENAME)
-    AssertNotEqual(re.search(TestLogHandler.MSG, fileHandler), None)
+    self.assertNotEqual(re.search(TestLogHandler.MSG, fileHandler.read()), None)
 
 if __name__ == '__main__':
   unittest.main()

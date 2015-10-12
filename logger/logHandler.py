@@ -1,18 +1,14 @@
-
+import logging
+import os
 from common.Constants import Constants
-#from common.monitorLog import monitorLog
+from common.monitorLog import monitorLog
+from common.handler import Handler
 
 # open file in init and close in destructor. Address Write Concurrency on log file. 
 class LogHandler:
 
   def __init__ (self, service): 
-    self.directory = "/" + Constants.LOGDIR + "/" + service
-    self.filepath = self.directory + "/" + Constants.FILENAME
-    if not os.path.exists(self.directory):
-      try:
-        os.makedirs(self.directory)
-      except:
-        monitorLog.logError("Cannot create directory " + self.directory)
+    self.logger = Handler(service).getLogHandler()
     self.service = service
     self.setHost()
     self.setZone()
@@ -21,11 +17,12 @@ class LogHandler:
     
   def appendLog (self, msg):
     try:
-      fileHandler = open(self.filepath, "a")
-      fileHandler.write(self.commonLog+msg)
-      fileHandler.close()
-      except IOError:
-        monitorLog.logError("Cannot write to file " + self.filepath) 
+      #fileHandler = open(self.filepath, "a")
+      #fileHandler.write(self.commonLog+msg)
+      #fileHandler.close()
+      self.logger.info(self.commonLog+msg)
+    except IOError:
+      monitorLog.logError("Cannot write to file " + self.filepath) 
   
   '''
     Set host from metadata.
@@ -42,7 +39,7 @@ class LogHandler:
   '''    
   def setZone(self):
     try:
-      self.host = "demo_zone"
+      self.zone = "demo_zone"
     except:
       pass
 
@@ -52,7 +49,7 @@ class LogHandler:
   '''
   def setRegion(self):
     try:
-      self.host = "demo_region"
+      self.region = "demo_region"
     except:
       pass
 

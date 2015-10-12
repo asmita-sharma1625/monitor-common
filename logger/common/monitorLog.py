@@ -1,11 +1,10 @@
 # Initialize logger to log monitor events
 
-import logging
-import Constants
+from logger.common.handler import Handler
 
 class monitorLog:
-  logger = logging.getLogger('monitor_app')
-  fileHandle = logging.FileHandler(Constants.LOGDIR+"/monitor/"+Constants.FILENAME)
+  
+  logger = Handler("monitor").getLogHandler()
 
   def logInfo(self, msg):
     logger.info(msg)

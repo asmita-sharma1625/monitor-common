@@ -3,19 +3,19 @@
 '''
 class Constants:
 
-	LOGDIR = "/var/logs/compute/"
-	FILENAME = "metric.log"
-	RUNTIME = "Runtime"
-	FAILCOUNT = "Failure Count"
-	# Use constants for metric type 
-	METRIC_TYPE = "Metric Type"
-	METRIC_NAME = "Name"
-	REGION = "Region"
-	ZONE = "Zone"
-	HOST = "Host"
-	SERVICE = "Service"
-	SEPARATOR = " : "
-	DELIMITER = "\n"
+  LOGDIR = "/home/asmi/compute/"
+  FILENAME = "metric.log"
+  RUNTIME = "Runtime"
+  FAILCOUNT = "Failure Count"
+# Use constants for metric type 
+  METRIC_TYPE = "Metric Type"
+  METRIC_NAME = "Name"
+  REGION = "Region"
+  ZONE = "Zone"
+  HOST = "Host"
+  SERVICE = "Service"
+  SEPARATOR = " : "
+  DELIMITER = "\n"
 
   @staticmethod
   def toStringCommon (region, zone, host, service):
@@ -28,5 +28,5 @@ class Constants:
   @staticmethod
   def toStringCount (name, mType, count):
     return Constants.METRIC_NAME + Constants.SEPARATOR + name + Constants.DELIMITER + Constants.METRIC_TYPE + Constants.SEPARATOR + mType + Constants.DELIMITER + Constants.FAILCOUNT + Constants.SEPARATOR + `count` + Constants.DELIMITER
-	
+
 
