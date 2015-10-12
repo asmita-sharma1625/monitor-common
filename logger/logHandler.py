@@ -7,12 +7,12 @@ class LogHandler:
 
   def __init__ (self, service): 
     self.directory = "/" + Constants.LOGDIR + "/" + service
-    self.filepath = directory + "/" + Constants.FILENAME
-    if not os.path.exists(directory):
+    self.filepath = self.directory + "/" + Constants.FILENAME
+    if not os.path.exists(self.directory):
       try:
-        os.makedirs(directory)
+        os.makedirs(self.directory)
       except:
-        #monitorLog.error()
+        monitorLog.logError("Cannot create directory " + self.directory)
     self.service = service
     self.setHost()
     self.setZone()
@@ -25,7 +25,7 @@ class LogHandler:
       fileHandler.write(self.commonLog+msg)
       fileHandler.close()
       except IOError:
-        pass
+        monitorLog.logError("Cannot write to file " + self.filepath) 
   
   '''
     Set host from metadata.
