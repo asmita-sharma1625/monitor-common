@@ -26,7 +26,7 @@ class TestLogHandler(unittest.TestCase):
 
   def test_appendLog(self):
     self.logHandler.appendLog(TestLogHandler.MSG)
-    fileHandler = open(Constants.LOGDIR + "/" + TestLogHandler.SERVICE + "/" + TestLogHandler.FILENAME)
+    fileHandler = open(Constants.LOGDIR + "/" + TestLogHandler.SERVICE + "/" + TestLogHandler.FILENAME, 'r')
     self.assertNotEqual(re.search(TestLogHandler.MSG, fileHandler.read()), None)
 
 if __name__ == '__main__':
