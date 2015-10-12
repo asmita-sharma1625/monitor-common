@@ -1,0 +1,8 @@
+
+### add test case for monitor logs
+### add synchronization
+### check file truncation
+### add timestamp to each log
+### add test case for logging synchronization by creating multiple threads.
+### take directory logging level etc from Config file.
+### configure host region zone from node itself

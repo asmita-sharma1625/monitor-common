@@ -12,7 +12,8 @@ class Handler:
     if not os.path.exists(self.filepath):
       open(self.filepath, 'a').close() 
     self.logger = logging.getLogger(service)
-    #self.logger.addHandler(logging.FileHandler(self.filepath))
+    self.logger.setLevel(logging.INFO)
+    self.logger.addHandler(logging.FileHandler(self.filepath))
 
   def getLogHandler(self):
     return self.logger
