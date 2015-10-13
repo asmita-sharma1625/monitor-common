@@ -87,6 +87,10 @@ class RotatorTest(unittest.TestCase):
     matcher = re.compile(r"_metric\.log\.[0-9]+$")
     #print "List 1 " + str([files for (dirp,dirname,filename) in os.walk(dirpath) for files in filename if matcher.search(files) and os.stat(os.path.join(dirp,files)).st_size==prevsize])
     #print "List 2 " + str([files for (dirp,dirname, filename) in os.walk(dirpath) for files in filename if files.endswith(rotator.Rotator.fileextension) and os.stat(os.path.join(dirp,files)).st_size==0])
-    return len([files for (dirp,dirname,filename) in os.walk(dirpath) for files in filename if matcher.search(files) and os.stat(os.path.join(dirp,files)).st_size==prevsize]) == rotatedcount and len([files for (dirp,dirname, filename) in os.walk(dirpath) for files in filename if files.endswith(rotator.Rotator.fileextension) and os.stat(os.path.join(dirp,files)).st_size==0])==prevcount
+    return len([files for (dirp,dirname,filename) in os.walk(dirpath) \
+                  for files in filename if matcher.search(files) and os.stat(os.path.join(dirp,files)).st_size==prevsize]) == rotatedcount \
+                and \
+          len([files for (dirp,dirname, filename) in os.walk(dirpath) \
+                  for files in filename if files.endswith(rotator.Rotator.fileextension) and os.stat(os.path.join(dirp,files)).st_size==0])==prevcount
 
 

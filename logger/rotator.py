@@ -24,7 +24,9 @@ class Rotator:
 
   def __file_lists(self):
       #Below is the list comprehension to iterate on the files inside the directory. It will give the list of nested directory also matching the file extension
-      return [os.path.join(dirpath, files) for (dirpath, dirname, filename) in os.walk(self.path) for files in filename if files.endswith(Rotator.fileextension)]
+      return [os.path.join(dirpath, files) \
+                for (dirpath, dirname, filename) in os.walk(self.path) \
+                for files in filename if files.endswith(Rotator.fileextension)]
 
   def __create_blankfile(self, filename):
     open(filename, "a").close()
