@@ -13,7 +13,7 @@ class LogHandler:
     self.setHost()
     self.setZone()
     self.setRegion()
-    self.commonLog = Constants.toStringCommon(self.region, self.zone, self.host, self.service)  
+    self.commonLog = Constants.setCommonString(self.region, self.zone, self.host, self.service)  
     
   def appendLog (self, msg):
     try:

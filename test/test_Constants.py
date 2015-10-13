@@ -1,4 +1,5 @@
 import unittest
+import re
 from logger.common.Constants import Constants 
 
 class TestConstants(unittest.TestCase):
@@ -12,7 +13,7 @@ class TestConstants(unittest.TestCase):
 
   def test_toString (self):
     string = "Name : " + self.NAME + "\n" + "Metric Type : " + self.TYPE + "\n" + "Runtime : " + `self.TIME` + "\n"
-    self.assertEqual(Constants.toStringRuntime(self.NAME, self.TYPE, self.TIME) , string)
+    self.assertNotEqual(re.match(string, Constants.toStringRuntime(self.NAME, self.TYPE, self.TIME)), None)
 
 if __name__ == '__main__':
   unittest.main()
