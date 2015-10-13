@@ -1,6 +1,7 @@
 import unittest
 
 class TestLogger(unittest.TestCase):
+   
 
   def test_sample(self):
     self.assertEqual(2+3,5)
