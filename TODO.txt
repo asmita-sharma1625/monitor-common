@@ -1,10 +1,27 @@
-### move all calls to Constants from logger to logHandler by creating appendRuntimeLog() appendCountLog() methods and modifying Constants method to append common string and timestamp to logs. 
-### add docs and comments to code.
-### add to wiki and github read me.
-### add Validation checks for method arguments.
-### add test case for monitor logs
-### add timestamp to each log
-### add test case for logging synchronization by creating multiple threads.
-### take directory logging level etc from Config file.
-### configure host region zone from node itself
-### add annotation functionality (publish.py)
+#### code zeroMQ logbook properly
+
+#### write a script to automatically run subscribers for all applications.
+
+#### take directory, logging level, zero mq socket etc from Config file using python ConfigParser to write to and read from config files..
+
+#### add annotation functionality (publish.py)
+
+#### run logger on devstack
+
+DONE - move all calls to Constants from logger to logHandler by creating appendRuntimeLog() appendCountLog() methods and modifying Constants method to append common string and timestamp to logs. 
+
+#### add docs and comments to code.
+
+#### add to wiki and github read me.
+
+#### add Validation checks for method arguments.
+
+#### add test case for monitor logs
+
+DONE - add timestamp to each log
+
+DONE - add test case for logging synchronization by creating multiple threads.
+
+#### configure host region zone from node itself
+
+

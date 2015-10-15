@@ -1,10 +1,10 @@
-from logger import logger
+from logger import logger2
 import time
 
-logger = logger.Logger("demo_logger")
+logger = logger2.Logger("demo_logger")
 
 def generate_logs():
-  i = 10000000
+  i = 10000
   j = 2
   while i > 0:
     demo_log(j, j*2)

@@ -1,4 +1,6 @@
 from logbook.queues import ZeroMQHandler
 
-handler = ZeroMQHandler('tcp://127.0.0.1:6000')
+mySocket1 = 'tcp://127.0.0.1:6000'
+mySocket2 = 'tcp://127.0.0.1:5000'
+handler = ZeroMQHandler(mySocket2)
 
