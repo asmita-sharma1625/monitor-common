@@ -1,6 +1,8 @@
 import os
 import logging
 from logger.common.Constants import Constants
+from logger.rotHandler import Rotator
+from logbook.compat import RedirectLoggingHandler
 
 class Handler:
   
@@ -13,7 +15,10 @@ class Handler:
       open(self.filepath, 'a').close() 
     self.logger = logging.getLogger(service)
     self.logger.setLevel(logging.INFO)
-    self.logger.addHandler(logging.FileHandler(self.filepath))
+    self.logger.addHandler(RedirectLoggingHandler())
+#    self.logger.addHandler(logging.FileHandler(self.filepath))
+    #self.rotHandler = Rotator(self.filepath, 'M', 1, 10)
+    #self.logger.addHandler(self.rotHandler)
 
   def getLogHandler(self):
     return self.logger

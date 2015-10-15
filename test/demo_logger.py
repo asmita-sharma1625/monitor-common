@@ -1,7 +1,7 @@
-from logger import Logger
+from logger import logger
 import time
 
-logger = Logger("demo_logger")
+logger = logger.Logger("demo_logger")
 
 def generate_logs():
   i = 10000000
@@ -11,7 +11,7 @@ def generate_logs():
     i = i - 1
 
 def demo_log(a, b):
-  logger.reportLatency("report latency", "demo-metric", demo_action, a, b)  
+  logger.reportLatency("report latency", "demo-metric", demo_action, a, b)
 
 def demo_action(a, b):
   time.sleep(5)

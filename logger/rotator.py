@@ -2,7 +2,7 @@
 
 import os
 import time
-import common
+from common.singleton import SingletonProcess
 import sys
 import shutil
 
@@ -11,7 +11,7 @@ class Rotator:
   def rotate_log_file(self):
       map (self.__rotate_file, self.__file_lists())
 
-  fileextension = "_metric.log"
+  fileextension = "metric.log"
   def __init__(self,path):
     self.path = path
     
@@ -34,19 +34,18 @@ class Rotator:
 '''
   This rotator.py can be directly called to run the rotator. In future, this code may be moved somewhere else.
 '''
-if __name__=='main':
-  
-  if len(sys.argv) < 2:
-    sys.stderr.write("Logfile path is not provided\n")
-    exit(-2)
-  
-  if len(sys.argv) > 2:
-    sys.stderr.write("Extra arguments will be ignored\n")
-  
-  singleton = common.Singleton("jio-rotator")
-  singleton.checkSingleton()
-  
-  #If it reaches here, it means there is only one process running
-  logrotator = Rotator(sys.argv[1])
-  logrotator.rotate_log_file()
- 
+#if __name__ == "main":
+if len(sys.argv) < 2:
+  sys.stderr.write("Logfile path is not provided\n")
+  exit(-2)
+
+if len(sys.argv) > 2:
+  sys.stderr.write("Extra arguments will be ignored\n")
+singleton = SingletonProcess("jio-rotator")
+singleton.checkSingleton()
+
+#If it reaches here, it means there is only one process running
+logrotator = Rotator(sys.argv[1])
+print sys.argv[1]
+logrotator.rotate_log_file()
+

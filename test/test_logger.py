@@ -1,5 +1,5 @@
 import unittest
-from logger import logger
+from logger import logger2
 
 class TestLogger(unittest.TestCase):
   
@@ -8,7 +8,7 @@ class TestLogger(unittest.TestCase):
   MTYPE = "debug"
 
   def setUp(self):
-    self.logger = logger.Logger(self.SERVICE)
+    self.logger = logger2.Logger(self.SERVICE)
 
   def dummy_func(self, a, b):
     return a / b  
