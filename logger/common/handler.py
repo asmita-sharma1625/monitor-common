@@ -1,9 +1,11 @@
 import os
 import logging
+from multiprocessing import Process
 from logger.common.Constants import Constants
 from logger.rotHandler import Rotator
 from logbook.compat import RedirectLoggingHandler
-
+from logger.common.zeroMQHandler import MyZeroMQHandler
+from logger.common.zeroMQSubscriber import MyZeroMQSubscriber
 class Handler:
   
   def __init__(self, service):
@@ -23,4 +25,13 @@ class Handler:
   def getLogHandler(self):
     return self.logger
 
+
+  def getQueueHandler(self):
+    return MyZeroMQHandler(Constants.SOCKET).getZeroMQHandler()
+
+  def startQueueSubscriber(self):
+    subscriber = MyZeroMQSubscriber(Constants.SOCKET)
+    p = Process(target=subscriber.startSubscriber, args =())
+    p.start()
+    p.join()
 

@@ -3,7 +3,6 @@
 import time
 import threading
 from logHandler import LogHandler
-from common.Constants import Constants
 
 class Logger:
 
@@ -25,8 +24,7 @@ class Logger:
   def logIfFail (self, name, metricType, expectedReturn, counter, action, *args, **kwargs):
     count = self.reportCountNE(expectedReturn, counter, action, *args, **kwargs)
     if count > 0:
-      logInfo = Constants.toStringCount(name, metricType, count)
-      self.logHandler.appendLog(logInfo)	
+      self.logHandler.appendCountLog(name, metricType, count)	
     return count
 
 
@@ -67,8 +65,7 @@ class Logger:
   def reportTime (self, name, metricType):
     endTime = time.time()
     runTime = endTime - self.threadLocal.startTime
-    logInfo = Constants.toStringRuntime(name, metricType, runTime)
-    self.logHandler.appendLog(logInfo)
+    self.logHandler.appendTimeLog(name, metricType, runTime)
 
   '''
     Logs the execution time of the given action and returns the value of action.
@@ -76,9 +73,12 @@ class Logger:
   def reportLatency (self, name, metricType, action, *args, **kwargs):
     self.startTime()
     try:
+      print "Inside reportLatency try block"
       actualReturn = action(*args, **kwargs)
+      print actualReturn
     except:
-       pass
+      print "Inside reportLatency except block"
+      #monitorLogs.logError("Error")
     self.reportTime(name, metricType)
     return actualReturn
 

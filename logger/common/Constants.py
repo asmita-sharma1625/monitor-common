@@ -1,12 +1,14 @@
 import time
+import configReader
 
 '''
 	Declares constants.
 '''
 class Constants:
 
-  LOGDIR = "/home/asmi/compute/"
-  FILENAME = "metric.log"
+  LOGDIR = configReader.getValue("Constants", "LogDir")
+  FILENAME = configReader.getValue("Constants", "Filename")
+  SOCKET = configReader.getValue("Constants", "Socket")
   RUNTIME = "Runtime"
   FAILCOUNT = "Failure Count"
 # Use constants for metric type 
@@ -19,6 +21,7 @@ class Constants:
   TIME = "Timestamp"
   SEPARATOR = " : "
   DELIMITER = "\n"
+  print FILENAME
 
   @staticmethod
   def toStringCommon (region, zone, host, service):

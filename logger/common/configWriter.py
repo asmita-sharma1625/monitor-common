@@ -21,8 +21,22 @@ value = sys.argv[4]
 config.add_section(section)
 config.set(section, key, value)
 
+# check if this config already exsits in file
+#try:
+#  configRead = ConfigParser.SafeConfigParser()
+#  configRead.read(filepath)
+#  configRead.get(section, key)
+#except:
+  # Writing our configuration file to input filename
+#  with open(filepath, 'a') as configfile:
+#    config.write(configfile)
+#    sys.exit(0)
+
+#configRead.remove_option(section, key)
 # Writing our configuration file to input filename
-with open(filepath, 'wb') as configfile:
-    config.write(configfile)
+with open(filepath, 'a') as configfile:
+  config.write(configfile)
+
+
 
 

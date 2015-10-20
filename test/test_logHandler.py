@@ -1,7 +1,7 @@
 import unittest
 import re
 import os
-from logger.logHandler2 import LogHandler
+from logger.logHandler import LogHandler
 from logger.common.Constants import Constants
 
 class TestLogHandler(unittest.TestCase):
