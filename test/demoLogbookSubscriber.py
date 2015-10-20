@@ -11,7 +11,7 @@ subscriber = ZeroMQSubscriber(mySocket)
 #  print "**** Log Record **** \n" , record.message
 #controller.stop()
 
-with TimedRotatingFileHandler('/home/asmi/compute/demo_publish/foo.log', date_format='%Y-%m-%d %H:%M'):
+with TimedRotatingFileHandler('/tmp/compute/demo_publish/foo.log', date_format='%Y-%m-%d %H:%M'):
   print subscriber.recv().message
   subscriber.dispatch_forever()
 

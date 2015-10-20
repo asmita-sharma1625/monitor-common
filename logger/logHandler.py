@@ -3,16 +3,17 @@ import os
 from common.Constants import Constants
 from common.monitorLog import monitorLog
 from common.handler import Handler
+from test import demoLogbookHandler
 
 class LogHandler:
 
   def __init__ (self, service):
     self.handler = Handler(service)
     self.logger = self.handler.getLogHandler()
-    # get queue handler for logging
-    self.queueHandler = self.handler.getQueueHandler()
     # start queue subscriber for logging 
     self.handler.startQueueSubscriber()
+    # get queue handler for logging
+    #self.queueHandler = self.handler.getQueueHandler()
     self.service = service
     self.setHost()
     self.setZone()
@@ -21,7 +22,7 @@ class LogHandler:
 
   def appendLog (self, msg):
     try:
-      with queueHandler:
+      with demoLogbookHandler.handler:
         self.logger.info(self.commonLog+msg)
     except:
       #monitorLog.logError("Cannot write to file " + self.filepath)

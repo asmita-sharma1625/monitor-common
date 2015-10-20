@@ -1,4 +1,4 @@
-from logger2 import Logger
+from logger import Logger
 
 logger = None
 

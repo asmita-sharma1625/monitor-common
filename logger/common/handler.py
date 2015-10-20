@@ -6,6 +6,7 @@ from logger.rotHandler import Rotator
 from logbook.compat import RedirectLoggingHandler
 from logger.common.zeroMQHandler import MyZeroMQHandler
 from logger.common.zeroMQSubscriber import MyZeroMQSubscriber
+
 class Handler:
   
   def __init__(self, service):
@@ -30,7 +31,7 @@ class Handler:
     return MyZeroMQHandler(Constants.SOCKET).getZeroMQHandler()
 
   def startQueueSubscriber(self):
-    subscriber = MyZeroMQSubscriber(Constants.SOCKET)
+    subscriber = MyZeroMQSubscriber()
     p = Process(target=subscriber.startSubscriber, args =())
     p.start()
     p.join()

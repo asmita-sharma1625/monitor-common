@@ -8,7 +8,7 @@ class TestLogger(unittest.TestCase):
   MTYPE = "debug"
 
   def setUp(self):
-    self.logger = logger2.Logger(self.SERVICE)
+    self.logger = logger.Logger(self.SERVICE)
 
   def dummy_func(self, a, b):
     return a / b  
