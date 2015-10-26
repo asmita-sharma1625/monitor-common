@@ -1,13 +1,17 @@
 import unittest
 from logger import logger
+from logger.common import configWriter
 
 class TestLogger(unittest.TestCase):
   
   SERVICE = "TestLogger"
   NAME = "dummy_metric"
   MTYPE = "debug"
+  socket = 6000
 
   def setUp(self):
+    TestLogger.socket = TestLogger.socket + 1
+    configWriter.CreateConfigFile("config.cfg", "Constants", "Socket", "tcp://127.0.0.1:"+`TestLogger.socket`)
     self.logger = logger.Logger(self.SERVICE, "config.cfg")
 
   def dummy_func(self, a, b):
