@@ -2,7 +2,7 @@ from logger import logger, publish
 import time
  
 #logger = logger.Logger("demo_logger")
-publish.setLogger("demo_publish")
+publish.setLogger("demo_publish", "config.cfg")
 
 def generate_logs():
   i = 10000

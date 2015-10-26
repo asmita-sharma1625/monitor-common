@@ -1,9 +1,16 @@
 import ConfigParser
 
-CONFIGFILE = "./monitor-common/config.cfg"
-config = ConfigParser.RawConfigParser()
-config.read(CONFIGFILE)
+class ConfigReader:  
+  
+  config = ConfigParser.RawConfigParser()
 
-def getValue(section, key):
-  return config.get(section, key) 
+  @staticmethod
+  def setConfig(configFile):
+    print "Config file is "+configFile
+    ConfigReader.config.read(configFile)
+    print "Config Read Done "+ConfigReader.getValue("Constants","LogDir")
+  
+  @staticmethod
+  def getValue(section, key):
+    return ConfigReader.config.get(section, key)
 

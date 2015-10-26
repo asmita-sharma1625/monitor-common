@@ -5,9 +5,11 @@ from logger.common.Constants import Constants
 class MyZeroMQSubscriber:
 
   def __init__(self):
-    self.subscriber = ZeroMQSubscriber(Constants.SOCKET)
+   # print "subscriber initiated"
+    self.subscriber = ZeroMQSubscriber(Constants.getSocket())
 
-  def startSubscriber(self):
-    with TimedRotatingFileHandler('/home/asmi/compute/subscriber1/foo.log', date_format='%Y-%m-%d %H:%M'):
+  def startSubscriber(self, filepath):
+   # print "subscriber started"
+    with TimedRotatingFileHandler(filepath, date_format='%Y-%m-%d %H:%M'):
       self.subscriber.dispatch_forever()
 

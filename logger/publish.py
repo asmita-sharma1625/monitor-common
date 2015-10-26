@@ -2,10 +2,11 @@ from logger import Logger
 
 logger = None
 
-def setLogger(service):
+def setLogger(service, configFile):
     global logger
-    logger  = Logger(service)
+    logger  = Logger(service, configFile)
 
+#TODO :  make changes for logIfFAil 
 def LogIfFail(name, metricType, expectedReturn, counter):
     def real_decorator(function):
         def wrapper(*args, **kwargs):

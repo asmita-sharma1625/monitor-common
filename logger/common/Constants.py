@@ -1,14 +1,14 @@
 import time
-import configReader
+from configReader import ConfigReader 
 
 '''
 	Declares constants.
 '''
 class Constants:
 
-  LOGDIR = configReader.getValue("Constants", "LogDir")
-  FILENAME = configReader.getValue("Constants", "Filename")
-  SOCKET = configReader.getValue("Constants", "Socket")
+  #LOGDIR = ConfigReader.getValue("Constants", "LogDir")
+  #FILENAME = ConfigReader.getValue("Constants", "Filename")
+  #SOCKET = ConfigReader.getValue("Constants", "Socket")
   RUNTIME = "Runtime"
   FAILCOUNT = "Failure Count"
 # Use constants for metric type 
@@ -21,7 +21,18 @@ class Constants:
   TIME = "Timestamp"
   SEPARATOR = " : "
   DELIMITER = "\n"
-  print FILENAME
+
+  @staticmethod
+  def getLogDir():
+    return ConfigReader.getValue("Constants", "LogDir")
+
+  @staticmethod
+  def getFilename():
+    return ConfigReader.getValue("Constants", "Filename")
+
+  @staticmethod
+  def getSocket():
+    return ConfigReader.getValue("Constants", "Socket")
 
   @staticmethod
   def toStringCommon (region, zone, host, service):

@@ -3,6 +3,7 @@
 import time
 import threading
 from logHandler import LogHandler
+from common.configReader import ConfigReader
 
 class Logger:
 
@@ -12,9 +13,14 @@ class Logger:
       - Creates LogHandler instance to write metrics to log file.
       - Creates threading.local() instance to create thread specific variables.
   '''
-  def __init__ (self, service):
+  def __init__ (self, service, configFile):
+    print "Test setconfig"
+    ConfigReader.setConfig(configFile)
     self.logHandler = LogHandler(service)
     self.threadLocal = threading.local()
+    self.counter = 0;
+    print "Test setconfig"
+    #ConfigReader.setConfig(configFile)
 
 
   '''
@@ -27,6 +33,11 @@ class Logger:
       self.logHandler.appendCountLog(name, metricType, count)	
     return count
 
+  def logFailure (self, name, metricType, counter):
+    if counter > 0:
+      self.logHandler.appendCountLog(name, metricType, counter)
+      return 1
+    return 0
 
   '''
     Report the incremented counter if the action has failed to pass the expectation.
@@ -56,7 +67,7 @@ class Logger:
     Starts the thread local timer.
   '''
   def startTime (self):
-#using thread local storage for start time 
+    #using thread local storage for start time 
     self.threadLocal.startTime = time.time()
 
   '''
@@ -73,11 +84,12 @@ class Logger:
   def reportLatency (self, name, metricType, action, *args, **kwargs):
     self.startTime()
     try:
-      print "Inside reportLatency try block"
+      #print "Inside reportLatency try block"
       actualReturn = action(*args, **kwargs)
-      print actualReturn
+      #print actualReturn
     except:
-      print "Inside reportLatency except block"
+      pass
+      #print "Inside reportLatency except block"
       #monitorLogs.logError("Error")
     self.reportTime(name, metricType)
     return actualReturn
