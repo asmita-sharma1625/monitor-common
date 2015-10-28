@@ -1,4 +1,5 @@
 import ConfigParser
+import configWriter 
 
 class ConfigReader:  
   
@@ -6,9 +7,10 @@ class ConfigReader:
 
   @staticmethod
   def setConfig(configFile):
-    print "Config file is "+configFile
+    #print "Config file is "+configFile
     ConfigReader.config.read(configFile)
-    print "Config Read Done "+ConfigReader.getValue("Constants","LogDir")
+    configWriter.setConfigFile(configFile)
+    #print "Config Read Done "+ConfigReader.getValue("Constants","LogDir")
   
   @staticmethod
   def getValue(section, key):
