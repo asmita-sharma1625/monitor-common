@@ -20,10 +20,10 @@ class TestLogHandler(unittest.TestCase):
 
   def setUp(self):
     TestLogHandler.socket = TestLogHandler.socket + 1
-    configWriter.CreateConfigFile("config.cfg", "Constants", "Socket", "tcp://127.0.0.1:"+`TestLogHandler.socket`)
-    configWriter.CreateConfigFile("config.cfg", "Constants", "LogDir", ".")
-    configWriter.CreateConfigFile("config.cfg", "Constants", "Filename", "metric.log")
     ConfigReader.setConfig("config.cfg")
+    configWriter.updateConfigFile("Constants", "Socket", "tcp://127.0.0.1:"+`TestLogHandler.socket`)
+    configWriter.updateConfigFile("Constants", "LogDir", ".")
+    configWriter.updateConfigFile("Constants", "Filename", "metric.log")
 
   def test_dirIfNotExists(self):
     logHandler = LogHandler(TestLogHandler.SERVICE)
