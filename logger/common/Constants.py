@@ -1,5 +1,6 @@
 import time
 from configReader import ConfigReader 
+import configWriter
 
 '''
 	Declares constants.
@@ -21,6 +22,10 @@ class Constants:
   TIME = "Timestamp"
   SEPARATOR = " : "
   DELIMITER = "\n"
+
+  @staticmethod
+  def setLogDir(logdir):
+    configWriter.updateConfigFile("Constants", "LogDir", logdir)
 
   @staticmethod
   def getLogDir():

@@ -13,11 +13,12 @@ class Handler:
   childProcess = None
  
   def __init__(self, service, host):
+    Constants.setLogDir(os.path.join(Constants.getLogDir(), host))
     try:
       #print os.getcwd()
       #pdb.set_trace()
       #print "GetLogDir "+Constants.getLogDir()
-      self.directory = os.path.join(Constants.getLogDir(), os.path.join(host, service))
+      self.directory = os.path.join(Constants.getLogDir(), service)
     except:
       print "log error message"
       return 

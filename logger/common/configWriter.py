@@ -1,6 +1,10 @@
 import ConfigParser
 
+filename = None
+
 def CreateConfigFile(filepath, section, key, value):
+  global filename
+  filename = filepath
   config = ConfigParser.RawConfigParser()
   
   # When adding sections or items, add them in the reverse order of
@@ -31,3 +35,10 @@ def CreateConfigFile(filepath, section, key, value):
   with open(filepath, 'a') as configfile:
     config.write(configfile)
 
+def setConfigFile(filepath):
+  global filename 
+  filename = filepath
+
+def updateConfigFile(section, key, value):
+  global filename
+  CreateConfigFile(filename, section, key, value)
