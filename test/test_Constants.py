@@ -1,5 +1,6 @@
 import unittest
 import re
+import socket
 from logger.common.Constants import Constants 
 
 class TestConstants(unittest.TestCase):
@@ -10,6 +11,9 @@ class TestConstants(unittest.TestCase):
 
   def test_constant (self):
     self.assertEqual(Constants.RUNTIME, "Runtime")
+
+  def test_getHostname (self):
+    self.assertEqual(Constants.getHostname(), socket.gethostname())
 
   def test_toString (self):
     string = "Name : " + self.NAME + "\n" + "Metric Type : " + self.TYPE + "\n" + "Runtime : " + `self.TIME` + "\n"

@@ -6,7 +6,8 @@ def CreateConfigFile(filepath, section, key, value):
   global filename
   filename = filepath
   config = ConfigParser.RawConfigParser()
-  
+  #print "create config filename : "+ filename
+
   # When adding sections or items, add them in the reverse order of
   # how you want them to be displayed in the actual file.
   # In addition, please note that using RawConfigParser's and the raw
@@ -38,6 +39,7 @@ def CreateConfigFile(filepath, section, key, value):
 def setConfigFile(filepath):
   global filename 
   filename = filepath
+  #print "filename : "+ filename
 
 def updateConfigFile(section, key, value):
   global filename

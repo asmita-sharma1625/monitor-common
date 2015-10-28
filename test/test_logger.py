@@ -1,7 +1,7 @@
 import unittest
 from logger import logger
 from logger.common import configWriter
-from logger.common.configReader import ConfigReader
+#from logger.common.configReader import ConfigReader
 
 class TestLogger(unittest.TestCase):
   

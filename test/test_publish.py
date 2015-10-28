@@ -6,10 +6,10 @@ from logger.common import configWriter
 class TestPublish(unittest.TestCase): 
   
   def setUp(self):
-    configWriter.CreateConfigFile("Config.cfg", "Constants", "Socket", "tcp://127.0.0.1:4000")
-    configWriter.CreateConfigFile("Config.cfg", "Constants", "LogDir", ".")
-    configWriter.CreateConfigFile("Config.cfg", "Constants", "Filename", "metric.log")
-    publish.setLogger("demo_publish", "Config.cfg")
+    configWriter.CreateConfigFile("pconfig.cfg", "Constants", "Socket", "tcp://127.0.0.1:4000")
+    configWriter.CreateConfigFile("pconfig.cfg", "Constants", "LogDir", ".")
+    configWriter.CreateConfigFile("pconfig.cfg", "Constants", "Filename", "metric.log")
+    publish.setLogger("demo_publish", "pconfig.cfg")
 
   def test_ReportLatency(self):
     i = 10

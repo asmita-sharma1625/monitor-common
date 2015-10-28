@@ -1,4 +1,5 @@
 import time
+import socket
 from configReader import ConfigReader 
 import configWriter
 
@@ -39,9 +40,16 @@ class Constants:
   def getSocket():
     return ConfigReader.getValue("Constants", "Socket")
 
+  '''
+    Get host from metadata.
+  '''
   @staticmethod
-  def toStringCommon (region, zone, host, service):
-    return Constants.REGION  + Constants.SEPARATOR + region + Constants.DELIMITER + Constants.ZONE + Constants.SEPARATOR + zone + Constants.DELIMITER + Constants.HOST + Constants.SEPARATOR + host + Constants.DELIMITER + Constants.SERVICE + Constants.SEPARATOR + service + Constants.DELIMITER 
+  def getHostname():
+      return socket.gethostname()
+
+  @staticmethod
+  def toStringCommon (service):
+    return Constants.HOST + Constants.SEPARATOR + Constants.getHostname() + Constants.DELIMITER + Constants.SERVICE + Constants.SEPARATOR + service + Constants.DELIMITER 
 
   @staticmethod
   def appendTimestamp (string):
