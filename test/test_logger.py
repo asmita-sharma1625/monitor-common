@@ -1,14 +1,13 @@
 import unittest
 from logger import logger
 from logger.common import configWriter
-#from logger.common.configReader import ConfigReader
 
 class TestLogger(unittest.TestCase):
   
   SERVICE = "TestLogger"
   NAME = "dummy_metric"
   MTYPE = "debug"
-  socket = 5000
+  socket = 4010
 
   def setUp(self):
     TestLogger.socket = TestLogger.socket + 1
