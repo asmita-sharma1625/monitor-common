@@ -14,12 +14,12 @@ class Logger:
       - Creates threading.local() instance to create thread specific variables.
   '''
   def __init__ (self, service, configFile):
-    print "Test setconfig"
+    #print "Test setconfig"
     ConfigReader.setConfig(configFile)
     self.logHandler = LogHandler(service)
     self.threadLocal = threading.local()
     self.counter = 0;
-    print "Test setconfig"
+    #print "Test setconfig"
     #ConfigReader.setConfig(configFile)
 
 

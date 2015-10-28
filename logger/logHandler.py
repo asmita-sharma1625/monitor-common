@@ -1,5 +1,6 @@
 import logging
 import os
+import socket
 from common.Constants import Constants
 #from common.monitorLog import monitorLog
 from common.handler import Handler
@@ -8,16 +9,16 @@ from common.handler import Handler
 class LogHandler:
 
   def __init__ (self, service):
-    self.handler = Handler(service)
+    self.service = service
+    self.setHost()
+    self.setZone()
+    self.setRegion()
+    self.handler = Handler(self.service, self.host)
     self.logger = self.handler.getLogHandler()
     # start queue subscriber for logging 
     self.handler.startQueueSubscriber()
     # get queue handler for logging
     self.queueHandler = self.handler.getQueueHandler()
-    self.service = service
-    self.setHost()
-    self.setZone()
-    self.setRegion()
     self.commonLog = Constants.toStringCommon(self.region, self.zone, self.host, self.service)
 
   def appendLog (self, msg):
@@ -41,7 +42,7 @@ class LogHandler:
   '''
   def setHost(self):
     try:
-      self.host = "demo_host"
+      self.host = socket.gethostname()
     except:
       pass
 

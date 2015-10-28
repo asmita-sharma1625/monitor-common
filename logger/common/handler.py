@@ -6,16 +6,18 @@ from logger.rotHandler import Rotator
 from logbook.compat import RedirectLoggingHandler
 from logger.common.zeroMQHandler import MyZeroMQHandler
 from logger.common.zeroMQSubscriber import MyZeroMQSubscriber
-#import pdb
+import atexit
 
 class Handler:
-  
-  def __init__(self, service):
+
+  childProcess = None
+ 
+  def __init__(self, service, host):
     try:
-      print os.getcwd()
- #     pdb.set_trace()
-      print "GetLogDir "+Constants.getLogDir()
-      self.directory = os.path.join(Constants.getLogDir(), service)
+      #print os.getcwd()
+      #pdb.set_trace()
+      #print "GetLogDir "+Constants.getLogDir()
+      self.directory = os.path.join(Constants.getLogDir(), os.path.join(host, service))
     except:
       print "log error message"
       return 
@@ -29,6 +31,7 @@ class Handler:
     #self.logger.addHandler(logging.FileHandler(self.filepath))
     #self.rotHandler = Rotator(self.filepath, 'M', 1, 10)
     #self.logger.addHandler(self.rotHandler)
+    #self.host = host
 
   def getLogHandler(self):
     return self.logger
@@ -39,9 +42,14 @@ class Handler:
 
   def startQueueSubscriber(self):
     #print "inside startQueueSubscriber"
-    p = Process(target = self.getQueueSubscriber)
-    p.start()
+    self.childProcess = Process(target = self.getQueueSubscriber)
+    self.childProcess.start()
+    atexit.register(self.killQueueSubscriber)
     #print "pid : " + `p.pid`
+
+  def killQueueSubscriber(self):
+    print "Kill Child process"
+    self.childProcess.terminate()
 
   def getQueueSubscriber(self):
     #print "inside getQueueSubscriber with pid : " + `os.getpid()`

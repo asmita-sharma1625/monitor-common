@@ -4,6 +4,8 @@ import os
 from logger.logHandler import LogHandler
 from logger.common.Constants import Constants
 from logger.common import configWriter
+from logger.common.configReader import ConfigReader
+
 class TestLogHandler(unittest.TestCase):
 
   SERVICE = "demo_service"
@@ -17,36 +19,43 @@ class TestLogHandler(unittest.TestCase):
   socket = 6000
 
   def setUp(self):
-    self.logHandler = LogHandler(TestLogHandler.SERVICE) 
     TestLogHandler.socket = TestLogHandler.socket + 1
     configWriter.CreateConfigFile("config.cfg", "Constants", "Socket", "tcp://127.0.0.1:"+`TestLogHandler.socket`)
+    configWriter.CreateConfigFile("config.cfg", "Constants", "LogDir", ".")
+    configWriter.CreateConfigFile("config.cfg", "Constants", "Filename", "metric.log")
+    ConfigReader.setConfig("config.cfg")
 
   def test_dirIfNotExists(self):
-    self.assertTrue(os.path.exists(Constants.LOGDIR + "/" + TestLogHandler.SERVICE))
+    logHandler = LogHandler(TestLogHandler.SERVICE)
+    self.assertTrue(os.path.exists(Constants.getLogDir() + "/" + TestLogHandler.SERVICE))
 
   def test_dirIfExists(self):
     new_logHandler = LogHandler(TestLogHandler.SERVICE)
-    self.assertTrue(os.path.exists(Constants.LOGDIR + "/" + TestLogHandler.SERVICE))  
-  @unittest.skip
+    self.assertTrue(os.path.exists(Constants.getLogDir() + "/" + TestLogHandler.SERVICE))  
+
+  @unittest.skip("skip")
   def test_filepath(self):
-    self.assertTrue(os.path.exists(Constants.LOGDIR + "/" + TestLogHandler.SERVICE + "/" + TestLogHandler.FILENAME))
-  @unittest.skip
+    self.assertTrue(os.path.exists(Constants.getLogDir() + "/" + TestLogHandler.SERVICE + "/" + TestLogHandler.FILENAME))
+
+  @unittest.skip("skip")
   def test_appendLog(self):
     self.logHandler.appendLog(TestLogHandler.MSG)
-    fileHandler = open(Constants.LOGDIR + "/" + TestLogHandler.SERVICE + "/" + TestLogHandler.FILENAME, 'r')
+    fileHandler = open(Constants.getLogDir() + "/" + TestLogHandler.SERVICE + "/" + TestLogHandler.FILENAME, 'r')
     self.assertNotEqual(re.search(TestLogHandler.MSG, fileHandler.read()), None)
-  @unittest.skip
+
+  @unittest.skip("skip")
   def test_appendCountLog(self):
     self.logHandler.appendCountLog(TestLogHandler.NAME, TestLogHandler.MTYPE, TestLogHandler.COUNT)
-    fileHandler = open(Constants.LOGDIR + "/" + TestLogHandler.SERVICE + "/" + TestLogHandler.FILENAME, 'r')
+    fileHandler = open(Constants.getLogDir() + "/" + TestLogHandler.SERVICE + "/" + TestLogHandler.FILENAME, 'r')
     testString = fileHandler.read()
     self.assertNotEqual(re.search(TestLogHandler.NAME, testString), None)
     self.assertNotEqual(re.search(TestLogHandler.MTYPE, testString), None)
     self.assertNotEqual(re.search(`TestLogHandler.COUNT`, testString), None)
-  @unittest.skip
+
+  @unittest.skip("skip")
   def test_appendTimeLog(self):
     self.logHandler.appendTimeLog(TestLogHandler.NAME, TestLogHandler.MTYPE, TestLogHandler.TIME)
-    fileHandler = open(Constants.LOGDIR + "/" + TestLogHandler.SERVICE + "/" + TestLogHandler.FILENAME, 'r')
+    fileHandler = open(Constants.getLogDir() + "/" + TestLogHandler.SERVICE + "/" + TestLogHandler.FILENAME, 'r')
     testString = fileHandler.read()
     self.assertNotEqual(re.search(TestLogHandler.NAME, testString), None)
     self.assertNotEqual(re.search(TestLogHandler.MTYPE, testString), None)
