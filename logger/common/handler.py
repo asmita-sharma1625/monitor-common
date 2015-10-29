@@ -43,5 +43,8 @@ class Handler:
 
   def getQueueSubscriber(self):
     filepath = os.path.join(self.directory, Constants.getFilename())
-    subscriber = MyZeroMQSubscriber()
+    try:
+      subscriber = MyZeroMQSubscriber()
+    except ZMQError:
+      pass
     subscriber.startSubscriber(filepath)
