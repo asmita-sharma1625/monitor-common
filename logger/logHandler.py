@@ -3,7 +3,7 @@ import os
 import socket
 from common.Constants import Constants
 from common.handler import Handler
-
+import pdb
 class LogHandler:
 
   def __init__ (self, service, configFile):
@@ -17,6 +17,7 @@ class LogHandler:
     self.commonLog = Constants.toStringCommon(service)
 
   def appendLog (self, msg):
+    pdb.set_trace()
     try:
       with self.queueHandler:
         self.logger.info(self.commonLog+msg)
