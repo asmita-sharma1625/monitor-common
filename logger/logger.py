@@ -15,9 +15,9 @@ class Logger:
   def __init__ (self, service, configFile):
     try:
       self.logHandler = LogHandler(service, configFile)
-    except ValueError as error:
+    except Exception as error:
       monitorLog.logError("Cannot Instantiate Logger with configFile : " + configFile, error)
-      raise ValueError("Cannot Instantiate Logger with configFile : " + configFile)
+      raise Exception("Cannot Instantiate Logger with configFile : " + configFile)
     self.threadLocal = threading.local()
     self.counter = 0;
 
@@ -28,12 +28,20 @@ class Logger:
   def logIfFail (self, name, metricType, expectedReturn, counter, action, *args, **kwargs):
     count = self.reportCountNE(expectedReturn, counter, action, *args, **kwargs)
     if count > 0:
-      self.logHandler.appendCountLog(name, metricType, count)	
+      try:
+        self.logHandler.appendCountLog(name, metricType, count)	
+      except Exception as error:
+        monitorLog.logError("Failed to append log for metric: " + name, error)
+        raise Exception("Failed to append log for metric: " + name)
     return count
 
   def logFailure (self, name, metricType, counter):
     if counter > 0:
-      self.logHandler.appendCountLog(name, metricType, counter)
+      try:
+        self.logHandler.appendCountLog(name, metricType, counter)
+      except Exception as error:
+        monitorLog.logError("Failed to append log for metric: " + name, error)
+        raise Exception("Failed to append log for metric: " + name)
       return 1
     return 0
 
@@ -74,7 +82,11 @@ class Logger:
   def reportTime (self, name, metricType):
     endTime = time.time()
     runTime = endTime - self.threadLocal.startTime
-    self.logHandler.appendTimeLog(name, metricType, runTime)
+    try:
+      self.logHandler.appendTimeLog(name, metricType, runTime)
+    except Exception as error:
+      monitorLog.logError("Failed to append log for metric: " + name, error)
+      raise Exception("Failed to append log for metric: " + name)
 
   '''
     Logs the execution time of the given action and returns the value of action.
@@ -85,7 +97,7 @@ class Logger:
       actualReturn = action(*args, **kwargs)
     except Exception as error:
       monitorLog.logError("Failed : Action " + action, error)
-      raise error
+      raise Exception("Failed :  Action :" + action)
     self.reportTime(name, metricType)
     return actualReturn
 

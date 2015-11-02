@@ -1,5 +1,6 @@
 import ConfigParser
 #import configWriter 
+from monitorLog import monitorLog
 
 class ConfigReader:  
   
@@ -14,5 +15,10 @@ class ConfigReader:
   
   @staticmethod
   def getValue(section, key):
-    return ConfigReader.config.get(section, key)
+    try:
+      value = ConfigReader.config.get(section, key)
+    except ConfigParser.NoSectionError as error:
+      monitorLog.logError("Cannot get LogDir", error)
+      raise Exception("Cannot get LogDir")
+    return value
 

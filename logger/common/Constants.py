@@ -2,6 +2,7 @@ import time
 import socket
 from configReader import ConfigReader 
 import configWriter
+from monitorLog import monitorLog 
 
 '''
 	Declares constants.
@@ -30,22 +31,42 @@ class Constants:
 
   @staticmethod
   def getLogDir():
-    return ConfigReader.getValue("Constants", "LogDir")
+    try:
+      logdir = ConfigReader.getValue("Constants", "LogDir")
+    except Exception as error:
+      monitorLog.logError("Cannot get LogDir", error)
+      raise error("Cannot get LogDir")
+    return logdir
 
   @staticmethod
   def getFilename():
-    return ConfigReader.getValue("Constants", "Filename")
+    try:
+      filename = ConfigReader.getValue("Constants", "Filename")
+    except Exception as error:
+      monitorLog.logError("Cannot get filename", error)
+      raise error("Cannot get filename")
+    return filename
 
   @staticmethod
   def getSocket():
-    return ConfigReader.getValue("Constants", "Socket")
+    try:
+      socket = ConfigReader.getValue("Constants", "Socket")
+    except Exception as error:
+      monitorLog.logError("Cannot get socket", error)
+      raise error("Cannot get socket")
+    return socket
 
   '''
     Get host from metadata.
   '''
   @staticmethod
   def getHostname():
-      return socket.gethostname()
+    try:
+      hostname = socket.gethostname()
+    except Exception as error:
+      monitorLog.logError("Cannot get hostname", error)
+      raise error("Cannot get hostname")
+    return hostname  
 
   @staticmethod
   def toStringCommon (service):

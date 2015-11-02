@@ -4,5 +4,6 @@ from logger.common.handler import Handler
 
 class TestMonitorLog(unittest.TestCase):
   def test_logError(self):
-    self.assertRaises(ValueError, lambda: Handler("dummy", "dummy").getLogHandler())
+    with self.assertRaises(Exception):
+      Handler("dummy", "dummy").getLogHandler()
     print "test passed*******************"

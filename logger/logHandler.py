@@ -14,7 +14,7 @@ class LogHandler:
       self.logger = self.handler.getLogHandler()
     except Exception as error:
       monitorLog.logError("Cannot Instantiate Handler with configFile : " + configFile, error)
-      raise ValueError("Cannot Instantiate Handler with configFile : " + configFile)
+      raise Exception("Cannot Instantiate Handler with configFile : " + configFile)
     # start queue subscriber for logging 
     self.handler.startQueueSubscriber()
     # get queue handler for logging
@@ -27,6 +27,7 @@ class LogHandler:
         self.logger.info(self.commonLog+msg)
     except Exception as error:
       monitorLog.logError("Failure to append Log: " + msg, error)
+      raise Exception("Failure to append log: " + msg)
 
   def appendCountLog(self, name, metricType, count):
     msg = Constants.toStringCount(name, metricType, count)

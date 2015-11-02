@@ -9,6 +9,7 @@ from logger.common.configReader import ConfigReader
 import atexit
 from logger.common.monitorLog import monitorLog
 
+
 class Handler:
 
   childProcess = None
@@ -19,7 +20,7 @@ class Handler:
       self.directory = os.path.join(Constants.getLogDir(), os.path.join(Constants.getHostname(), service))
     except Exception, error:
       monitorLog.logError("Could not retrieve logging directory", error) 
-      raise ValueError("Could not retrieve logging directory")
+      raise Exception("Could not retrieve logging directory")
     if not os.path.exists(self.directory):
         os.makedirs(self.directory)
     self.logger = logging.getLogger(service)
