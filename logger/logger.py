@@ -3,6 +3,7 @@
 import time
 import threading
 from logHandler import LogHandler
+from common.monitorLog import monitorLog
 
 class Logger:
 
@@ -12,7 +13,11 @@ class Logger:
       - Creates threading.local() instance to create thread specific variables.
   '''
   def __init__ (self, service, configFile):
-    self.logHandler = LogHandler(service, configFile)
+    try:
+      self.logHandler = LogHandler(service, configFile)
+    except ValueError as error:
+      monitorLog.logError("Cannot Instantiate Logger with configFile : " + configFile, error)
+      raise ValueError("Cannot Instantiate Logger with configFile : " + configFile)
     self.threadLocal = threading.local()
     self.counter = 0;
 
@@ -78,8 +83,9 @@ class Logger:
     self.startTime()
     try:
       actualReturn = action(*args, **kwargs)
-    except:
-      pass
+    except Exception as error:
+      monitorLog.logError("Failed : Action " + action, error)
+      raise error
     self.reportTime(name, metricType)
     return actualReturn
 

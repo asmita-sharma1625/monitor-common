@@ -3,13 +3,18 @@ import os
 import socket
 from common.Constants import Constants
 from common.handler import Handler
-import pdb
+from common.monitorLog import monitorLog
+
 class LogHandler:
 
   def __init__ (self, service, configFile):
     self.service = service
-    self.handler = Handler(self.service, configFile)
-    self.logger = self.handler.getLogHandler()
+    try:
+      self.handler = Handler(self.service, configFile)
+      self.logger = self.handler.getLogHandler()
+    except Exception as error:
+      monitorLog.logError("Cannot Instantiate Handler with configFile : " + configFile, error)
+      raise ValueError("Cannot Instantiate Handler with configFile : " + configFile)
     # start queue subscriber for logging 
     self.handler.startQueueSubscriber()
     # get queue handler for logging
@@ -17,12 +22,11 @@ class LogHandler:
     self.commonLog = Constants.toStringCommon(service)
 
   def appendLog (self, msg):
-    pdb.set_trace()
     try:
       with self.queueHandler:
         self.logger.info(self.commonLog+msg)
-    except:
-      pass
+    except Exception as error:
+      monitorLog.logError("Failure to append Log: " + msg, error)
 
   def appendCountLog(self, name, metricType, count):
     msg = Constants.toStringCount(name, metricType, count)

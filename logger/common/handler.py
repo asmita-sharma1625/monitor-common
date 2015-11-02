@@ -7,6 +7,7 @@ from logger.common.zeroMQHandler import MyZeroMQHandler
 from logger.common.zeroMQSubscriber import MyZeroMQSubscriber
 from logger.common.configReader import ConfigReader
 import atexit
+from logger.common.monitorLog import monitorLog
 
 class Handler:
 
@@ -16,9 +17,9 @@ class Handler:
     ConfigReader.setConfig(configFile)
     try:
       self.directory = os.path.join(Constants.getLogDir(), os.path.join(Constants.getHostname(), service))
-    except:
-      print "log error message"
-      return 
+    except Exception, error:
+      monitorLog.logError("Could not retrieve logging directory", error) 
+      raise ValueError("Could not retrieve logging directory")
     if not os.path.exists(self.directory):
         os.makedirs(self.directory)
     self.logger = logging.getLogger(service)
@@ -45,6 +46,7 @@ class Handler:
     filepath = os.path.join(self.directory, Constants.getFilename())
     try:
       subscriber = MyZeroMQSubscriber()
-    except ZMQError:
+    except ZMQError as error:
+      monitorLog.logError("Subscriber process already running", error)
       pass
     subscriber.startSubscriber(filepath)

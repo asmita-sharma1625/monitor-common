@@ -21,5 +21,5 @@ class monitorLog:
     monitorLog.logger.info(msg)
 
   @staticmethod
-  def logError(msg):
-    monitorLog.logger.error(msg)
+  def logError(msg, error):
+    monitorLog.logger.error("Message: " + msg + "Error: " + `logging.exception(error)`)
