@@ -1,16 +1,25 @@
 # Initialize logger to log monitor events
 
-from logger.common.handler import Handler
+import os
 import sys
-
-sys.path.append('/home/asmi/monitor-common/logger')
+import logging
+from logging import handlers
+import pdb
 
 class monitorLog:
-  
-  logger = Handler("monitor").getLogHandler()
+  pdb.set_trace()
+  logger = logging.getLogger("metric-generator")
+  logger.setLevel(logging.INFO)
+  directory = "/tmp/metric-generator/"
+  if not os.path.exists(directory):
+        os.makedirs(directory)
+  #logger.addHandler(logging.FileHandler())
+  logger.addHandler(logging.handlers.TimedRotatingFileHandler(os.path.join(directory, "metric.log"),'S', 2, 10))
 
-  def logInfo(self, msg):
-    logger.info(msg)
+  @staticmethod
+  def logInfo(msg):
+    monitorLog.logger.info(msg)
 
-  def logError(self, msg):
-    logger.error(msg)
+  @staticmethod
+  def logError(msg):
+    monitorLog.logger.error(msg)
