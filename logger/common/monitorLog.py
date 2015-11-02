@@ -4,10 +4,8 @@ import os
 import sys
 import logging
 from logging import handlers
-import pdb
 
 class monitorLog:
-  pdb.set_trace()
   logger = logging.getLogger("metric-generator")
   logger.setLevel(logging.INFO)
   directory = "/tmp/metric-generator/"
