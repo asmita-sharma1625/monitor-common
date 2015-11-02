@@ -31,11 +31,18 @@ class LogHandler:
 
   def appendCountLog(self, name, metricType, count):
     msg = Constants.toStringCount(name, metricType, count)
-    self.appendLog(msg)
+    try:
+      self.appendLog(msg)
+    except:
+      monitorLog.logError("Failure to append Count Log: " + msg, error)
+      raise Exception("Failure to append Count log: " + msg)
 
   def appendTimeLog(self, name, metricType, runtime):
     msg = Constants.toStringRuntime(name, metricType, runtime)
-    self.appendLog(msg)
-
+    try:
+      self.appendLog(msg)
+    except:
+      monitorLog.logError("Failure to append Count Log: " + msg, error)
+      raise Exception("Failure to append Count log: " + msg)
 
 

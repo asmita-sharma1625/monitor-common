@@ -4,6 +4,7 @@ import time
 import threading
 from logHandler import LogHandler
 from common.monitorLog import monitorLog
+from common.exceptions import IncorrectConfigException, LoggingException
 
 class Logger:
 
@@ -17,7 +18,7 @@ class Logger:
       self.logHandler = LogHandler(service, configFile)
     except Exception as error:
       monitorLog.logError("Cannot Instantiate Logger with configFile : " + configFile, error)
-      raise Exception("Cannot Instantiate Logger with configFile : " + configFile)
+      raise IncorrectConfigException("Cannot Instantiate Logger with configFile : " + configFile)
     self.threadLocal = threading.local()
     self.counter = 0;
 
@@ -32,7 +33,7 @@ class Logger:
         self.logHandler.appendCountLog(name, metricType, count)	
       except Exception as error:
         monitorLog.logError("Failed to append log for metric: " + name, error)
-        raise Exception("Failed to append log for metric: " + name)
+        raise LoggingException("Failed to append log for metric: " + name)
     return count
 
   def logFailure (self, name, metricType, counter):
@@ -41,12 +42,13 @@ class Logger:
         self.logHandler.appendCountLog(name, metricType, counter)
       except Exception as error:
         monitorLog.logError("Failed to append log for metric: " + name, error)
-        raise Exception("Failed to append log for metric: " + name)
+        raise LoggingException("Failed to append log for metric: " + name)
       return 1
     return 0
 
   '''
     Report the incremented counter if the action has failed to pass the expectation.
+
   '''
   def reportCountEqual(self, expectedReturn, counter, action, *args, **kwargs):
     try:
@@ -86,7 +88,7 @@ class Logger:
       self.logHandler.appendTimeLog(name, metricType, runTime)
     except Exception as error:
       monitorLog.logError("Failed to append log for metric: " + name, error)
-      raise Exception("Failed to append log for metric: " + name)
+      raise LoggingException("Failed to append log for metric: " + name)
 
   '''
     Logs the execution time of the given action and returns the value of action.
