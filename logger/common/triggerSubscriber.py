@@ -1,8 +1,7 @@
 from logbook.queues import ZeroMQSubscriber
-from logbook import TimedRotatingFileHandler, GMailHandler
-from logger.common.Constants import Constants
+from common.fingersCrossedHandler import TriggerHandler 
 
-class MyZeroMQSubscriber:
+class TriggerSubscriber:
 
   def __init__(self):
     print "subscriber initiated"
@@ -11,7 +10,7 @@ class MyZeroMQSubscriber:
 
   def startSubscriber(self, filepath):
     print "subscriber started"
-    with TimedRotatingFileHandler(filepath, date_format='%Y-%m-%d %H:%M', level = "ERROR"):
+    with GmailHandler("itsmeasmi25@gmail.com", "asmi9971026789", "asmita_sharma@outlook.com"):
       print "log received : ", self.subscriber.recv()
       self.subscriber.dispatch_forever()
 

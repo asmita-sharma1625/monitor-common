@@ -14,16 +14,18 @@ class Constants:
   #SOCKET = ConfigReader.getValue("Constants", "Socket")
   RUNTIME = "Runtime"
   FAILCOUNT = "Failure Count"
+  COUNT = "Counter"
 # Use constants for metric type 
   METRIC_TYPE = "Metric Type"
-  METRIC_NAME = "Name"
-  REGION = "Region"
-  ZONE = "Zone"
+  METRIC_NAME = "Metric Name"
   HOST = "Host"
   SERVICE = "Service"
   TIME = "Timestamp"
+  SEVERITY = "Severity"
+  METRIC_VALUE = "Metric Value"
   SEPARATOR = " : "
   DELIMITER = "\n"
+  
 
   @staticmethod
   def setLogDir(logdir):
@@ -70,7 +72,7 @@ class Constants:
 
   @staticmethod
   def toStringCommon (service):
-    return Constants.HOST + Constants.SEPARATOR + Constants.getHostname() + Constants.DELIMITER + Constants.SERVICE + Constants.SEPARATOR + service + Constants.DELIMITER 
+    return Constants.HOST + Constants.SEPARATOR + Constants.getHostname() + Constants.DELIMITER + Constants.SERVICE + Constants.SEPARATOR + service + Constants.DELIMITER
 
   @staticmethod
   def appendTimestamp (string):
@@ -78,10 +80,10 @@ class Constants:
 
   @staticmethod
   def toStringRuntime (name, mType, runtime):
-    return Constants.appendTimestamp(Constants.METRIC_NAME + Constants.SEPARATOR + name + Constants.DELIMITER + Constants.METRIC_TYPE + Constants.SEPARATOR + mType + Constants.DELIMITER + Constants.RUNTIME + Constants.SEPARATOR + `runtime` + Constants.DELIMITER)
+    return Constants.appendTimestamp(Constants.METRIC_NAME + Constants.SEPARATOR + name + Constants.DELIMITER + Constants.METRIC_TYPE + Constants.SEPARATOR + mType + Constants.DELIMITER + Constants.METRIC_VALUE + Constants.SEPARATOR + `runtime` + Constants.DELIMITER)
 
   @staticmethod
   def toStringCount (name, mType, count):
-    return Constants.appendTimestamp(Constants.METRIC_NAME + Constants.SEPARATOR + name + Constants.DELIMITER + Constants.METRIC_TYPE + Constants.SEPARATOR + mType + Constants.DELIMITER + Constants.FAILCOUNT + Constants.SEPARATOR + `count` + Constants.DELIMITER)
+    return Constants.appendTimestamp(Constants.METRIC_NAME + Constants.SEPARATOR + name + Constants.DELIMITER + Constants.METRIC_TYPE + Constants.SEPARATOR + mType + Constants.DELIMITER + Constants.METRIC_VALUE + Constants.SEPARATOR + `count` + Constants.DELIMITER)
 
 

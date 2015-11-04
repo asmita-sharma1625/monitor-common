@@ -7,6 +7,11 @@ from common.monitorLog import monitorLog
 from common.exceptions import IncorrectConfigException, LoggingException
 
 class Logger:
+  
+  #beyond these, email will be triggered.
+  threshold_failure = 4
+  threshold_latency = 4
+  threshold_count = 4
 
   '''
     It :
@@ -26,25 +31,40 @@ class Logger:
     If the given action is failed, then it will log the failure count uptil now.
     It will also return the updated counter value.
   '''
-  def logIfFail (self, name, metricType, expectedReturn, counter, action, *args, **kwargs):
+  def logIfFail (self, name, expectedReturn, counter, action, severity = None, *args, **kwargs):
     count = self.reportCountNE(expectedReturn, counter, action, *args, **kwargs)
     if count > 0:
       try:
-        self.logHandler.appendCountLog(name, metricType, count)	
+        self.logHandler.appendFailCountLog(name, count, severity)	
       except Exception as error:
         monitorLog.logError("Failed to append log for metric: " + name, error)
         raise LoggingException("Failed to append log for metric: " + name)
     return count
 
-  def logFailure (self, name, metricType, counter):
+  def logFailure (self, name, counter, severity = None):
     if counter > 0:
       try:
-        self.logHandler.appendCountLog(name, metricType, counter)
+        if counter >= Logger.threshold_failure:
+          self.logHandler.appendFailCountLog(name, counter,  'CRITICAL')
+        self.logHandler.appendFailCountLog(name, counter, severity)
       except Exception as error:
         monitorLog.logError("Failed to append log for metric: " + name, error)
         raise LoggingException("Failed to append log for metric: " + name)
       return 1
     return 0
+
+  def logCount (self, name, counter, severity = None):
+    if counter > 0:
+      try:
+        if counter >= Logger.threshold_count:
+          self.logHandler.appendCountLog(name, counter,  'CRITICAL')
+        self.logHandler.appendCountLog(name, counter, severity)
+      except Exception as error:
+        monitorLog.logError("Failed to append log for metric: " + name, error)
+        raise LoggingException("Failed to append log for metric: " + name)
+      return 1
+    return 0
+
 
   '''
     Report the incremented counter if the action has failed to pass the expectation.
@@ -81,11 +101,13 @@ class Logger:
   '''
     Stops the thread local timer and logs the execution time. 
   '''
-  def reportTime (self, name, metricType):
+  def reportTime (self, name, severity = None):
     endTime = time.time()
     runTime = endTime - self.threadLocal.startTime
     try:
-      self.logHandler.appendTimeLog(name, metricType, runTime)
+      if runTime >= Logger.threshold_latency:
+        self.logHandler.appendTimeLog(name, runTime, 'CRITICAL')
+      self.logHandler.appendTimeLog(name, runTime, severity)
     except Exception as error:
       monitorLog.logError("Failed to append log for metric: " + name, error)
       raise LoggingException("Failed to append log for metric: " + name)
@@ -93,13 +115,13 @@ class Logger:
   '''
     Logs the execution time of the given action and returns the value of action.
   '''
-  def reportLatency (self, name, metricType, action, *args, **kwargs):
+  def reportLatency (self, name, action, severity = None, *args, **kwargs):
     self.startTime()
     try:
       actualReturn = action(*args, **kwargs)
     except Exception as error:
       monitorLog.logError("Failed : Action " + action, error)
       raise Exception("Failed :  Action :" + action)
-    self.reportTime(name, metricType)
+    self.reportTime(name, severity)
     return actualReturn
 

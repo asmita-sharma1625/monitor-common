@@ -8,7 +8,7 @@ from logger.common.zeroMQSubscriber import MyZeroMQSubscriber
 from logger.common.configReader import ConfigReader
 import atexit
 from logger.common.monitorLog import monitorLog
-
+import zmq
 
 class Handler:
 
@@ -47,7 +47,7 @@ class Handler:
     filepath = os.path.join(self.directory, Constants.getFilename())
     try:
       subscriber = MyZeroMQSubscriber()
-    except ZMQError as error:
+    except zmq.error.ZMQError as error:
       monitorLog.logError("Subscriber process already running", error)
       pass
     subscriber.startSubscriber(filepath)

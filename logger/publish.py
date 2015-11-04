@@ -7,17 +7,17 @@ def setLogger(service, configFile):
     logger  = Logger(service, configFile)
 
 #TODO :  make changes for logIfFAil 
-def LogIfFail(name, metricType, expectedReturn, counter):
+def LogIfFail(name, expectedReturn, counter, severity = None):
     def real_decorator(function):
         def wrapper(*args, **kwargs):
-            return logger.logIfFail(name, metricType, expectedReturn, counter, function, *args, **kwargs)
+            return logger.logIfFail(name, expectedReturn, counter, function, severity, *args, **kwargs)
         return wrapper
     return real_decorator
 
-def ReportLatency(name, metricType):
+def ReportLatency(name, severity = None):
     def real_decorator(function):
         def wrapper(*args, **kwargs):
-           return logger.reportLatency(name, metricType, function, *args, **kwargs)
+           return logger.reportLatency(name, function, severity, *args, **kwargs)
         return wrapper
     return real_decorator
 
