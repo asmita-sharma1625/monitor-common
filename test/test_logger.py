@@ -7,7 +7,7 @@ class TestLogger(unittest.TestCase):
   SERVICE = "TestLogger"
   NAME = "dummy_metric"
   SEVERITY = 50
-  socket = 5000
+  socket = 5578
 
   def setUp(self):
     TestLogger.socket = TestLogger.socket + 1

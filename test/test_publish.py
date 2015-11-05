@@ -6,7 +6,7 @@ from logger.common import configWriter
 class TestPublish(unittest.TestCase): 
   
   def setUp(self):
-    configWriter.CreateConfigFile("pconfig.cfg", "Constants", "Socket", "tcp://127.0.0.1:7000")
+    configWriter.CreateConfigFile("pconfig.cfg", "Constants", "Socket", "tcp://127.0.0.1:3780")
     configWriter.CreateConfigFile("pconfig.cfg", "Constants", "LogDir", ".")
     configWriter.CreateConfigFile("pconfig.cfg", "Constants", "Filename", "metric.log")
     publish.setLogger("demo_publish", "pconfig.cfg")
