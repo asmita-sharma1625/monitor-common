@@ -79,11 +79,17 @@ class Constants:
     return string + Constants.TIME + Constants.SEPARATOR + `time.time()` + Constants.DELIMITER
 
   @staticmethod
-  def toStringRuntime (name, mType, runtime):
-    return Constants.appendTimestamp(Constants.METRIC_NAME + Constants.SEPARATOR + name + Constants.DELIMITER + Constants.METRIC_TYPE + Constants.SEPARATOR + mType + Constants.DELIMITER + Constants.METRIC_VALUE + Constants.SEPARATOR + `runtime` + Constants.DELIMITER)
+  def toStringRuntime (name, mType, runtime, severity):
+    return Constants.appendSeverity ( Constants.appendTimestamp ( Constants.prependMetricInfo ( name, mType, Constants.METRIC_VALUE + Constants.SEPARATOR + `runtime` + Constants.DELIMITER ) ), severity )
 
   @staticmethod
-  def toStringCount (name, mType, count):
-    return Constants.appendTimestamp(Constants.METRIC_NAME + Constants.SEPARATOR + name + Constants.DELIMITER + Constants.METRIC_TYPE + Constants.SEPARATOR + mType + Constants.DELIMITER + Constants.METRIC_VALUE + Constants.SEPARATOR + `count` + Constants.DELIMITER)
+  def toStringCount (name, mType, count, severity):
+    return Constants.appendSeverity ( Constants.appendTimestamp ( Constants.prependMetricInfo ( name, mType, Constants.METRIC_VALUE + Constants.SEPARATOR + `count` + Constants.DELIMITER) ), severity )
 
+  @staticmethod
+  def prependMetricInfo(name, mType, string):
+    return Constants.METRIC_NAME + Constants.SEPARATOR + name + Constants.DELIMITER + Constants.METRIC_TYPE + Constants.SEPARATOR + mType + Constants.DELIMITER + string
 
+  @staticmethod
+  def appendSeverity(string, severity):
+    return string + Constants.SEVERITY + Constants.SEPARATOR + `severity` + Constants.DELIMITER 

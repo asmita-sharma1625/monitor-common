@@ -25,37 +25,36 @@ class LogHandler:
       raise Exception("Cannot instanstiate ZMQ handler with given context")
     self.commonLog = Constants.toStringCommon(service)
 
+  '''
+    Input - takes a string parameter 'msg' and an integer parameter specifying the logging level as 'severity'
+    Logs the msg with the specified logging level.
+  '''
   def appendLog (self, msg, severity):
     try:
       with self.queueHandler:
-        if severity == logging.INFO:
-          self.logger.info(self.commonLog+msg)
-        elif severity == logging.ERROR:
-          self.logger.error(self.commonLog+msg)
-        elif severity == logging.CRITICAL:
-          self.logger.critical(self.commonLog+msg)
+          self.logger.log(severity, self.commonLog+msg)
     except Exception as error:
       monitorLog.logError("Failure to append Log: " + msg, error)
       raise Exception("Failure to append log: " + msg)
 
-  def appendFailCountLog(self, name, count, severity = None):
-    msg = Constants.toStringCount(name, Constants.FAILCOUNT, count)
+  def appendFailCountLog(self, name, count, severity):
+    msg = Constants.toStringCount(name, Constants.FAILCOUNT, count, severity)
     try:
       self.appendLog(msg, severity)
     except:
       monitorLog.logError("Failure to append Count Log: " + msg, error)
       raise Exception("Failure to append Count log: " + msg)
 
-  def appendCountLog(self, name, count, severity = None):
-    msg = Constants.toStringCount(name, Constants.COUNT, count)
+  def appendCountLog(self, name, count, severity):
+    msg = Constants.toStringCount(name, Constants.COUNT, count, severity)
     try:
       self.appendLog(msg, severity)
     except:
       monitorLog.logError("Failure to append Count Log: " + msg, error)
       raise Exception("Failure to append Count log: " + msg)
 
-  def appendTimeLog(self, name, runtime, severity = None):
-    msg = Constants.toStringRuntime(name, Constants.RUNTIME, runtime)
+  def appendTimeLog(self, name, runtime, severity):
+    msg = Constants.toStringRuntime(name, Constants.RUNTIME, runtime, severity)
     try:
       self.appendLog(msg, severity)
     except:

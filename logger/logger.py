@@ -31,7 +31,7 @@ class Logger:
     If the given action is failed, then it will log the failure count uptil now.
     It will also return the updated counter value.
   '''
-  def logIfFail (self, name, expectedReturn, counter, action, severity = None, *args, **kwargs):
+  def logIfFail (self, name, expectedReturn, counter, action, severity = 20, *args, **kwargs):
     count = self.reportCountNE(expectedReturn, counter, action, *args, **kwargs)
     if count > 0:
       try:
@@ -41,7 +41,7 @@ class Logger:
         raise LoggingException("Failed to append log for metric: " + name)
     return count
 
-  def logFailure (self, name, counter, severity = None):
+  def logFailure (self, name, counter, severity = 20):
     if counter > 0:
       try:
         if counter >= Logger.threshold_failure:
@@ -53,7 +53,7 @@ class Logger:
       return 1
     return 0
 
-  def logCount (self, name, counter, severity = None):
+  def logCount (self, name, counter, severity = 20):
     if counter > 0:
       try:
         if counter >= Logger.threshold_count:
@@ -101,7 +101,7 @@ class Logger:
   '''
     Stops the thread local timer and logs the execution time. 
   '''
-  def reportTime (self, name, severity = None):
+  def reportTime (self, name, severity = 20):
     endTime = time.time()
     runTime = endTime - self.threadLocal.startTime
     try:
@@ -115,7 +115,7 @@ class Logger:
   '''
     Logs the execution time of the given action and returns the value of action.
   '''
-  def reportLatency (self, name, action, severity = None, *args, **kwargs):
+  def reportLatency (self, name, action, severity = 20, *args, **kwargs):
     self.startTime()
     try:
       actualReturn = action(*args, **kwargs)

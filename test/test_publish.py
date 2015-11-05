@@ -19,7 +19,7 @@ class TestPublish(unittest.TestCase):
       i = i - 1
       j = j * 2
 
-  @publish.ReportLatency("demo", "ERROR")
+  @publish.ReportLatency("demo", 40)
   def demo_log(self, a, b):
     #logger.reportLatency("report latency", "demo-metric", demo_action, a, b)
     return self.demo_action(a, b)
