@@ -2,7 +2,6 @@ import unittest
 from logger import logger, publish
 import time
 from logger.common import configWriter
-import pdb
 
 class TestPublish(unittest.TestCase): 
 
@@ -18,7 +17,6 @@ class TestPublish(unittest.TestCase):
     #print " ##### end tear down ####"
 
   def test_ReportLatency(self):
-    pdb.set_trace()
     i = 10
     j = 2
     while i > 0:
