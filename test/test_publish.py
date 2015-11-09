@@ -1,7 +1,7 @@
 import unittest
 from logger import logger, publish
 import time
-from demo_config import demoConfig
+from test.demo_config import demoConfig
 
 class TestPublish(unittest.TestCase): 
 

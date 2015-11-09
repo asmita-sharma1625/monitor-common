@@ -3,7 +3,7 @@ import re
 import os
 from logger.logHandler import LogHandler
 from logger.common.Constants import Constants
-from demo_config import demoConfig
+from test.demo_config import demoConfig
 
 class TestLogHandler(unittest.TestCase):
 
