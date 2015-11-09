@@ -1,7 +1,7 @@
 import unittest
 from logger import logger
 from logger.common import configWriter
-from test.demo_config import demoConfig 
+from test import demo_config 
 
 class TestLogger(unittest.TestCase):
   
@@ -15,7 +15,7 @@ class TestLogger(unittest.TestCase):
     #configWriter.CreateConfigFile("Config.cfg", "Constants", "Socket", "tcp://127.0.0.1:"+`TestLogger.socket`)
     #configWriter.CreateConfigFile("Config.cfg", "Constants", "LogDir", "./logs")
     #configWriter.CreateConfigFile("Config.cfg", "Constants", "Filename", "metric.log")
-    cfgfile = demoConfig().setConfig()
+    cfgfile = demo_config.demoConfig().setConfig()
     self.logger = logger.Logger(self.SERVICE, cfgfile)
 
   def dummy_func(self, a, b):

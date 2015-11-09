@@ -2,13 +2,13 @@ from logger.consumer import Consumer
 from logger.common.Constants import Constants
 import unittest
 import filecmp
-from test.demo_config import demoConfig
+from test import demo_config 
 import os 
 
 class TestConsumerIntegrationWithLogger(unittest.TestCase):
 
   def setUp(self):
-    cfgfile = demoConfig().setConfig()  
+    cfgfile = demo_config.demoConfig().setConfig()  
     self.src_path = "../logs"
     self.dest_path = "../consumer"
 
