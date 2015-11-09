@@ -18,7 +18,7 @@ class Rotator:
   #Double underscore for private method
   def __rotate_file(self, filename):
     timestamp = long(time.time())
-    newfilename = filename +"."+ str(timestamp)
+    newfilename = os.path.splitext(filename)[0] +"."+ str(timestamp)+os.path.splitext(filename)[1]
     os.rename(filename, newfilename)
     self.__create_blankfile(filename)
 
@@ -34,18 +34,18 @@ class Rotator:
 '''
   This rotator.py can be directly called to run the rotator. In future, this code may be moved somewhere else.
 '''
-#if __name__ == "main":
-if len(sys.argv) < 2:
-  sys.stderr.write("Logfile path is not provided\n")
-  exit(-2)
-
-if len(sys.argv) > 2:
-  sys.stderr.write("Extra arguments will be ignored\n")
-singleton = SingletonProcess("jio-rotator")
-singleton.checkSingleton()
-
-#If it reaches here, it means there is only one process running
-logrotator = Rotator(sys.argv[1])
-print sys.argv[1]
-logrotator.rotate_log_file()
+if __name__ == "main":
+    if len(sys.argv) < 2:
+      sys.stderr.write("Logfile path is not provided\n")
+      exit(-2)
+    
+    if len(sys.argv) > 2:
+      sys.stderr.write("Extra arguments will be ignored\n")
+    singleton = SingletonProcess("jio-rotator")
+    singleton.checkSingleton()
+    
+    #If it reaches here, it means there is only one process running
+    logrotator = Rotator(sys.argv[1])
+    print sys.argv[1]
+    logrotator.rotate_log_file()
 
