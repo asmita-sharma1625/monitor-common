@@ -7,8 +7,8 @@ import shutil
 
 class Consumer:
 
-  suffixpattern = "\d{4}-\d{2}-\d{2} [0-2][0-9]:[0-5][0-9]"
-  fileextension = "metric.log"
+  suffixpattern = "metric\d{4}-\d{2}-\d{2} [0-2][0-9]:[0-5][0-9]"
+  fileextension = ".log"
 
   class LastFileInfo:
     infopath = "/tmp/lib/jiocloud-consumer/consumer.db"
@@ -32,16 +32,15 @@ class Consumer:
       self.sqliteconnection.close()
 
     def get_last_file(self, name):
-      filename = os.path.basename(name)
       cur = self.sqliteconnection.cursor()
       #print "SELECT lastfile from lastfiles where filename='%s'"%(filename,)
-      cur.execute("SELECT lastfile from lastfiles where filename='%s'"%(filename,))
+      cur.execute("SELECT lastfile from lastfiles where filename='%s'"%(name,))
       rows = cur.fetchone()
       #print "Rows " + `rows`
       if rows:
         return rows[0]
 
-      cur.execute("INSERT INTO lastfiles (filename) VALUES('%s')"%(filename,))
+      cur.execute("INSERT INTO lastfiles (filename) VALUES('%s')"%(name,))
       self.sqliteconnection.commit()
       return ""
 
@@ -49,19 +48,19 @@ class Consumer:
       filename = os.path.basename(name)
       lastfile = os.path.basename(lastfilename)
       cur = self.sqliteconnection.cursor()
-      cur.execute("UPDATE lastfiles SET lastfile='%s' WHERE filename ='%s'"%(lastfile, filename))
+      cur.execute("UPDATE lastfiles SET lastfile='%s' WHERE filename ='%s'"%(lastfile, name))
       self.sqliteconnection.commit()
 
   class ActionOnFile:
-    def doTask(self, filename,logfilename):
+    def doTask(self, filename, relativepath):
       return True
 
   class DefaultAction(ActionOnFile):
     def __init__(self, target_path):
       self.target_path = target_path
 
-    def doTask(self, filename,logfilename):
-      dest_path = os.path.join(self.target_path, os.path.splitext(os.path.basename(logfilename))[0])
+    def doTask(self, filename,relativepath):
+      dest_path = os.path.join(self.target_path, relativepath)
       try:
         if not os.path.isdir(dest_path):
           os.makedirs(dest_path)
@@ -85,6 +84,7 @@ class Consumer:
   #def __init__(self, path, '''consumeinterval, ''' deleterotatedfiles=True, logpattern="", lastfileinfo=None):
   def __init__(self, path, deleterotatedfiles=True, logpattern="", provider = None, target_path=None, lastfileinfo=None):
     self.path = path
+    os.chdir(self.path)
 #    self.consumerinterval = consumerinterval # Now it seems unneeded.
     self.deleterotatedfiles = deleterotatedfiles
     if lastfileinfo:
@@ -107,7 +107,7 @@ class Consumer:
 
   def list_of_logs(self):
     return [os.path.join(dirpath, files) \
-              for (dirpath, dirname, filename) in os.walk(self.path) \
+              for (dirpath, dirname, filename) in os.walk(".") \
               for files in filename if files.endswith(Consumer.fileextension)]
 
   def list_of_consumeables(self, filename):
@@ -124,7 +124,7 @@ class Consumer:
 
     return sorted([os.path.join(dirpath, files) \
               for (dirpath, _, filenames) in os.walk(os.path.dirname(filename)) \
-              for files in filenames if self.regex.search(files) and files.startswith(fileprefix) and files > lastfilename])
+              for files in filenames if self.regex.search(files) and files > lastfilename])
     #Update the data with the last file.
     #self.lastfileinfo.set_last_file(filename, filelists[-1])
     #return filelists
@@ -132,7 +132,7 @@ class Consumer:
 
   def do_action(self, last_value, filename):
     #This is just for test of now. Later, it will be upgraded for object storage.
-    return last_value and self.provider.doTask(filename, self.currentlog)
+    return last_value and self.provider.doTask(filename, self.relpath)
     #Temporary just make an entry into the file.
 
   def do_delete(self, filename):
@@ -145,7 +145,9 @@ class Consumer:
     #This means files are not produced so far.
     if len(files) < 1:
       return
-    self.currentlog = filename
+    
+    #self.currentlog = filename
+    self.relpath = os.path.relpath(self.path, filename)
     result = reduce(self.do_action, files, True)
     if not result:
       sys.stderr.write("Operation failed on all or some files")
