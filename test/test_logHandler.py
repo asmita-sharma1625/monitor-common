@@ -3,7 +3,7 @@ import re
 import os
 from logger.logHandler import LogHandler
 from logger.common.Constants import Constants
-from test import demo_config
+from test import democonfig
 
 class TestLogHandler(unittest.TestCase):
 
@@ -15,7 +15,7 @@ class TestLogHandler(unittest.TestCase):
     #configWriter.CreateConfigFile("config.cfg", "Constants", "Socket", "tcp://127.0.0.1:"+`TestLogHandler.socket`)
     #configWriter.CreateConfigFile("config.cfg", "Constants", "LogDir", "./logs")
     #configWriter.CreateConfigFile("config.cfg", "Constants", "Filename", "metric.log")
-    self.cfgfile = demo_config.demoConfig().setConfig()
+    self.cfgfile = democonfig.demoConfig().setConfig()
 
   def test_dirIfNotExists(self):
     logHandler = LogHandler(TestLogHandler.SERVICE, self.cfgfile)

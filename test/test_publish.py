@@ -1,7 +1,7 @@
 import unittest
 from logger import logger, publish
 import time
-from test import demo_config 
+from test import democonfig 
 
 class TestPublish(unittest.TestCase): 
 
@@ -9,7 +9,7 @@ class TestPublish(unittest.TestCase):
     #configWriter.CreateConfigFile("pconfig.cfg", "Constants", "Socket", "tcp://127.0.0.1:8932")
     #configWriter.CreateConfigFile("pconfig.cfg", "Constants", "LogDir", "./logs")
     #configWriter.CreateConfigFile("pconfig.cfg", "Constants", "Filename", "metric.log")
-    cfgfile = demo_config.demoConfig().setConfig()
+    cfgfile = democonfig.demoConfig().setConfig()
     publish.setLogger("demo_publish", cfgfile)
   
   def tearDown(self):
