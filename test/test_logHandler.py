@@ -10,7 +10,7 @@ from logger.common.configReader import ConfigReader
 class TestLogHandler(unittest.TestCase):
 
   SERVICE = "demo_service"
-  socket = 6765
+  socket = 5555
 
   def setUp(self):
     #pdb.set_trace()
