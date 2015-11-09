@@ -1,20 +1,21 @@
 import unittest
 from logger import logger, publish
 import time
-from logger.common import configWriter
+from demo_config import demoConfig
 
 class TestPublish(unittest.TestCase): 
 
   def setUp(self):
-    configWriter.CreateConfigFile("pconfig.cfg", "Constants", "Socket", "tcp://127.0.0.1:8932")
-    configWriter.CreateConfigFile("pconfig.cfg", "Constants", "LogDir", ".")
-    configWriter.CreateConfigFile("pconfig.cfg", "Constants", "Filename", "metric.log")
-    publish.setLogger("demo_publish", "pconfig.cfg")
+    #configWriter.CreateConfigFile("pconfig.cfg", "Constants", "Socket", "tcp://127.0.0.1:8932")
+    #configWriter.CreateConfigFile("pconfig.cfg", "Constants", "LogDir", "./logs")
+    #configWriter.CreateConfigFile("pconfig.cfg", "Constants", "Filename", "metric.log")
+    cfgfile = demoConfig().setConfig()
+    publish.setLogger("demo_publish", cfgfile)
   
- # def tearDown(self):
-  #  print " ###### tearing down publish test ##### "
-   # super(TestPublish, self).tearDown()
-    #print " ##### end tear down ####"
+  def tearDown(self):
+    print " ###### tearing down publish test ##### "
+    super(TestPublish, self).tearDown()
+    print " ##### end tear down ####"
 
   def test_ReportLatency(self):
     i = 10

@@ -3,29 +3,26 @@ import re
 import os
 from logger.logHandler import LogHandler
 from logger.common.Constants import Constants
-from logger.common import configWriter
-from logger.common.configReader import ConfigReader
-#import pdb
+from demo_config import demoConfig
 
 class TestLogHandler(unittest.TestCase):
 
   SERVICE = "demo_service"
-  socket = 5555
+  #socket = 5555
 
   def setUp(self):
-    #pdb.set_trace()
-    TestLogHandler.socket = TestLogHandler.socket + 1
-    configWriter.CreateConfigFile("config.cfg", "Constants", "Socket", "tcp://127.0.0.1:"+`TestLogHandler.socket`)
-    configWriter.CreateConfigFile("config.cfg", "Constants", "LogDir", ".")
-    configWriter.CreateConfigFile("config.cfg", "Constants", "Filename", "metric.log")
+    #TestLogHandler.socket = TestLogHandler.socket + 1
+    #configWriter.CreateConfigFile("config.cfg", "Constants", "Socket", "tcp://127.0.0.1:"+`TestLogHandler.socket`)
+    #configWriter.CreateConfigFile("config.cfg", "Constants", "LogDir", "./logs")
+    #configWriter.CreateConfigFile("config.cfg", "Constants", "Filename", "metric.log")
+    self.cfgfile = demoConfig().setConfig()
 
   def test_dirIfNotExists(self):
-   # pdb.set_trace()
-    logHandler = LogHandler(TestLogHandler.SERVICE, "config.cfg")
+    logHandler = LogHandler(TestLogHandler.SERVICE, self.cfgfile)
     self.assertTrue(os.path.exists(os.path.join(os.path.join(Constants.getLogDir(), Constants.getHostname()),TestLogHandler.SERVICE)))
 
   def test_dirIfExists(self):
-    new_logHandler = LogHandler(TestLogHandler.SERVICE, "config.cfg")
+    new_logHandler = LogHandler(TestLogHandler.SERVICE, self.cfgfile)
     self.assertTrue(os.path.exists(os.path.join(os.path.join(Constants.getLogDir(), Constants.getHostname()),TestLogHandler.SERVICE)))
 
 if __name__ == '__main__':

@@ -8,5 +8,5 @@ class TestMonitorLog(unittest.TestCase):
   @unittest.skip("skip")
   def test_logError(self):
     with self.assertRaises(IncorrectConfigException):
-      Logger("dummy", "dummy")
+      Logger("dummy", "dummy.cfg")
     print "test passed*******************"

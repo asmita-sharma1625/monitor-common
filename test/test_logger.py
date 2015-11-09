@@ -1,20 +1,22 @@
 import unittest
 from logger import logger
 from logger.common import configWriter
+from demo_config import demoConfig 
 
 class TestLogger(unittest.TestCase):
   
   SERVICE = "TestLogger"
   NAME = "dummy_metric"
   SEVERITY = 50
-  socket = 5578
+  #socket = 5578
 
   def setUp(self):
-    TestLogger.socket = TestLogger.socket + 1
-    configWriter.CreateConfigFile("Config.cfg", "Constants", "Socket", "tcp://127.0.0.1:"+`TestLogger.socket`)
-    configWriter.CreateConfigFile("Config.cfg", "Constants", "LogDir", ".")
-    configWriter.CreateConfigFile("Config.cfg", "Constants", "Filename", "metric.log")
-    self.logger = logger.Logger(self.SERVICE, "Config.cfg")
+    #TestLogger.socket = TestLogger.socket + 1
+    #configWriter.CreateConfigFile("Config.cfg", "Constants", "Socket", "tcp://127.0.0.1:"+`TestLogger.socket`)
+    #configWriter.CreateConfigFile("Config.cfg", "Constants", "LogDir", "./logs")
+    #configWriter.CreateConfigFile("Config.cfg", "Constants", "Filename", "metric.log")
+    cfgfile = demoConfig().setConfig()
+    self.logger = logger.Logger(self.SERVICE, cfgfile)
 
   def dummy_func(self, a, b):
     return a / b  
