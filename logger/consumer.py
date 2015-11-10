@@ -42,7 +42,6 @@ class Consumer:
 
   def __init__(self, path, deleterotatedfiles=True, logpattern=".*", provider = None, target_path=None):
     self.path = path
-    os.chdir(self.path)
     self.deleterotatedfiles = deleterotatedfiles
 
     self.logpattern = logpattern
@@ -58,7 +57,7 @@ class Consumer:
 
   def list_of_logs(self):
     return [os.path.join(dirpath, files) \
-              for (dirpath, dirname, filename) in os.walk(".") \
+              for (dirpath, dirname, filename) in os.walk(self.path) \
               for files in filename if files.endswith(Consumer.fileextension) and self.regex.search(files)]
 
 
