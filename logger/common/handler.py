@@ -47,7 +47,7 @@ class Handler:
     filepath = os.path.join(self.directory, Constants.getFilename())
     try:
       subscriber = MyZeroMQSubscriber()
+      subscriber.startSubscriber(filepath)
     except zmq.error.ZMQError as error:
       monitorLog.logError("Subscriber process already running", error)
       pass
-    subscriber.startSubscriber(filepath)
