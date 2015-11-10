@@ -61,7 +61,7 @@ class ConsumerTest(unittest.TestCase):
     self.__tear_setup(tempath)
 
   def test_consumer2(self):
-    (tempath,filesize) = self.__create_setup_at("/tmp/tmph_FSBc/")
+    (tempath,filesize) = self.__create_setup()
     filecount = self.__validate_before(tempath)
     self.assertTrue(filecount > 0)
 
@@ -86,6 +86,10 @@ class ConsumerTest(unittest.TestCase):
     #shutil.rmtree(log_path)
     if not os.path.isdir(log_path):
       os.makedirs(log_path)
+    else:
+      shutil.rmtree(log_path)
+      os.makedirs(log_path)
+
     mconsumer = consumer.Consumer(tempath,True,"[0-9]+.log$", None,log_path)
     initial_files = self.__fc_l(log_path)
     #pudb.set_trace()
@@ -148,7 +152,7 @@ class ConsumerTest(unittest.TestCase):
     return os.stat(filename).st_size
 
   def __tear_setup(self, dirpath):
-    pass
+    shutil.rmtree(dirpath)
 
   def __validate_before(self, dirpath):
     return len([files for (dirp,dirname,filename) in os.walk(dirpath) for files in filename if files.endswith(rotator.Rotator.fileextension)])
