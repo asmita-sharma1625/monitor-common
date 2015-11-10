@@ -1,5 +1,5 @@
 #!/usr/bin/python
-'''
+
 from logger import consumer
 from logger import rotator
 import unittest
@@ -148,11 +148,11 @@ class ConsumerTest(unittest.TestCase):
     return os.stat(filename).st_size
 
   def __tear_setup(self, dirpath):
-    shutil.rmtree(dirpath)
+    pass
 
   def __validate_before(self, dirpath):
     return len([files for (dirp,dirname,filename) in os.walk(dirpath) for files in filename if files.endswith(rotator.Rotator.fileextension)])
 
 if __name__=='__main__':
     unittest.main()
-'''
+
