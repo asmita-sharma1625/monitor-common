@@ -17,7 +17,7 @@ class MyZeroMQSubscriber:
   def startSubscriber(self, filepath):
     print "subscriber started"
     with TimedRotatingFileHandler(filepath, date_format='%Y-%m-%d %H:%M', level = "ERROR"):
-      print "log received : ", self.subscriber.recv().message
+      print "log received : "
       self.subscriber.dispatch_forever()
 
 

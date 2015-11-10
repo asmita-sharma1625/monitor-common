@@ -6,17 +6,13 @@ from test import democonfig
 class TestPublish(unittest.TestCase): 
 
   def setUp(self):
+    cfgfile = "config.cfg"
     #configWriter.CreateConfigFile("pconfig.cfg", "Constants", "Socket", "tcp://127.0.0.1:8932")
     #configWriter.CreateConfigFile("pconfig.cfg", "Constants", "LogDir", "./logs")
     #configWriter.CreateConfigFile("pconfig.cfg", "Constants", "Filename", "metric.log")
-    cfgfile = democonfig.demoConfig().setConfig()
+    democonfig.demoConfig(cfgfile).setConfig()
     publish.setLogger("demo_publish", cfgfile)
   
-  def tearDown(self):
-    print " ###### tearing down publish test ##### "
-    super(TestPublish, self).tearDown()
-    print " ##### end tear down ####"
-
   def test_ReportLatency(self):
     i = 10
     j = 2

@@ -1,5 +1,4 @@
 import ConfigParser
-
 filename = None
 
 def CreateConfigFile(filepath, section, key, value):
@@ -16,7 +15,6 @@ def CreateConfigFile(filepath, section, key, value):
   # when attempting to write to a file or when you get it in non-raw
   # mode. SafeConfigParser does not allow such assignments to take place.
   
-
   config.add_section(section)
   config.set(section, key, value)
   
@@ -33,7 +31,7 @@ def CreateConfigFile(filepath, section, key, value):
   
   #configRead.remove_option(section, key)
   # Writing our configuration file to input filename
-  with open(filepath, 'a') as configfile:
+  with open(filename, 'a') as configfile:
     config.write(configfile)
 
 def setConfigFile(filepath):

@@ -1,6 +1,5 @@
 import unittest
 from logger import logger
-from logger.common import configWriter
 from test import democonfig 
 
 class TestLogger(unittest.TestCase):
@@ -11,11 +10,12 @@ class TestLogger(unittest.TestCase):
   #socket = 5578
 
   def setUp(self):
+    cfgfile = "logconfig.cfg"
     #TestLogger.socket = TestLogger.socket + 1
     #configWriter.CreateConfigFile("Config.cfg", "Constants", "Socket", "tcp://127.0.0.1:"+`TestLogger.socket`)
     #configWriter.CreateConfigFile("Config.cfg", "Constants", "LogDir", "./logs")
     #configWriter.CreateConfigFile("Config.cfg", "Constants", "Filename", "metric.log")
-    cfgfile = democonfig.demoConfig().setConfig()
+    democonfig.demoConfig(cfgfile).setConfig()
     self.logger = logger.Logger(self.SERVICE, cfgfile)
 
   def dummy_func(self, a, b):

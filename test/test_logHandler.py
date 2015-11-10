@@ -11,11 +11,12 @@ class TestLogHandler(unittest.TestCase):
   #socket = 5555
 
   def setUp(self):
+    self.cfgfile = "pconfig.cfg"
     #TestLogHandler.socket = TestLogHandler.socket + 1
     #configWriter.CreateConfigFile("config.cfg", "Constants", "Socket", "tcp://127.0.0.1:"+`TestLogHandler.socket`)
     #configWriter.CreateConfigFile("config.cfg", "Constants", "LogDir", "./logs")
     #configWriter.CreateConfigFile("config.cfg", "Constants", "Filename", "metric.log")
-    self.cfgfile = democonfig.demoConfig().setConfig()
+    democonfig.demoConfig(self.cfgfile).setConfig()
 
   def test_dirIfNotExists(self):
     logHandler = LogHandler(TestLogHandler.SERVICE, self.cfgfile)

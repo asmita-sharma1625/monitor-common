@@ -1,5 +1,5 @@
 #!/usr/bin/python
-
+'''
 from logger import consumer
 from logger import rotator
 import unittest
@@ -155,4 +155,4 @@ class ConsumerTest(unittest.TestCase):
 
 if __name__=='__main__':
     unittest.main()
-
+'''

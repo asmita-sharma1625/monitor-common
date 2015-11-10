@@ -8,7 +8,8 @@ import os
 class TestConsumerIntegrationWithLogger(unittest.TestCase):
 
   def setUp(self):
-    cfgfile = democonfig.demoConfig().setConfig()  
+    cfgfile = "iconfig.cfg"
+    cfgfile = democonfig.demoConfig(cfgfile).setConfig()  
     self.src_path = "../logs"
     self.dest_path = "../consumer"
 
