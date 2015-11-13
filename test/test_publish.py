@@ -1,5 +1,5 @@
 import unittest
-from logger import logger, publish
+from metricgenerator import logger, publish
 import time
 from test import democonfig 
 

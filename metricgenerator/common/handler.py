@@ -1,13 +1,13 @@
 import os
 import logging
 from multiprocessing import Process
-from logger.common.Constants import Constants
+from metricgenerator.common.Constants import Constants
 from logbook.compat import RedirectLoggingHandler
-from logger.common.zeroMQHandler import MyZeroMQHandler
-from logger.common.zeroMQSubscriber import MyZeroMQSubscriber
-from logger.common.configReader import ConfigReader
+from metricgenerator.common.zeroMQHandler import MyZeroMQHandler
+from metricgenerator.common.zeroMQSubscriber import MyZeroMQSubscriber
+from metricgenerator.common.configReader import ConfigReader
 import atexit
-from logger.common.monitorLog import monitorLog
+from metricgenerator.common.monitorLog import monitorLog
 import zmq
 
 class Handler:

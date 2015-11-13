@@ -1,6 +1,6 @@
 from logbook.queues import ZeroMQSubscriber
 from logbook import TimedRotatingFileHandler, GMailHandler
-from logger.common.Constants import Constants
+from metricgenerator.common.Constants import Constants
 import zmq
 
 class MyZeroMQSubscriber:

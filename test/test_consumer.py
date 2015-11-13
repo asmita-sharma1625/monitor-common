@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
-from logger import consumer
-from logger import rotator
+from metricgenerator import consumer
+from metricgenerator import rotator
 import unittest
 import sys
 import os
