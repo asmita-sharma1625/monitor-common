@@ -36,8 +36,9 @@ class Handler:
 
   def startQueueSubscriber(self):
     self.childProcess = Process(target = self.getQueueSubscriber)
+    self.childProcess.daemon = True
     self.childProcess.start()
-    atexit.register(self.killQueueSubscriber)
+    #atexit.register(self.killQueueSubscriber)
 
   def killQueueSubscriber(self):
     print "Kill Child process"

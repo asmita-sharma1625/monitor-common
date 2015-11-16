@@ -13,7 +13,7 @@ class LogHandler:
       self.handler = Handler(self.service, configFile)
       self.logger = self.handler.getLogHandler()
     except Exception as error:
-      monitorLog.logError("Cannot Instantiate Handler with configFile : " + configFile, error)
+      monitorLog.logError("Cannot Instantiate Handler with configFile : " + configFile, `error`)
       raise Exception("Cannot Instantiate Handler with configFile : " + configFile)
     # start queue subscriber for logging 
     self.handler.startQueueSubscriber()
@@ -21,7 +21,7 @@ class LogHandler:
     try:
       self.queueHandler = self.handler.getQueueHandler()
     except Exception as error:
-      monitorLog.logError("Cannot instanstiate ZMQ handler with given context", error)
+      monitorLog.logError("Cannot instanstiate ZMQ handler with given context", `error`)
       raise Exception("Cannot instanstiate ZMQ handler with given context")
     self.commonLog = Constants.toStringCommon(service)
 
@@ -34,7 +34,7 @@ class LogHandler:
       with self.queueHandler:
           self.logger.log(severity, self.commonLog+msg)
     except Exception as error:
-      monitorLog.logError("Failure to append Log: " + msg, error)
+      monitorLog.logError("Failure to append Log: " + msg, `error`)
       raise Exception("Failure to append log: " + msg)
 
   def appendFailCountLog(self, name, count, severity):
@@ -42,7 +42,7 @@ class LogHandler:
     try:
       self.appendLog(msg, severity)
     except:
-      monitorLog.logError("Failure to append Count Log: " + msg, error)
+      monitorLog.logError("Failure to append Count Log: " + msg, `error`)
       raise Exception("Failure to append Count log: " + msg)
 
   def appendCountLog(self, name, count, severity):
@@ -50,7 +50,7 @@ class LogHandler:
     try:
       self.appendLog(msg, severity)
     except:
-      monitorLog.logError("Failure to append Count Log: " + msg, error)
+      monitorLog.logError("Failure to append Count Log: " + msg, `error`)
       raise Exception("Failure to append Count log: " + msg)
 
   def appendTimeLog(self, name, runtime, severity):
@@ -58,7 +58,7 @@ class LogHandler:
     try:
       self.appendLog(msg, severity)
     except:
-      monitorLog.logError("Failure to append Count Log: " + msg, error)
+      monitorLog.logError("Failure to append Count Log: " + msg, `error`)
       raise Exception("Failure to append Count log: " + msg)
 
   
