@@ -1,8 +1,8 @@
 import unittest
 import re
 import os
-from logger.logHandler import LogHandler
-from logger.common.Constants import Constants
+from metricgenerator.logHandler import LogHandler
+from metricgenerator.common.Constants import Constants
 from test import democonfig
 
 class TestLogHandler(unittest.TestCase):

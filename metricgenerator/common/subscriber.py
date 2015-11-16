@@ -4,7 +4,7 @@ import socket
 from logbook.queues import ZeroMQSubscriber
 from logbook import TimedRotatingFileHandler
 from nova.logger.common import Constants
-from logger.common.configReader import ConfigReader
+from metricgenerator.common.configReader import ConfigReader
 
 ConfigReader.setConfig(sys.argv[1])
 

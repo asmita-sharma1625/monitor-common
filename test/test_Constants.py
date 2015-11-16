@@ -1,7 +1,7 @@
 import unittest
 import re
 import socket
-from logger.common.Constants import Constants 
+from metricgenerator.common.Constants import Constants 
 
 class TestConstants(unittest.TestCase):
 

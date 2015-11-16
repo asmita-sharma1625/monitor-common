@@ -1,4 +1,4 @@
-from logger.common import configWriter, configReader
+from metricgenerator.common import configWriter, configReader
 import os 
 
 class demoConfig:

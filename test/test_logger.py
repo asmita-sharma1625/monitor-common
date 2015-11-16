@@ -1,5 +1,5 @@
 import unittest
-from logger import logger
+from metricgenerator import logger
 from test import democonfig 
 
 class TestLogger(unittest.TestCase):

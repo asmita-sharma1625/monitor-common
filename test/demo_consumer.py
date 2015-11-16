@@ -1,7 +1,7 @@
-from logger.consumer import Consumer
-from logger.common.Constants import Constants
-from logger.common import configWriter
-from logger.common.configReader import ConfigReader
+from metricgenerator.consumer import Consumer
+from metricgenerator.common.Constants import Constants
+from metricgenerator.common import configWriter
+from metricgenerator.common.configReader import ConfigReader
 import pdb
 
 

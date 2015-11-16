@@ -1,7 +1,7 @@
 import unittest
-from logger.common.monitorLog import monitorLog
-from logger.logger import Logger
-from logger.common.exceptions import IncorrectConfigException
+from metricgenerator.common.monitorLog import monitorLog
+from metricgenerator.logger import Logger
+from metricgenerator.common.exceptions import IncorrectConfigException
 
 class TestMonitorLog(unittest.TestCase):
 

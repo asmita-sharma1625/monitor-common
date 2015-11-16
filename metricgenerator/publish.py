@@ -1,4 +1,4 @@
-from logger import Logger
+from metricgenerator.logger import Logger
 
 logger = None
 

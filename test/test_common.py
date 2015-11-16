@@ -3,7 +3,7 @@
 import unittest
 import os
 import time
-import logger.common.singleton
+import metricgenerator.common.singleton
 import tempfile
 import sys
 
