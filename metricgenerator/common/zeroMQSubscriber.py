@@ -15,9 +15,9 @@ class MyZeroMQSubscriber:
       raise zmq.error.ZMQError("error while binding to socket :" + Constants.getSocket())
 
   def startSubscriber(self, filepath):
-    print "subscriber started"
-    with TimedRotatingFileHandler(filepath, date_format='%Y-%m-%d %H:%M', level = "ERROR"):
-      print "log received : "
+    print "subscriber started" + `self.subscriber`
+    with TimedRotatingFileHandler(filepath, date_format='%Y-%m-%d %H:%M'):
+      print "log received : " + self.subscriber.recv().message
       self.subscriber.dispatch_forever()
 
 

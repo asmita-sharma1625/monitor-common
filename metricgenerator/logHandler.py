@@ -41,7 +41,7 @@ class LogHandler:
     msg = Constants.toStringCount(name, Constants.FAILCOUNT, count, severity)
     try:
       self.appendLog(msg, severity)
-    except:
+    except Exception as error:
       monitorLog.logError("Failure to append Count Log: " + msg, `error`)
       raise Exception("Failure to append Count log: " + msg)
 
@@ -49,15 +49,15 @@ class LogHandler:
     msg = Constants.toStringCount(name, Constants.COUNT, count, severity)
     try:
       self.appendLog(msg, severity)
-    except:
-      monitorLog.logError("Failure to append Count Log: " + msg, `error`)
+    except Exception as error:
+      monitorLog.logError("Failure append Count Log: " + msg, `error`)
       raise Exception("Failure to append Count log: " + msg)
 
   def appendTimeLog(self, name, runtime, severity):
     msg = Constants.toStringRuntime(name, Constants.RUNTIME, runtime, severity)
     try:
       self.appendLog(msg, severity)
-    except:
+    except Exception as error:
       monitorLog.logError("Failure to append Count Log: " + msg, `error`)
       raise Exception("Failure to append Count log: " + msg)
 

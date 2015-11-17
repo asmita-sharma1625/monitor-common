@@ -17,8 +17,6 @@ def LogIfFail(name, expectedReturn, counter, severity = None):
 def ReportLatency(name, severity = None):
     def real_decorator(function):
         def wrapper(*args, **kwargs):
-	   global logger
-	   print "*****logger object *****" + `logger`
            return logger.reportLatency(name, function, severity, *args, **kwargs)
         return wrapper
     return real_decorator
