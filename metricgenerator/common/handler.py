@@ -1,14 +1,17 @@
 import os
 import logging
-from multiprocessing import Process
 from metricgenerator.common.Constants import Constants
 from logbook.compat import RedirectLoggingHandler
 from metricgenerator.common.zeroMQHandler import MyZeroMQHandler
-from metricgenerator.common.zeroMQSubscriber import MyZeroMQSubscriber
 from metricgenerator.common.configReader import ConfigReader
-import atexit
 from metricgenerator.common.monitorLog import monitorLog
 import zmq
+''' not used since subscriber is an independent process now '''
+'''
+from metricgenerator.common.zeroMQSubscriber import MyZeroMQSubscriber
+from multiprocessing import Process
+import atexit
+'''
 
 class Handler:
 
@@ -26,14 +29,19 @@ class Handler:
     self.logger = logging.getLogger(service)
     self.logger.setLevel(logging.INFO)
     self.logger.addHandler(RedirectLoggingHandler())
+    print "handler instantiated"
 
   def getLogHandler(self):
+    print "returning logger instance :", `self.logger`
     return self.logger
 
 
   def getQueueHandler(self):
+    print "returning queue handler"
     return MyZeroMQHandler(Constants.getSocket()).getZeroMQHandler()
 
+  ''' Follwing methods are not used since subscriber is an independent process now '''
+  '''
   def startQueueSubscriber(self):
     self.childProcess = Process(target = self.getQueueSubscriber)
     self.childProcess.daemon = True
@@ -52,3 +60,4 @@ class Handler:
     except zmq.error.ZMQError as error:
       monitorLog.logError("Subscriber process already running", error)
       pass
+  '''

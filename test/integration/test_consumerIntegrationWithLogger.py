@@ -2,18 +2,21 @@ from metricgenerator.consumer import Consumer
 from metricgenerator.common.Constants import Constants
 import unittest
 import filecmp
-from test import democonfig 
+#from test import democonfig 
 import os 
+import socket
 
 class TestConsumerIntegrationWithLogger(unittest.TestCase):
 
   def setUp(self):
+    '''
     cfgfile = "iconfig.cfg"
-    cfgfile = democonfig.demoConfig(cfgfile).setConfig()  
+    cfgfile = democonfig.demoConfig(cfgfile).setConfig() 
+    ''' 
     self.src_path = "../logs"
     self.dest_path = "../consumer"
 
-  @unittest.skipUnless(os.path.exists(os.path.join("../logs", Constants.getHostname())), "logger test case not run yet")
+  @unittest.skipUnless(os.path.exists(os.path.join("../logs", socket.gethostname())), "logger test case not run yet")
   def test_logConsumption(self):
     #configWriter.CreateConfigFile("config.cfg", "Constants", "LogDir", "./logs")
     #ConfigReader.setConfig("config.cfg")

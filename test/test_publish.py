@@ -5,28 +5,31 @@ from test import democonfig
 
 class TestPublish(unittest.TestCase): 
 
+  SERVICE = "Test"
+  publish.setLogger(SERVICE, "config.cfg")
+
   def setUp(self):
-    cfgfile = "config.cfg"
-    #configWriter.CreateConfigFile("pconfig.cfg", "Constants", "Socket", "tcp://127.0.0.1:8932")
-    #configWriter.CreateConfigFile("pconfig.cfg", "Constants", "LogDir", "./logs")
-    #configWriter.CreateConfigFile("pconfig.cfg", "Constants", "Filename", "metric.log")
-    democonfig.demoConfig(cfgfile).setConfig()
-    publish.setLogger("demo_publish", cfgfile)
+    #cfgfile = "config.cfg"
+    '''
+    configWriter.CreateConfigFile("pconfig.cfg", "Constants", "Socket", "tcp://127.0.0.1:8932")
+    configWriter.CreateConfigFile("pconfig.cfg", "Constants", "LogDir", "./logs")
+    configWriter.CreateConfigFile("pconfig.cfg", "Constants", "Filename", "metric.log")
+    '''
+    #democonfig.demoConfig(cfgfile).setConfig()
+    #publish.setLogger("demo_publish", cfgfile)
   
   def test_ReportLatency(self):
+    print "testing publish"
     i = 10
     j = 2
     while i > 0:
-      self.demo_log(j * 2, j)
+      self.demo_action(j * 2, j)
       i = i - 1
       j = j * 2
 
-  @publish.ReportLatency("demo", 40)
-  def demo_log(self, a, b):
-    #logger.reportLatency("report latency", "demo-metric", demo_action, a, b)
-    return self.demo_action(a, b)
-
+  @publish.ReportLatency("publish", 40)
   def demo_action(self, a, b):
+    print "in demo_action"
     time.sleep(1)
     return a / b
   

@@ -20,6 +20,7 @@ class Logger:
   '''
   def __init__ (self, service, configFile):
     try:
+      print "logger instantiated"
       self.logHandler = LogHandler(service, configFile)
     except Exception as error:
       monitorLog.logError("Cannot Instantiate Logger with configFile : " + configFile, `error`)
@@ -35,6 +36,7 @@ class Logger:
     count = self.reportCountNE(expectedReturn, counter, action, *args, **kwargs)
     if count > 0:
       try:
+        print "logging failure"
         self.logHandler.appendFailCountLog(name, count, severity)	
       except Exception as error:
         monitorLog.logError("Failed to append log for metric: " + name, `error`)
@@ -47,6 +49,7 @@ class Logger:
         if counter >= Logger.threshold_failure:
           self.logHandler.appendFailCountLog(name, counter,  'CRITICAL')
         self.logHandler.appendFailCountLog(name, counter, severity)
+        print "logging failure"
       except Exception as error:
         monitorLog.logError("Failed to append log for metric: " + name, `error`)
         raise LoggingException("Failed to append log for metric: " + name)
