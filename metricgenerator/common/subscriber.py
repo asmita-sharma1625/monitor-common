@@ -33,15 +33,19 @@ print "HOSTNAME - ", HOSTNAME
 subscriber = None
 
 try:
-  subscriber = ZeroMQSubscriber(SOCKET)
+  subscriber = ZeroMQSubscriber(SOCKET, multi = True)
   print "Subscriber bind to socket - ", SOCKET
 except zmq.error.ZMQError as error:
       print "error in service " + SERVICE + " while binding to socket :" + SOCKET
       raise zmq.error.ZMQError("error in service " + SERVICE + " while binding to socket :" + SOCKET)                                                                                                                                                                                           
-path = os.path.join(os.path.join(LOGDIR, HOSTNAME), os.path.join(SERVICE, FILENAME))
+path = os.path.join(os.path.join(LOGDIR, HOSTNAME), SERVICE)
+path_with_filename = os.path.join(path, FILENAME)
 print "PATH - ", path
 
-with TimedRotatingFileHandler(path, date_format='%Y-%m-%d %H:%M'):
+if not os.path.exists(path):
+  os.makedirs(path)
+
+with TimedRotatingFileHandler(path_with_filename, date_format='%Y-%m-%d %H:%M'):
   print "Log Received - ", subscriber.recv().message
   subscriber.dispatch_forever()
 
