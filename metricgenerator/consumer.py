@@ -1,9 +1,10 @@
-
+import sys
 import os
 import sqlite3
 import re
 import sys
 import shutil
+from metricgenerator.common.configReader import ConfigReader
 
 class Consumer:
 
@@ -83,4 +84,22 @@ class Consumer:
     #Get list of file names
     file_names = self.list_of_logs()
     map(self.consume_each_file, file_names)
+
+if __name__ == '__main__':
+  if len(sys.argv) != 3:
+    raise SystemExit("Invalid Arguments - config path and section name required")
+
+  CONFIGFILE = sys.argv[1]
+  SECTION = sys.argv[2]
+  TARGET_PATH = sys.argv[3]
+  ConfigReader.setConfig(CONFIGFILE)
+
+  print "CONFIGFILE - ", CONFIGFILE
+  print "SECTION - ", SECTION
+
+  LOGDIR =  ConfigReader.getValue(SECTION, "LogDir") #sys.argv[2]
+  FILENAME = ConfigReader.getValue(SECTION, "Filename") #sys.argv[3]
+  
+  consumer = Consumer(LOGDIR, deleterotatedfiles = False, logpattern = FILENAME, target_path = TARGET_PATH)
+  consumer.consume()   
 

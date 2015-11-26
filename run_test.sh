@@ -8,13 +8,12 @@ find |grep "pyc$"|xargs rm -f
  #rm *.cfg -f
  
  python create_config.py config.cfg Constants --service Test --logdir ./logs --filename metric.log --socket tcp://127.0.0.1:5581
- #python ../metricgenerator/common/subscriber.py config.cfg Constants
-
+ python ../metricgenerator/common/subscriber.py config.cfg Constants &
+ #python metricgenerator/consumer.py config.cfg Constants
  python -m unittest discover -s .
  cd integration
  python -m unittest discover -s .
-  
- #pkill -9 -f ../../metricgenerator/common/subscriber.py
+ ps -ef | grep subscriber | grep -v grep | awk '{print $2}' | xargs kill
   
 #cd $CWD
 #cd logger
