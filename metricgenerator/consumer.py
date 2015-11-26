@@ -86,8 +86,8 @@ class Consumer:
     map(self.consume_each_file, file_names)
 
 if __name__ == '__main__':
-  if len(sys.argv) != 3:
-    raise SystemExit("Invalid Arguments - config path and section name required")
+  if len(sys.argv) != 4:
+    raise SystemExit("Invalid Arguments - config path, section name and target path required")
 
   CONFIGFILE = sys.argv[1]
   SECTION = sys.argv[2]
