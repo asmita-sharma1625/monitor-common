@@ -99,7 +99,13 @@ if __name__ == '__main__':
 
   LOGDIR =  ConfigReader.getValue(SECTION, "LogDir") #sys.argv[2]
   FILENAME = ConfigReader.getValue(SECTION, "Filename") #sys.argv[3]
+  components = FILENAME.split(".")[0]
+  PATTERN = "metric.*\.log"
+  if len(components) == 2:
+    PATTERN = components[0] + ".*\." + components[1]  
+
+  consumer = Consumer(LOGDIR, deleterotatedfiles = False, logpattern = PATTERN, target_path = TARGET_PATH)
   
-  consumer = Consumer(LOGDIR, deleterotatedfiles = False, logpattern = FILENAME, target_path = TARGET_PATH)
-  consumer.consume()   
+  while True:
+    consumer.consume()   
 
