@@ -31,22 +31,31 @@ class Consumer:
       return True
 
   class ObjectStorageAction(ActionOnFile):
-    def __init__(self, bucket, dest_path = None):
+    def __init__(self, bucket, logdir, dest_path = None):
       '''
       self.username = "account_name:username"
       self.api_key = "API Public key."
       self.authurl = "https::/user.com/auth"
       #self.conn = cloudfiles.get_connection(username=self.username, api_key=self.api_key, authurl=self.authurl)
       '''
+      self.logdir = logdir
       if dest_path is  not None:
         self.dest_path = dest_path
       else:
-        self.dest_path = ""
+        self.dest_path = None
       self.s3Dao = s3Dao.S3Dao()
       self.s3Dao.setBucket(bucket)
 
     def doTask(self, filename, logfilename):
-      self.s3Dao.uploadObject(os.path.join(self.dest_path, logfilename), filename)
+      if self.dest_path is not None:
+        logfilename = os.path.join(self.dest_path, logfilename) 
+      filename = os.path.join(self.logdir, filename)
+      print logfilename, "*******", filename
+      try:
+        self.s3Dao.uploadObject(logfilename, filename)
+      except Exception as error:
+        print "ERROR : unable to upload " + filename + "to s3"
+        pass
       #if not self.conn
       #  return False
       return True
@@ -96,12 +105,16 @@ class Consumer:
     map(self.consume_each_file, file_names)
 
 if __name__ == '__main__':
-  if len(sys.argv) != 4:
-    raise SystemExit("Invalid Arguments - config path, section name and target path required")
+  if len(sys.argv) < 3:
+    raise SystemExit("Invalid Arguments - config path and section name required")
 
   CONFIGFILE = sys.argv[1]
   SECTION = sys.argv[2]
-  TARGET_PATH = sys.argv[3]
+
+  if len(sys.argv) == 4:
+    TARGET_PATH = sys.argv[3]
+  else:
+     TARGET_PATH = None
   ConfigReader.setConfig(CONFIGFILE)
 
   print "CONFIGFILE - ", CONFIGFILE
@@ -115,7 +128,7 @@ if __name__ == '__main__':
   #if len(components) == 2:
    # PATTERN = components[0] + ".*\." + components[1]  
 
-  consumer = Consumer(LOGDIR, deleterotatedfiles = False, logpattern = PATTERN, target_path = TARGET_PATH, provider = Consumer.ObjectStorageAction(BUCKET, TARGET_PATH))
+  consumer = Consumer(LOGDIR, deleterotatedfiles = False, logpattern = PATTERN, target_path = TARGET_PATH, provider = Consumer.ObjectStorageAction(BUCKET, LOGDIR, TARGET_PATH))
   
   while True:
     consumer.consume()   
