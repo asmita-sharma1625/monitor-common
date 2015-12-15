@@ -3,7 +3,7 @@ import os
 import sqlite3
 import re
 import sys
-import shutil
+import shutil, socket
 from metricgenerator.common.configReader import ConfigReader
 from metricgenerator import s3Dao
 
@@ -31,18 +31,22 @@ class Consumer:
       return True
 
   class ObjectStorageAction(ActionOnFile):
-    def __init__(self, bucket):
+    def __init__(self, bucket, dest_path = None):
       '''
       self.username = "account_name:username"
       self.api_key = "API Public key."
       self.authurl = "https::/user.com/auth"
       #self.conn = cloudfiles.get_connection(username=self.username, api_key=self.api_key, authurl=self.authurl)
       '''
+      if dest_path is  not None:
+        self.dest_path = dest_path
+      else:
+        self.dest_path = ""
       self.s3Dao = s3Dao.S3Dao()
       self.s3Dao.setBucket(bucket)
 
     def doTask(self, filename, logfilename):
-      self.s3Dao.uploadObject(logfilename, filename)
+      self.s3Dao.uploadObject(os.path.join(self.dest_path, logfilename), filename)
       #if not self.conn
       #  return False
       return True
@@ -106,12 +110,12 @@ if __name__ == '__main__':
   LOGDIR =  ConfigReader.getValue(SECTION, "LogDir") #sys.argv[2]
   FILENAME = ConfigReader.getValue(SECTION, "Filename") #sys.argv[3]
   BUCKET = ConfigReader.getValue(SECTION, "Bucket")
-  components = FILENAME.split(".")[0]
-  PATTERN = "metric.*\.log"
-  if len(components) == 2:
-    PATTERN = components[0] + ".*\." + components[1]  
+  #components = FILENAME.split(".")[0]
+  PATTERN = ".*\.log.*"
+  #if len(components) == 2:
+   # PATTERN = components[0] + ".*\." + components[1]  
 
-  consumer = Consumer(LOGDIR, deleterotatedfiles = False, logpattern = PATTERN, target_path = TARGET_PATH, provider = Consumer.ObjectStorageAction(BUCKET))
+  consumer = Consumer(LOGDIR, deleterotatedfiles = False, logpattern = PATTERN, target_path = TARGET_PATH, provider = Consumer.ObjectStorageAction(BUCKET, TARGET_PATH))
   
   while True:
     consumer.consume()   
