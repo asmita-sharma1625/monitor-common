@@ -5,9 +5,9 @@ find |grep "pyc$"|xargs rm -f
  cd test
  rm -rf consumer
  rm -rf logs
- #rm *.cfg -f
+ rm config.cfg -f
  
- python ../metricgenerator/common/create_config.py config.cfg Constants --service Test --logdir ./logs --filename metric.log --socket tcp://127.0.0.1:5581
+ python ../metricgenerator/common/create_config.py config.cfg Constants --service Test --logdir ./logs --filename metric.log --socket tcp://127.0.0.1:5588
  python ../metricgenerator/common/subscriber.py config.cfg Constants &
  #python metricgenerator/consumer.py config.cfg Constants
  python -m unittest discover -s .
