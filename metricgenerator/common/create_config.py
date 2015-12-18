@@ -29,6 +29,8 @@ while i < arg_len:
     configWriter.CreateConfigFile(CONFIGFILE, SECTION, "Filename", val)
   if option == "--socket":
     configWriter.CreateConfigFile(CONFIGFILE, SECTION, "Socket", val)
+  if option == "--bucket":
+    configWriter.CreateConfigFile(CONFIGFILE, SECTION, "Bucket", val)
 
 HOSTNAME = socket.gethostname()
 configWriter.CreateConfigFile(CONFIGFILE, SECTION, "Hostname", HOSTNAME)
