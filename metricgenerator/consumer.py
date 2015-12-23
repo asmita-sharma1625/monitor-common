@@ -123,13 +123,9 @@ if __name__ == '__main__':
   print "CONFIGFILE - ", CONFIGFILE
   print "SECTION - ", SECTION
 
-  LOGDIR =  ConfigReader.getValue(SECTION, "LogDir") #sys.argv[2]
-  FILENAME = ConfigReader.getValue(SECTION, "Filename") #sys.argv[3]
+  LOGDIR =  ConfigReader.getValue(SECTION, "LogDir") 
   BUCKET = ConfigReader.getValue(SECTION, "Bucket")
-  #components = FILENAME.split(".")[0]
   PATTERN = ".*\.log.*"
-  #if len(components) == 2:
-   # PATTERN = components[0] + ".*\." + components[1]  
 
   consumer = Consumer(LOGDIR, deleterotatedfiles = DELETE_FLAG, logpattern = PATTERN, target_path = TARGET_PATH, provider = Consumer.ObjectStorageAction(BUCKET, LOGDIR, TARGET_PATH))
   
