@@ -52,6 +52,8 @@ class Consumer:
       filename = os.path.join(self.logdir, filename)
       print logfilename, "*******", filename
       try:
+        #print "##########", os.stat(filename)[ST_MODE]
+        #os.chmod(os.path.dirname(filename), 777)
         self.s3Dao.uploadObject(logfilename, filename)
       except Exception as error:
         print "ERROR : unable to upload " + filename + "to s3"
@@ -105,11 +107,12 @@ class Consumer:
     map(self.consume_each_file, file_names)
 
 if __name__ == '__main__':
-  if len(sys.argv) < 3:
-    raise SystemExit("Invalid Arguments - config path and section name required")
+  if len(sys.argv) < 4:
+    raise SystemExit("Invalid Arguments - config path, section name and delete_flag required")
 
   CONFIGFILE = sys.argv[1]
   SECTION = sys.argv[2]
+  DELETE_FLAG = sys.argv[3]
 
   if len(sys.argv) == 4:
     TARGET_PATH = sys.argv[3]
@@ -128,7 +131,7 @@ if __name__ == '__main__':
   #if len(components) == 2:
    # PATTERN = components[0] + ".*\." + components[1]  
 
-  consumer = Consumer(LOGDIR, deleterotatedfiles = False, logpattern = PATTERN, target_path = TARGET_PATH, provider = Consumer.ObjectStorageAction(BUCKET, LOGDIR, TARGET_PATH))
+  consumer = Consumer(LOGDIR, deleterotatedfiles = DELETE_FLAG, logpattern = PATTERN, target_path = TARGET_PATH, provider = Consumer.ObjectStorageAction(BUCKET, LOGDIR, TARGET_PATH))
   
   while True:
     consumer.consume()   
