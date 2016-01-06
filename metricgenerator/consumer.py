@@ -2,7 +2,7 @@ import sys
 import os
 import sqlite3
 import re
-import sys
+import sys, datetime
 import shutil, socket
 from metricgenerator.common.configReader import ConfigReader
 from metricgenerator import s3Dao
@@ -43,13 +43,19 @@ class Consumer:
         self.dest_path = dest_path
       else:
         self.dest_path = None
+      print "dest path:", dest_path
       self.s3Dao = s3Dao.S3Dao()
       self.s3Dao.setBucket(bucket)
 
     def doTask(self, filename, logfilename):
       if self.dest_path is not None:
-        logfilename = os.path.join(self.dest_path, logfilename) 
+        date = datetime.date.today()
+        print date
+        dateRecord = os.path.join(`date.year`, os.path.join(`date.month`, `date.day`))
+        print dateRecord
+        logfilename = os.path.join(self.dest_path, os.path.join(dateRecord, logfilename)) 
       filename = os.path.join(self.logdir, filename)
+      
       print logfilename, "*******", filename
       try:
         #print "##########", os.stat(filename)[ST_MODE]
@@ -114,8 +120,8 @@ if __name__ == '__main__':
   SECTION = sys.argv[2]
   DELETE_FLAG = sys.argv[3]
 
-  if len(sys.argv) == 4:
-    TARGET_PATH = sys.argv[3]
+  if len(sys.argv) == 5:
+    TARGET_PATH = sys.argv[4]
   else:
      TARGET_PATH = None
   ConfigReader.setConfig(CONFIGFILE)
