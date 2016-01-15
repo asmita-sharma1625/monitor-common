@@ -5,7 +5,7 @@ import threading
 from logHandler import LogHandler
 from common.monitorLog import monitorLog
 from common.exceptions import IncorrectConfigException, LoggingException
-
+import traceback
 class Logger:
   
   #beyond these, email will be triggered.
@@ -113,7 +113,7 @@ class Logger:
       self.logHandler.appendTimeLog(name, runTime, severity)
     except Exception as error:
       monitorLog.logError("Failed to append log for metric: " + name, `error`)
-      raise LoggingException("Failed to append log for metric: " + name)
+      raise LoggingException("Failed to append log for metric: " + name+traceback.format_exc())
 
   '''
     Logs the execution time of the given action and returns the value of action.
