@@ -7,12 +7,12 @@ from common.monitorLog import monitorLog
 from common.exceptions import IncorrectConfigException, LoggingException
 
 class Logger:
-  
+  '''
   #beyond these, email will be triggered.
-  threshold_failure = 4
-  threshold_latency = 4
-  threshold_count = 4
-
+  threshold_failure = 20
+  threshold_latency = 20
+  threshold_count = 20
+  '''
   '''
     It :
       - Creates LogHandler instance to write metrics to log file.
@@ -46,8 +46,10 @@ class Logger:
   def logFailure (self, name, counter, severity = 20):
     if counter > 0:
       try:
+        '''
         if counter >= Logger.threshold_failure:
-          self.logHandler.appendFailCountLog(name, counter,  'CRITICAL')
+          self.logHandler.appendFailCountLog(name, counter,  50)
+        '''
         self.logHandler.appendFailCountLog(name, counter, severity)
         print "logging failure"
       except Exception as error:
@@ -59,8 +61,11 @@ class Logger:
   def logCount (self, name, counter, severity = 20):
     if counter > 0:
       try:
+        print "inside logCount method for metric name - ", name
+        '''
         if counter >= Logger.threshold_count:
-          self.logHandler.appendCountLog(name, counter,  'CRITICAL')
+          self.logHandler.appendCountLog(name, counter,  50)
+        '''
         self.logHandler.appendCountLog(name, counter, severity)
       except Exception as error:
         monitorLog.logError("Failed to append log for metric: " + name, `error`)
@@ -108,8 +113,10 @@ class Logger:
     endTime = time.time()
     runTime = endTime - self.threadLocal.startTime
     try:
+      '''
       if runTime >= Logger.threshold_latency:
-        self.logHandler.appendTimeLog(name, runTime, 'CRITICAL')
+        self.logHandler.appendTimeLog(name, runTime, 50)
+      '''
       self.logHandler.appendTimeLog(name, runTime, severity)
     except Exception as error:
       monitorLog.logError("Failed to append log for metric: " + name, `error`)

@@ -34,8 +34,9 @@ class LogHandler:
   def appendLog (self, msg, severity):
     try:
       with self.queueHandler:
+          print "inside appendLog - appending log- ", msg
           self.logger.log(severity, self.commonLog+msg)
-          print "appende log"
+          print "appended log"
     except Exception as error:
       monitorLog.logError("Failure to append Log: " + msg, `error`)
       raise Exception("Failure to append log: " + msg)
