@@ -4,6 +4,7 @@ import socket
 from common.Constants import Constants
 from common.handler import Handler
 from common.monitorLog import monitorLog
+import threading
 
 class LogHandler:
 
@@ -18,7 +19,7 @@ class LogHandler:
       raise Exception("Cannot Instantiate Handler with configFile : " + configFile)
     ''' Subscriber is now an independent process , hence following lines are commented '''
     # start queue subscriber for logging 
-    #self.handler.startQueueSubscriber()
+    # self.handler.startQueueSubscriber()
     # get queue handler for logging
     try:
       self.queueHandler = self.handler.getQueueHandler()
@@ -26,6 +27,7 @@ class LogHandler:
       monitorLog.logError("Cannot instanstiate ZMQ handler with given context", `error`)
       raise Exception("Cannot instanstiate ZMQ handler with given context")
     self.commonLog = Constants.toStringCommon(service)
+    #self.mutex = threading.Lock()
 
   '''
     Input - takes a string parameter 'msg' and an integer parameter specifying the logging level as 'severity'
@@ -34,8 +36,14 @@ class LogHandler:
   def appendLog (self, msg, severity):
     try:
       with self.queueHandler:
-          print "inside appendLog - appending log- ", msg
+          mutex = threading.Lock() #self.mutex
+          #print "@inside appendLog - acquiring lock- ", msg
+          mutex.acquire(True)
+          print "@acquiring lock- "
           self.logger.log(severity, self.commonLog+msg)
+          print "@releasing lock"
+          mutex.release()
+          print "@Lock released"
           print "appended log"
     except Exception as error:
       monitorLog.logError("Failure to append Log: " + msg, `error`)

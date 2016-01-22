@@ -1,7 +1,7 @@
 import unittest
 from metricgenerator import logger, publish
 import time
-from test import democonfig 
+#from test import democonfig 
 
 class TestPublish(unittest.TestCase): 
 
@@ -35,4 +35,5 @@ class TestPublish(unittest.TestCase):
  
 if __name__ == '__main__':
   unittest.main()
-
+  test = TestPublish()
+  test.test_ReportLatency()

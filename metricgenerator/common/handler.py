@@ -38,7 +38,7 @@ class Handler:
 
   def getQueueHandler(self):
     print "returning queue handler"
-    return MyZeroMQHandler(Constants.getSocket()).getZeroMQHandler()
+    return MyZeroMQHandler(Constants.getSocket(), zmq.Context()).getZeroMQHandler()
 
   ''' Follwing methods are not used since subscriber is an independent process now '''
   '''

@@ -128,6 +128,7 @@ class Logger:
   def reportLatency (self, name, action, severity = 20, *args, **kwargs):
     self.startTime()
     try:
+      print "inside report Latency for metric name - ", name
       actualReturn = action(*args, **kwargs)
     except Exception as error:
       monitorLog.logError("Failed Action " + `action`, `error`)
