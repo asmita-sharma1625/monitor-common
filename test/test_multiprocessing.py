@@ -1,9 +1,8 @@
 #from metricgenerator import publish
 from metricgenerator import logger
-import threading
+from multiprocessing import Process
 import unittest
 import time
-import traceback
 
 class MultiThreading:
 
@@ -25,12 +24,12 @@ class TestMultiThreading(unittest.TestCase):
 
   def test_multithreadedlogger(self):
     test = MultiThreading()
-    threads = []
-    try:
-      for i in range(1,9):
-        threads.append(threading.Thread(target=test.print_time("Thread-"+`i`, 0)))
-      for i in range(1,9):
-        threads.pop().start()
+    processes = []
+    for i in range(1,9):
+      processes.append(Process(target=test.print_time, args=("Process-"+`i`, 0,)))
+    for i in range(1,9):
+      processes.pop().start()
+
       '''
       thread.start_new_thread( test.print_time, ("Thread-1", 0, ) )
       thread.start_new_thread( test.print_time, ("Thread-2", 0, ) )
@@ -41,8 +40,6 @@ class TestMultiThreading(unittest.TestCase):
       thread.start_new_thread( test.print_time, ("Thread-7", 0, ) )
       thread.start_new_thread( test.print_time, ("Thread-8", 0, ) )
       '''
-    except:
-      print "Error: unable to start thread",traceback.format_exc()
 
 if __name__ == '__main__':
   unittest.main()

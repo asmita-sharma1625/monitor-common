@@ -1,16 +1,17 @@
 #from metricgenerator import publish
-from metricgenerator import logHandler
+from metricgenerator import logger
 import thread
 import unittest
 import time
 import threading
+import traceback
 
 mutex = threading.Lock()
 
 #class MultiThreading:
 
 #publish.setLogger("Test", "config.cfg")
-loghandler = logHandler.LogHandler("Test","config.cfg")
+logger = logger.Logger("Test","config.cfg")
 
 #@publish.ReportLatency("multi-thread-latency")
 #def print_time(self, threadName, delay):
@@ -21,7 +22,7 @@ def print_time( threadName, delay):
   while count < 20:
     #mutex.acquire()
     print"got it=============="+threadName+"="+`count`
-    loghandler.appendFailCountLog(threadName,count,20)
+    logger.logCount(threadName,count)
     #print "Test "+`count`
     time.sleep(delay)
     count += 1
@@ -60,7 +61,7 @@ class TestMultiThreading(unittest.TestCase):
       thread.start_new_thread( test.print_time, ("Thread-8", 0, ) )
       '''
     except:
-      print "Error: unable to start thread"
+      print "Error: unable to start thread",traceback.format_exc()
 
 if __name__ == '__main__':
   unittest.main()
