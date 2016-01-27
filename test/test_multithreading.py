@@ -11,9 +11,10 @@ class MultiThreading:
 
   #@publish.ReportLatency("multi-thread-latency")
   def print_time(self, threadName, delay):
-    self.logger.logFailure(threadName, "1")
+    #self.logger.logFailure(threadName, "1")
     count = 0
     while count < 5:
+      self.logger.logFailure(threadName, "1")
       time.sleep(delay)
       count += 1
       #print "%s: %s" % ( threadName, time.ctime(time.time()) )

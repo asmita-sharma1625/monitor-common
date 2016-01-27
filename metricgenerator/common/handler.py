@@ -26,19 +26,23 @@ class Handler:
       raise Exception("Could not retrieve logging directory")
     if not os.path.exists(self.directory):
         os.makedirs(self.directory)
-    self.logger = logging.getLogger(service)
+    self.service = service
+    self.logger = logging.getLogger(self.service)
     self.logger.setLevel(logging.INFO)
     self.logger.addHandler(RedirectLoggingHandler())
     print "handler instantiated"
+    #self.context = zmq.Context()
 
   def getLogHandler(self):
-    print "returning logger instance :", `self.logger`
-    return self.logger
+    logger = logging.getLogger(self.service)
+    print "returning logger instance :", `logger`
+    return logger
 
 
   def getQueueHandler(self):
-    print "returning queue handler"
-    return MyZeroMQHandler(Constants.getSocket(), zmq.Context()).getZeroMQHandler()
+    context = zmq.Context()
+    print "returning queue handler - ", context
+    return MyZeroMQHandler(Constants.getSocket(), context).getZeroMQHandler()
 
   ''' Follwing methods are not used since subscriber is an independent process now '''
   '''
