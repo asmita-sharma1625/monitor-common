@@ -16,13 +16,13 @@ import atexit
 class Handler:
 
   childProcess = None
- 
+
   def __init__(self, service, configFile):
     ConfigReader.setConfig(configFile)
     try:
       self.directory = os.path.join(Constants.getLogDir(), os.path.join(Constants.getHostname(), service))
     except Exception, error:
-      monitorLog.logError("Could not retrieve logging directory", error) 
+      monitorLog.logError("Could not retrieve logging directory", error)
       raise Exception("Could not retrieve logging directory")
     if not os.path.exists(self.directory):
         os.makedirs(self.directory)

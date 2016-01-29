@@ -14,7 +14,7 @@ class LogHandler:
       monitorLog.logError("Cannot Instantiate Handler with configFile : " + configFile, `error`)
       raise Exception("Cannot Instantiate Handler with configFile : " + configFile)
     ''' Subscriber is now an independent process , hence following lines are commented '''
-    # start queue subscriber for logging 
+    # start queue subscriber for logging
     # self.handler.startQueueSubscriber()
     self.commonLog = Constants.toStringCommon(service)
 
@@ -35,7 +35,7 @@ class LogHandler:
     except Exception as error:
       monitorLog.logError("Failure to append Log: " + msg, `error`)
       raise Exception("Failure to append log: " + msg)
-  
+
   def appendFailCountLog(self, name, count, severity):
     msg = Constants.toStringCount(name, Constants.FAILCOUNT, count, severity)
     try:
@@ -59,5 +59,3 @@ class LogHandler:
     except Exception as error:
       monitorLog.logError("Failure to append Count Log: " + msg, `error`)
       raise Exception("Failure to append Count log: " + msg)
-
-  

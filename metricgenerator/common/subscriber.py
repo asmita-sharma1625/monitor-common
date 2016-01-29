@@ -37,7 +37,7 @@ try:
   print "Subscriber bind to socket - ", SOCKET
 except zmq.error.ZMQError as error:
       print "error in service " + SERVICE + " while binding to socket :" + SOCKET
-      raise zmq.error.ZMQError("error in service " + SERVICE + " while binding to socket :" + SOCKET)                                                                                                                                                                                           
+      raise zmq.error.ZMQError("error in service " + SERVICE + " while binding to socket :" + SOCKET)
 path = os.path.join(os.path.join(LOGDIR, HOSTNAME), SERVICE)
 path_with_filename = os.path.join(path, FILENAME)
 print "PATH - ", path
