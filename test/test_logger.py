@@ -1,14 +1,14 @@
 import unittest
 from metricgenerator import logger
-#from test import democonfig 
+#from test import democonfig
 
 class TestLogger(unittest.TestCase):
-  
+
   SERVICE = "Test"
   NAME = "logger_metric"
   SEVERITY = 50
   #socket = 5578
-  
+
   logger = logger.Logger(SERVICE, "config.cfg")
 
   def setUp(self):
@@ -25,7 +25,7 @@ class TestLogger(unittest.TestCase):
     #TestLogger.logger = logger.Logger(self.SERVICE, cfgfile)
 
   def dummy_func(self, a, b):
-    return a / b  
+    return a / b
 
   def test_logFailure_fail(self):
     print "1 log instance :", `logger`
@@ -34,10 +34,10 @@ class TestLogger(unittest.TestCase):
   def test_logFailure_pass(self):
     print "2 log instance :", `logger`
     self.assertEquals(TestLogger.logger.logFailure(self.NAME, 1, self.SEVERITY), 1)
-  
+
   def test_logIfFail_fail(self):
     print "3 log instance :", `logger`
-    self.assertEquals(TestLogger.logger.logIfFail(self.NAME, 2, 0, self.dummy_func, self.SEVERITY, 4, 2), 0) 
+    self.assertEquals(TestLogger.logger.logIfFail(self.NAME, 2, 0, self.dummy_func, self.SEVERITY, 4, 2), 0)
 
   def test_logIfFail_error(self):
     print "4 log instance :", `logger`
@@ -57,7 +57,7 @@ class TestLogger(unittest.TestCase):
 
   def test_reportCountEqual_pass(self):
     self.assertEquals(TestLogger.logger.reportCountEqual(2, 0, self.dummy_func, 4, 2), 1)
-  
+
   def test_reportLatency(self):
     self.assertEquals(TestLogger.logger.reportLatency(self.NAME, self.dummy_func, self.SEVERITY, 4, 2), 2)
 
