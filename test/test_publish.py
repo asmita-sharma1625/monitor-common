@@ -1,7 +1,7 @@
 import unittest
 from metricgenerator import logger, publish
 import time
-from test import democonfig 
+#from test import democonfig 
 
 class TestPublish(unittest.TestCase): 
 
@@ -17,7 +17,7 @@ class TestPublish(unittest.TestCase):
     '''
     #democonfig.demoConfig(cfgfile).setConfig()
     #publish.setLogger("demo_publish", cfgfile)
-  
+ 
   def test_ReportLatency(self):
     print "testing publish"
     i = 10
@@ -32,7 +32,8 @@ class TestPublish(unittest.TestCase):
     print "in demo_action"
     time.sleep(1)
     return a / b
-  
+ 
 if __name__ == '__main__':
   unittest.main()
-
+  test = TestPublish()
+  test.test_ReportLatency()

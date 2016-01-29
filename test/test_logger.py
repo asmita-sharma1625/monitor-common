@@ -61,6 +61,11 @@ class TestLogger(unittest.TestCase):
   def test_reportLatency(self):
     self.assertEquals(TestLogger.logger.reportLatency(self.NAME, self.dummy_func, self.SEVERITY, 4, 2), 2)
 
+  def test_logCount(self):
+    for i in range(1,10):
+      print "--------------logging count----------------"
+      TestLogger.logger.logCount("***count***",20)
+
 if __name__ == '__main__':
   unittest.main()
 

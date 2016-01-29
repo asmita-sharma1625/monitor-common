@@ -2,7 +2,7 @@ import sys
 import os
 import sqlite3
 import re
-import sys
+import sys, datetime
 import shutil, socket
 from metricgenerator.common.configReader import ConfigReader
 from metricgenerator import s3Dao
@@ -10,7 +10,7 @@ from metricgenerator import s3Dao
 class Consumer:
 
   suffixpattern = "metric\d{4}-\d{2}-\d{2} [0-2][0-9]:[0-5][0-9]"
-  fileextension = ".log"
+  fileextension = ""
 
   class ActionOnFile:
     def doTask(self, filename, relativepath):
@@ -43,15 +43,23 @@ class Consumer:
         self.dest_path = dest_path
       else:
         self.dest_path = None
+      print "dest path:", dest_path
       self.s3Dao = s3Dao.S3Dao()
       self.s3Dao.setBucket(bucket)
 
     def doTask(self, filename, logfilename):
       if self.dest_path is not None:
-        logfilename = os.path.join(self.dest_path, logfilename) 
+        date = datetime.date.today()
+        print date
+        dateRecord = os.path.join(`date.year`, os.path.join(`date.month`, `date.day`))
+        print dateRecord
+        logfilename = os.path.join(self.dest_path, os.path.join(dateRecord, logfilename)) 
       filename = os.path.join(self.logdir, filename)
+      
       print logfilename, "*******", filename
       try:
+        #print "##########", os.stat(filename)[ST_MODE]
+        #os.chmod(os.path.dirname(filename), 777)
         self.s3Dao.uploadObject(logfilename, filename)
       except Exception as error:
         print "ERROR : unable to upload " + filename + "to s3"
@@ -105,14 +113,15 @@ class Consumer:
     map(self.consume_each_file, file_names)
 
 if __name__ == '__main__':
-  if len(sys.argv) < 3:
-    raise SystemExit("Invalid Arguments - config path and section name required")
+  if len(sys.argv) < 4:
+    raise SystemExit("Invalid Arguments - config path, section name and delete_flag required")
 
   CONFIGFILE = sys.argv[1]
   SECTION = sys.argv[2]
+  DELETE_FLAG = sys.argv[3]
 
-  if len(sys.argv) == 4:
-    TARGET_PATH = sys.argv[3]
+  if len(sys.argv) == 5:
+    TARGET_PATH = sys.argv[4]
   else:
      TARGET_PATH = None
   ConfigReader.setConfig(CONFIGFILE)
@@ -120,15 +129,11 @@ if __name__ == '__main__':
   print "CONFIGFILE - ", CONFIGFILE
   print "SECTION - ", SECTION
 
-  LOGDIR =  ConfigReader.getValue(SECTION, "LogDir") #sys.argv[2]
-  FILENAME = ConfigReader.getValue(SECTION, "Filename") #sys.argv[3]
+  LOGDIR =  ConfigReader.getValue(SECTION, "LogDir") 
   BUCKET = ConfigReader.getValue(SECTION, "Bucket")
-  #components = FILENAME.split(".")[0]
   PATTERN = ".*\.log.*"
-  #if len(components) == 2:
-   # PATTERN = components[0] + ".*\." + components[1]  
 
-  consumer = Consumer(LOGDIR, deleterotatedfiles = False, logpattern = PATTERN, target_path = TARGET_PATH, provider = Consumer.ObjectStorageAction(BUCKET, LOGDIR, TARGET_PATH))
+  consumer = Consumer(LOGDIR, deleterotatedfiles = DELETE_FLAG, logpattern = PATTERN, target_path = TARGET_PATH, provider = Consumer.ObjectStorageAction(BUCKET, LOGDIR, TARGET_PATH))
   
   while True:
     consumer.consume()   
