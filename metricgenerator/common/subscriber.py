@@ -8,7 +8,7 @@ from metricgenerator.common.configReader import ConfigReader
 import zmq
 
 if len(sys.argv) != 3:
-  raise SystemExit("Invalid Arguments - config path and section name required")
+    raise SystemExit("Invalid Arguments - config path and section name required")
 
 CONFIGFILE = sys.argv[1]
 SECTION = sys.argv[2]
@@ -33,19 +33,19 @@ print "HOSTNAME - ", HOSTNAME
 subscriber = None
 
 try:
-  subscriber = ZeroMQSubscriber(SOCKET, multi = True)
-  print "Subscriber bind to socket - ", SOCKET
+    subscriber = ZeroMQSubscriber(SOCKET, multi = True)
+    print "Subscriber bind to socket - ", SOCKET
 except zmq.error.ZMQError as error:
-      print "error in service " + SERVICE + " while binding to socket :" + SOCKET
-      raise zmq.error.ZMQError("error in service " + SERVICE + " while binding to socket :" + SOCKET)
+    print "error in service " + SERVICE + " while binding to socket :" + SOCKET
+    raise zmq.error.ZMQError("error in service " + SERVICE + " while binding to socket :" + SOCKET)
 path = os.path.join(os.path.join(LOGDIR, HOSTNAME), SERVICE)
 path_with_filename = os.path.join(path, FILENAME)
 print "PATH - ", path
 
 if not os.path.exists(path):
-  os.makedirs(path)
+    os.makedirs(path)
 
 with TimedRotatingFileHandler(path_with_filename, date_format='%Y-%m-%d %H:%M'):
-  print "Log Received - ", subscriber.recv().message
-  subscriber.dispatch_forever()
+    #print "Log Received - ", subscriber.recv().message
+    subscriber.dispatch_forever()
 
