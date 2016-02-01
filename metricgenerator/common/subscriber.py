@@ -1,11 +1,15 @@
 import sys
 import os
 import socket
+import statsd
+import zmq
+import json
 from logbook.queues import ZeroMQSubscriber
 from logbook import TimedRotatingFileHandler
+from logbook.base import dispatch_record
 #from nova.logger.common import Constants
 from metricgenerator.common.configReader import ConfigReader
-import zmq
+from metricgenerator.common.Constants import Constants
 
 if len(sys.argv) != 3:
     raise SystemExit("Invalid Arguments - config path and section name required")
@@ -32,6 +36,22 @@ print "HOSTNAME - ", HOSTNAME
 
 subscriber = None
 
+def parseEmitMetrics (msg):
+    customDict = json.loads(msg)
+    metricName = customDict[Constants.HOST] + "." + \
+            customDict[Constants.SERVICE] + "." + \
+            customDict[Constants.METRIC_NAME] + "." + \
+            customDict[Constants.METRIC_TYPE]
+    #initializing statsd client (search from collectd on which port stasd is
+    #running)
+    c = statsd.StatsClient('localhost', 8125)
+    if customDict[Constants.METRIC_TYPE] == Constants.RUNTIME:
+        c.timing(metricName, \
+                 (customDict[Constants.METRIC_VALUE]))
+    elif customDict[Constants.METRIC_TYPE] == Constants.COUNT:
+        c.incr(metricName)
+
+
 try:
     subscriber = ZeroMQSubscriber(SOCKET, multi = True)
     print "Subscriber bind to socket - ", SOCKET
@@ -45,7 +65,11 @@ print "PATH - ", path
 if not os.path.exists(path):
     os.makedirs(path)
 
-with TimedRotatingFileHandler(path_with_filename, date_format='%Y-%m-%d %H:%M'):
-    #print "Log Received - ", subscriber.recv().message
-    subscriber.dispatch_forever()
+with TimedRotatingFileHandler(path_with_filename, date_format='%Y_%m_%d_%H_%M'):
+    while 1:
+        record = subscriber.recv()
+        print "Log Received - ", record.message
+        parseEmitMetrics(record.message)
+        #subscriber.dispatch_forever()
+        dispatch_record(record)
 

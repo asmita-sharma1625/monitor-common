@@ -6,7 +6,7 @@ def setLogger(service, configFile):
     global logger
     logger  = Logger(service, configFile)
 
-#TODO :  make changes for logIfFAil 
+#TODO :  make changes for logIfFAil
 def LogIfFail(name, expectedReturn, counter, severity = 20):
     def real_decorator(function):
         def wrapper(*args, **kwargs):

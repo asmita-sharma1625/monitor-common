@@ -39,31 +39,33 @@ class LogHandler:
                 logger.log(severity,
                            json.dumps(customLogDict))
         except Exception as error:
-            monitorLog.logError("Failure to append Log: " + msg, `error`)
-            raise Exception("Failure to append log: " + msg)
+            monitorLog.logError("Failure to append Log: " + json.dumps(msg), `error`)
+            raise Exception("Failure to append log: " + json.dumps(msg))
 
     def appendFailCountLog(self, name, count, severity):
         msg = Constants.toStringCount(name, Constants.FAILCOUNT, count, severity)
         try:
             self.appendLog(msg, severity)
         except Exception as error:
-            monitorLog.logError("Failure to append Count Log: " + msg, `error`)
-            raise Exception("Failure to append Count log: " + msg)
+            monitorLog.logError("Failure to append Count Log: " + json.dumps(msg), `error`)
+            raise Exception("Failure to append Count log: " + json.dumps(msg))
 
     def appendCountLog(self, name, count, severity):
         msg = Constants.toStringCount(name, Constants.COUNT, count, severity)
         try:
             self.appendLog(msg, severity)
         except Exception as error:
-            monitorLog.logError("Failure append Count Log: " + msg, `error`)
-            raise Exception("Failure to append Count log: " + msg)
+            monitorLog.logError("Failure append Count Log: " + json.dumps(msg), `error`)
+            raise Exception("Failure to append Count log: " + json.dumps(msg))
 
     def appendTimeLog(self, name, runtime, severity):
+        #converting the runtime to ms
+        runtime = runtime*1000
         msg = Constants.toDictRuntime(name, Constants.RUNTIME, runtime, severity)
         #print (json.dumps(msg))
         try:
             #print (msg)
             self.appendLog(msg, severity)
         except Exception as error:
-            monitorLog.logError("Failure to append Count Log: " + msg, `error`)
-            raise Exception("Failure to append Count log: " + msg)
+            monitorLog.logError("Failure to append Count Log: " + json.dumps(msg), `error`)
+            raise Exception("Failure to append Count log: " + json.dumps(msg))
