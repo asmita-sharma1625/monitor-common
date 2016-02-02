@@ -38,10 +38,8 @@ subscriber = None
 
 def parseEmitMetrics (msg):
     customDict = json.loads(msg)
-    metricName = customDict[Constants.HOST] + "." + \
-            customDict[Constants.SERVICE] + "." + \
-            customDict[Constants.METRIC_NAME] + "." + \
-            customDict[Constants.METRIC_TYPE]
+    metricName = customDict[Constants.SERVICE] + "." + \
+            customDict[Constants.METRIC_NAME]
     #initializing statsd client (search from collectd on which port stasd is
     #running)
     c = statsd.StatsClient('localhost', 8125)
