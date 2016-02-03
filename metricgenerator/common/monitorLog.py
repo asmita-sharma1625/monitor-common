@@ -6,18 +6,18 @@ import logging
 from logging import handlers
 
 class monitorLog:
-  logger = logging.getLogger("metric-generator")
-  logger.setLevel(logging.INFO)
-  directory = "/tmp/metric-generator/"
-  if not os.path.exists(directory):
-        os.makedirs(directory)
-  #logger.addHandler(logging.FileHandler())
-  logger.addHandler(logging.handlers.TimedRotatingFileHandler(os.path.join(directory, "metric.log"),'S', 2, 10))
+    logger = logging.getLogger("metric-generator")
+    logger.setLevel(logging.INFO)
+    directory = "/tmp/metric-generator/"
+    if not os.path.exists(directory):
+                os.makedirs(directory)
+    #logger.addHandler(logging.FileHandler())
+    logger.addHandler(logging.handlers.TimedRotatingFileHandler(os.path.join(directory, "metric.log"),'S', 2, 10))
 
-  @staticmethod
-  def logInfo(msg):
-    monitorLog.logger.info(msg)
+    @staticmethod
+    def logInfo(msg):
+        monitorLog.logger.info(msg)
 
-  @staticmethod
-  def logError(msg, error):
-    monitorLog.logger.error("Message: " + msg + "Error: " + `logging.exception(error)`)
+    @staticmethod
+    def logError(msg, error):
+        monitorLog.logger.error("Message: " + msg + "Error: " + `logging.exception(error)`)
