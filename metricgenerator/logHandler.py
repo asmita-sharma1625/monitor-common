@@ -59,14 +59,10 @@ class LogHandler:
             monitorLog.logError("Failure append Count Log: " + json.dumps(msg), `error`)
             raise Exception("Failure to append Count log: " + json.dumps(msg))
 
-<<<<<<< HEAD
     def appendTimeLog(self, name, runtime, severity, addOnInfoPairs = {}):
-        print "add ons : ", addOnInfoPairs
-=======
-    def appendTimeLog(self, name, runtime, severity):
+        #print "add ons : ", addOnInfoPairs
         #converting the runtime to ms
         runtime = runtime*1000
->>>>>>> 1f33df9309ad131b9e0e2255d838da448828bd28
         msg = Constants.toDictRuntime(name, Constants.RUNTIME, runtime, severity)
         msg.update(addOnInfoPairs)
         #print (json.dumps(msg))
@@ -74,22 +70,22 @@ class LogHandler:
             #print (msg)
             self.appendLog(msg, severity)
         except Exception as error:
-<<<<<<< HEAD
-            monitorLog.logError("Failure to append Count Log: " + msg, `error`)
-            raise Exception("Failure to append Count log: " + msg)
+            monitorLog.logError("Failure to append Time Log: " + json.dumps(msg), `error`)
+            raise Exception("Failure to append Time log: " + json.dumps(msg))
+
     '''
       list of arguments takes indices of arguments in *args assuming the each argument to be searched being json/dict.
-      list of keys is the keys corresponding to an argument to be looked for. 
+      list of keys is the keys corresponding to an argument to be looked for.
     '''
-    def appendKeysToLog(self, listOfArguments, listOfKeys, *args):
+    def appendKeysToLog(self, listOfKeys, *args):
+        import pprint
+        pprint.pprint (args)
         customDict = {}
-        for i in range(0,len(listOfArguments)):
+        for i in range(0,len(listOfKeys)):
+            print (i)
             if listOfKeys[i] is not []:
                 for key in listOfKeys[i]:
-                    customDict = Constants.addKeyValue(key, args[listOfArguments[i]][key], customDict)
-        return customDict 
-
-=======
-            monitorLog.logError("Failure to append Count Log: " + json.dumps(msg), `error`)
-            raise Exception("Failure to append Count log: " + json.dumps(msg))
->>>>>>> 1f33df9309ad131b9e0e2255d838da448828bd28
+                    print (key)
+                    customDict = Constants.addKeyValue(key,
+                                                       getattr(args[i], key), customDict)
+        return customDict

@@ -125,8 +125,8 @@ class Logger:
     '''
         Logs the execution time of the given action and returns the value of action.
     '''
-    def reportLatency (self, name, action, severity = 20, listOfArguments = [], listOfKeys = [], *args, **kwargs):
-        keyValuePairs = self.logHandler.appendKeysToLog(listOfArguments, listOfKeys, *args) 
+    def reportLatency (self, name, action, severity = 20,listOfKeys = [], *args, **kwargs):
+        keyValuePairs = self.logHandler.appendKeysToLog(listOfKeys, *args)
         print "key vaue pairs", keyValuePairs
         self.startTime()
         try:
