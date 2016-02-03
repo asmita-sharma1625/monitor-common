@@ -19,7 +19,7 @@ class Constants:
     METRIC_TYPE = "Metric Type"
     METRIC_NAME = "Metric Name"
     HOST = "Host"
-    SERVICE = "Service"
+    SERVICE = "service"
     TIME = "Timestamp"
     SEVERITY = "Severity"
     METRIC_VALUE = "Metric Value"
@@ -95,10 +95,9 @@ class Constants:
         return string + Constants.SEVERITY + Constants.SEPARATOR + `severity` + Constants.DELIMITER
     '''
     @staticmethod
-    def createDictCommon (service):
+    def createDictCommon ():
         commonDict = {
-            Constants.HOST : Constants.getHostname(),
-            Constants.SERVICE : service
+            Constants.HOST : Constants.getHostname()
         }
         return commonDict
 
@@ -108,8 +107,11 @@ class Constants:
         return customDict
 
     @staticmethod
-    def toDictRuntime (name, mType, runtime, severity):
-        customDict = { Constants.METRIC_VALUE : runtime }
+    def toDictRuntime (topic, name, mType, runtime, severity):
+        customDict = {
+            "service" : topic,
+            Constants.METRIC_VALUE : runtime
+        }
         return Constants.addSeveriety ( Constants.addTimeStamp (
             Constants.addMetricInfo ( name, mType, customDict ) ), severity)
 

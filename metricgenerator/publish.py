@@ -2,9 +2,9 @@ from metricgenerator.logger import Logger
 
 logger = None
 
-def setLogger(service, configFile):
+def setLogger(configFile):
     global logger
-    logger  = Logger(service, configFile)
+    logger  = Logger(configFile)
 
 #TODO :  make changes for logIfFAil
 def LogIfFail(name, expectedReturn, counter, severity = 20):
@@ -14,10 +14,10 @@ def LogIfFail(name, expectedReturn, counter, severity = 20):
         return wrapper
     return real_decorator
 
-def ReportLatency(name, severity = 20, listOfKeys = []):
+def ReportLatency(topic, name, severity = 20, listOfKeys = []):
     def real_decorator(function):
         def wrapper(*args, **kwargs):
-           return logger.reportLatency(name, function, severity,\
+           return logger.reportLatency(topic, name, function, severity,\
                                        listOfKeys, *args, **kwargs)
         return wrapper
     return real_decorator

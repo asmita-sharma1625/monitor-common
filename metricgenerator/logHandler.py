@@ -8,9 +8,9 @@ from common.monitorLog import monitorLog
 
 class LogHandler:
 
-    def __init__ (self, service, configFile):
+    def __init__ (self, configFile):
         try:
-            self.handler = Handler(service, configFile)
+            self.handler = Handler(configFile)
         except Exception as error:
             monitorLog.logError("Cannot Instantiate Handler with configFile : " + configFile, `error`)
             raise Exception("Cannot Instantiate Handler with configFile : " + configFile)
@@ -18,7 +18,7 @@ class LogHandler:
         # start queue subscriber for logging
         # self.handler.startQueueSubscriber()
         #self.commonLog = Constants.toStringCommon(service)
-        self.commonLog = Constants.createDictCommon(service)
+        self.commonLog = Constants.createDictCommon()
 
     '''
         Input - takes a string parameter 'msg' and an integer parameter specifying the logging level as 'severity'
@@ -61,11 +61,11 @@ class LogHandler:
             monitorLog.logError("Failure append Count Log: " + json.dumps(msg), `error`)
             raise Exception("Failure to append Count log: " + json.dumps(msg))
 
-    def appendTimeLog(self, name, runtime, severity, addOnInfoPairs = {}):
+    def appendTimeLog(self, topic, name, runtime, severity, addOnInfoPairs = {}):
         #print "add ons : ", addOnInfoPairs
         #converting the runtime to ms
         runtime = runtime*1000
-        msg = Constants.toDictRuntime(name, Constants.RUNTIME, runtime, severity)
+        msg = Constants.toDictRuntime(topic, name, Constants.RUNTIME, runtime, severity)
         msg.update(addOnInfoPairs)
         #print (json.dumps(msg))
         try:

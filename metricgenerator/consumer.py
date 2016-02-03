@@ -129,7 +129,7 @@ if __name__ == '__main__':
     print "CONFIGFILE - ", CONFIGFILE
     print "SECTION - ", SECTION
 
-    LOGDIR =  ConfigReader.getValue(SECTION, "LogDir")
+    LOGDIR =  ConfigReader.getValue(SECTION, "logdir")
     BUCKET = ConfigReader.getValue(SECTION, "Bucket")
     PATTERN = ".*\.log.*"
 

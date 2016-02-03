@@ -17,24 +17,23 @@ class Handler:
 
     childProcess = None
 
-    def __init__(self, service, configFile):
+    def __init__(self, configFile):
         ConfigReader.setConfig(configFile)
         try:
-            self.directory = os.path.join(Constants.getLogDir(), os.path.join(Constants.getHostname(), service))
+            self.directory = os.path.join(Constants.getLogDir(), os.path.join(Constants.getHostname()))
         except Exception, error:
             monitorLog.logError("Could not retrieve logging directory", error)
             raise Exception("Could not retrieve logging directory")
         if not os.path.exists(self.directory):
                 os.makedirs(self.directory)
-        self.service = service
-        self.logger = logging.getLogger(self.service)
+        self.logger = logging.getLogger()
         self.logger.setLevel(logging.INFO)
         self.logger.addHandler(RedirectLoggingHandler())
         print "handler instantiated"
         #self.context = zmq.Context()
 
     def getLogHandler(self):
-        logger = logging.getLogger(self.service)
+        logger = logging.getLogger()
         print "returning logger instance :", `logger`
         return logger
 
