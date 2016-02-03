@@ -109,7 +109,7 @@ class Constants:
     @staticmethod
     def toDictRuntime (topic, name, mType, runtime, severity):
         customDict = {
-            "service" : topic,
+            Constants.SERVICE : topic,
             Constants.METRIC_VALUE : runtime
         }
         return Constants.addSeveriety ( Constants.addTimeStamp (
