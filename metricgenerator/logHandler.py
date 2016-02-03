@@ -40,27 +40,33 @@ class LogHandler:
                 logger.log(severity,
                            json.dumps(customLogDict))
         except Exception as error:
-            monitorLog.logError("Failure to append Log: " + msg, `error`)
-            raise Exception("Failure to append log: " + msg)
+            monitorLog.logError("Failure to append Log: " + json.dumps(msg), `error`)
+            raise Exception("Failure to append log: " + json.dumps(msg))
 
     def appendFailCountLog(self, name, count, severity):
         msg = Constants.toStringCount(name, Constants.FAILCOUNT, count, severity)
         try:
             self.appendLog(msg, severity)
         except Exception as error:
-            monitorLog.logError("Failure to append Count Log: " + msg, `error`)
-            raise Exception("Failure to append Count log: " + msg)
+            monitorLog.logError("Failure to append Count Log: " + json.dumps(msg), `error`)
+            raise Exception("Failure to append Count log: " + json.dumps(msg))
 
     def appendCountLog(self, name, count, severity):
         msg = Constants.toStringCount(name, Constants.COUNT, count, severity)
         try:
             self.appendLog(msg, severity)
         except Exception as error:
-            monitorLog.logError("Failure append Count Log: " + msg, `error`)
-            raise Exception("Failure to append Count log: " + msg)
+            monitorLog.logError("Failure append Count Log: " + json.dumps(msg), `error`)
+            raise Exception("Failure to append Count log: " + json.dumps(msg))
 
+<<<<<<< HEAD
     def appendTimeLog(self, name, runtime, severity, addOnInfoPairs = {}):
         print "add ons : ", addOnInfoPairs
+=======
+    def appendTimeLog(self, name, runtime, severity):
+        #converting the runtime to ms
+        runtime = runtime*1000
+>>>>>>> 1f33df9309ad131b9e0e2255d838da448828bd28
         msg = Constants.toDictRuntime(name, Constants.RUNTIME, runtime, severity)
         msg.update(addOnInfoPairs)
         #print (json.dumps(msg))
@@ -68,6 +74,7 @@ class LogHandler:
             #print (msg)
             self.appendLog(msg, severity)
         except Exception as error:
+<<<<<<< HEAD
             monitorLog.logError("Failure to append Count Log: " + msg, `error`)
             raise Exception("Failure to append Count log: " + msg)
     '''
@@ -82,3 +89,7 @@ class LogHandler:
                     customDict = Constants.addKeyValue(key, args[listOfArguments[i]][key], customDict)
         return customDict 
 
+=======
+            monitorLog.logError("Failure to append Count Log: " + json.dumps(msg), `error`)
+            raise Exception("Failure to append Count log: " + json.dumps(msg))
+>>>>>>> 1f33df9309ad131b9e0e2255d838da448828bd28

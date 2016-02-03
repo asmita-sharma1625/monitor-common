@@ -55,7 +55,7 @@ class Consumer:
                 print dateRecord
                 logfilename = os.path.join(self.dest_path, os.path.join(dateRecord, logfilename)) 
             filename = os.path.join(self.logdir, filename)
-            
+
             print logfilename, "*******", filename
             try:
                 #print "##########", os.stat(filename)[ST_MODE]
@@ -137,4 +137,3 @@ if __name__ == '__main__':
 
     while True:
         consumer.consume()
-

@@ -12,7 +12,7 @@ class Constants:
     #LOGDIR = ConfigReader.getValue("Constants", "LogDir")
     #FILENAME = ConfigReader.getValue("Constants", "Filename")
     #SOCKET = ConfigReader.getValue("Constants", "Socket")
-    RUNTIME = "Runtime"
+    RUNTIME = "Runtime" #this will be measured in miliseconds
     FAILCOUNT = "Failure Count"
     COUNT = "Counter"
 # Use constants for metric type
@@ -104,14 +104,14 @@ class Constants:
 
     @staticmethod
     def addTimeStamp (customDict):
-        customDict.update({Constants.TIME : `time.time()`})
+        customDict.update({Constants.TIME : time.time()})
         return customDict
 
     @staticmethod
     def toDictRuntime (name, mType, runtime, severity):
-        customDict = { Constants.METRIC_VALUE : `runtime` }
+        customDict = { Constants.METRIC_VALUE : runtime }
         return Constants.addSeveriety ( Constants.addTimeStamp (
-            Constants.addMetricInfo ( name, mType, customDict ) ), `severity`)
+            Constants.addMetricInfo ( name, mType, customDict ) ), severity)
 
     @staticmethod
     def addMetricInfo (name, mType, customDict):
@@ -124,7 +124,7 @@ class Constants:
 
     @staticmethod
     def addSeveriety (customDict, severity):
-        severityDict = {Constants.SEVERITY : `severity`}
+        severityDict = {Constants.SEVERITY : severity}
         customDict.update(severityDict)
         return customDict
 
