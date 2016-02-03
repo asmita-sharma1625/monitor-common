@@ -14,10 +14,11 @@ def LogIfFail(name, expectedReturn, counter, severity = 20):
         return wrapper
     return real_decorator
 
-def ReportLatency(name, severity = 20):
+def ReportLatency(name, severity = 20, listOfKeys = []):
     def real_decorator(function):
         def wrapper(*args, **kwargs):
-           return logger.reportLatency(name, function, severity, *args, **kwargs)
+           return logger.reportLatency(name, function, severity,\
+                                       listOfKeys, *args, **kwargs)
         return wrapper
     return real_decorator
 
