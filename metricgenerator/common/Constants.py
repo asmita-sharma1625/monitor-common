@@ -127,3 +127,9 @@ class Constants:
         severityDict = {Constants.SEVERITY : `severity`}
         customDict.update(severityDict)
         return customDict
+
+    @staticmethod
+    def addKeyValue (key, value, customDict = {}):
+        pair = {key : value}
+        customDict.update(pair)
+        return customDict    
