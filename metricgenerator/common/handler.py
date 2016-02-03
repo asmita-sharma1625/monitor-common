@@ -31,6 +31,7 @@ class Handler:
         self.logger = logging.getLogger(self.service)
         self.logger.setLevel(logging.INFO)
         self.logger.addHandler(RedirectLoggingHandler())
+        self.socket = self.constants.getSocket()
         print "handler instantiated"
         #self.context = zmq.Context()
 
@@ -43,9 +44,9 @@ class Handler:
     def getQueueHandler(self):
         context = zmq.Context()
         print "returning queue handler - ", context
-        socket = self.constants.getSocket()
-        print "connect to socket : ", socket
-        return MyZeroMQHandler(socket, context).getZeroMQHandler()
+        #socket = self.constants.getSocket()
+        print "connect to socket : ", self.socket
+        return MyZeroMQHandler(self.socket, context).getZeroMQHandler()
 
     ''' Follwing methods are not used since subscriber is an independent process now '''
     '''
