@@ -18,9 +18,10 @@ class Handler:
     childProcess = None
 
     def __init__(self, service, configFile):
-        ConfigReader.setConfig(configFile)
+        print "config file******", configFile
+        self.constants = Constants(configFile)
         try:
-            self.directory = os.path.join(Constants.getLogDir(), os.path.join(Constants.getHostname(), service))
+            self.directory = os.path.join(self.constants.getLogDir(), os.path.join(Constants.getHostname(), service))
         except Exception, error:
             monitorLog.logError("Could not retrieve logging directory", error)
             raise Exception("Could not retrieve logging directory")
@@ -42,7 +43,9 @@ class Handler:
     def getQueueHandler(self):
         context = zmq.Context()
         print "returning queue handler - ", context
-        return MyZeroMQHandler(Constants.getSocket(), context).getZeroMQHandler()
+        socket = self.constants.getSocket()
+        print "connect to socket : ", socket
+        return MyZeroMQHandler(socket, context).getZeroMQHandler()
 
     ''' Follwing methods are not used since subscriber is an independent process now '''
     '''
@@ -57,7 +60,7 @@ class Handler:
         self.childProcess.terminate()
 
     def getQueueSubscriber(self):
-        filepath = os.path.join(self.directory, Constants.getFilename())
+        filepath = os.path.join(self.directory, self.constants.getFilename())
         try:
             subscriber = MyZeroMQSubscriber()
             subscriber.startSubscriber(filepath)
