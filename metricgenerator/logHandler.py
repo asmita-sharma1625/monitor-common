@@ -43,16 +43,18 @@ class LogHandler:
             monitorLog.logError("Failure to append Log: " + json.dumps(msg), `error`)
             raise Exception("Failure to append log: " + json.dumps(msg))
 
-    def appendFailCountLog(self, name, count, severity):
-        msg = Constants.toStringCount(name, Constants.FAILCOUNT, count, severity)
+    def appendFailCountLog(self, name, count, severity, addOnInfoPairs = {}):
+        msg = Constants.toDictCount(name, Constants.FAILCOUNT, count, severity)
+        msg.update(addOnInfoPairs)
         try:
             self.appendLog(msg, severity)
         except Exception as error:
             monitorLog.logError("Failure to append Count Log: " + json.dumps(msg), `error`)
             raise Exception("Failure to append Count log: " + json.dumps(msg))
 
-    def appendCountLog(self, name, count, severity):
-        msg = Constants.toStringCount(name, Constants.COUNT, count, severity)
+    def appendCountLog(self, name, count, severity, addOnInfoPairs = {}):
+        msg = Constants.toDictCount(name, Constants.COUNT, count, severity)
+        msg.update(addOnInfoPairs)
         try:
             self.appendLog(msg, severity)
         except Exception as error:

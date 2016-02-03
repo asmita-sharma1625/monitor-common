@@ -43,14 +43,14 @@ class Logger:
                 raise LoggingException("Failed to append log for metric: " + name)
         return count
 
-    def logFailure (self, name, counter, severity = 20):
+    def logFailure (self, name, counter, severity = 20, addOnInfoPairs = {}):
         if counter > 0:
             try:
                 '''
                 if counter >= Logger.threshold_failure:
                     self.logHandler.appendFailCountLog(name, counter,  50)
                 '''
-                self.logHandler.appendFailCountLog(name, counter, severity)
+                self.logHandler.appendFailCountLog(name, counter, severity, addOnInfoPairs)
                 print "logging failure"
             except Exception as error:
                 monitorLog.logError("Failed to append log for metric: " + name, `error`)
@@ -58,7 +58,7 @@ class Logger:
             return 1
         return 0
 
-    def logCount (self, name, counter, severity = 20):
+    def logCount (self, name, counter, severity = 20, addOnInfoPairs = {}):
         if counter > 0:
             try:
                 print "inside logCount method for metric name - ", name
@@ -66,7 +66,7 @@ class Logger:
                 if counter >= Logger.threshold_count:
                     self.logHandler.appendCountLog(name, counter,  50)
                 '''
-                self.logHandler.appendCountLog(name, counter, severity)
+                self.logHandler.appendCountLog(name, counter, severity, addOnInfoPairs)
             except Exception as error:
                 monitorLog.logError("Failed to append log for metric: " + name, `error`)
                 raise LoggingException("Failed to append log for metric: " + name)

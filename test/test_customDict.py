@@ -1,13 +1,24 @@
 from metricgenerator import logger
 logger = logger.Logger("Test","config.cfg")
-context = {'a':'b','c':'d'}
+customDict = {'a':'b','c':'d'}
+class context:
+  def __init__(self,a,b,c):
+    self.a = a
+    self.b = b  
+    self.c = c
+
+cntxt = context('a','b','c')
 
 def func(a,b,c):
      print b,c
-l2 = []
-l2.append([])
-l1 =[]
-l1.append(0)
-l2[0].append("a")
-logger.reportLatency("new", func, 20, l1, l2, context, 5, 2)
+logger.reportLatency("latency", func, 20, [['a']], cntxt, 5, 2)
+logger.logCount("count", 5, 20, customDict)
 
+from metricgenerator import publish
+publish.setLogger("Test","config.cfg")
+
+@publish.ReportLatency("publish",20,[['a']])
+def f(a,b,c):
+  print c,b
+
+f(cntxt, 5, 2)

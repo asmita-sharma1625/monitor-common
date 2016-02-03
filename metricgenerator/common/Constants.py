@@ -69,7 +69,7 @@ class Constants:
             monitorLog.logError("Cannot get hostname", error)
             raise error("Cannot get hostname")
         return hostname
-
+    '''
     @staticmethod
     def toStringCommon (service):
         return Constants.HOST + Constants.SEPARATOR + Constants.getHostname() + Constants.DELIMITER + Constants.SERVICE + Constants.SEPARATOR + service + Constants.DELIMITER
@@ -93,7 +93,7 @@ class Constants:
     @staticmethod
     def appendSeverity(string, severity):
         return string + Constants.SEVERITY + Constants.SEPARATOR + `severity` + Constants.DELIMITER
-
+    '''
     @staticmethod
     def createDictCommon (service):
         commonDict = {
@@ -112,6 +112,13 @@ class Constants:
         customDict = { Constants.METRIC_VALUE : runtime }
         return Constants.addSeveriety ( Constants.addTimeStamp (
             Constants.addMetricInfo ( name, mType, customDict ) ), severity)
+
+    @staticmethod
+    def toDictCount (name, mType, count, severity):
+        customDict = { Constants.METRIC_VALUE : count }
+        return Constants.addSeveriety ( Constants.addTimeStamp (
+            Constants.addMetricInfo ( name, mType, customDict ) ), severity)
+
 
     @staticmethod
     def addMetricInfo (name, mType, customDict):
