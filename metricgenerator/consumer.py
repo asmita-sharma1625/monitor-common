@@ -124,16 +124,15 @@ if __name__ == '__main__':
         TARGET_PATH = sys.argv[4]
     else:
           TARGET_PATH = None
-    ConfigReader.setConfig(CONFIGFILE)
+    configReader = ConfigReader(CONFIGFILE)
 
     print "CONFIGFILE - ", CONFIGFILE
     print "SECTION - ", SECTION
 
-    LOGDIR =  ConfigReader.getValue(SECTION, "LogDir")
-    BUCKET = ConfigReader.getValue(SECTION, "Bucket")
+    LOGDIR =  configReader.getValue(SECTION, "LogDir")
+    BUCKET = configReader.getValue(SECTION, "Bucket")
     PATTERN = ".*\.log.*"
 
-    consumer = Consumer(LOGDIR, deleterotatedfiles = DELETE_FLAG, logpattern = PATTERN, target_path = TARGET_PATH, provider = Consumer.ObjectStorageAction(BUCKET, LOGDIR, TARGET_PATH))
+    consumer = Consumer(LOGDIR, deleterotatedfiles = eval(DELETE_FLAG), logpattern = PATTERN, target_path = TARGET_PATH, provider = Consumer.ObjectStorageAction(BUCKET, LOGDIR, TARGET_PATH))
 
-    while True:
-        consumer.consume()
+    consumer.consume()
