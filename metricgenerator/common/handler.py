@@ -18,7 +18,6 @@ class Handler:
     childProcess = None
 
     def __init__(self, service, configFile):
-        print "config file******", configFile
         self.constants = Constants(configFile)
         try:
             self.directory = os.path.join(self.constants.getLogDir(), os.path.join(Constants.getHostname(), service))
@@ -32,20 +31,15 @@ class Handler:
         self.logger.setLevel(logging.INFO)
         self.logger.addHandler(RedirectLoggingHandler())
         self.socket = self.constants.getSocket()
-        print "handler instantiated"
         #self.context = zmq.Context()
 
     def getLogHandler(self):
         logger = logging.getLogger(self.service)
-        print "returning logger instance :", `logger`
         return logger
 
 
     def getQueueHandler(self):
         context = zmq.Context()
-        print "returning queue handler - ", context
-        #socket = self.constants.getSocket()
-        print "connect to socket : ", self.socket
         return MyZeroMQHandler(self.socket, context).getZeroMQHandler()
 
     ''' Follwing methods are not used since subscriber is an independent process now '''
@@ -57,7 +51,6 @@ class Handler:
         #atexit.register(self.killQueueSubscriber)
 
     def killQueueSubscriber(self):
-        print "Kill Child process"
         self.childProcess.terminate()
 
     def getQueueSubscriber(self):
