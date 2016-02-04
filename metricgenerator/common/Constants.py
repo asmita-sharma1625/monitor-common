@@ -25,7 +25,7 @@ class Constants:
     METRIC_VALUE = "Metric Value"
     SEPARATOR = " : "
     DELIMITER = "\n"
-    
+
     def __init__(self, configFile):
         self.configReader = ConfigReader(configFile)
 
@@ -137,4 +137,4 @@ class Constants:
     def addKeyValue (key, value, customDict = {}):
         pair = {key : value}
         customDict.update(pair)
-        return customDict    
+        return customDict
