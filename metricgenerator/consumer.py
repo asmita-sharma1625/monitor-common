@@ -71,7 +71,10 @@ class Consumer:
     def __init__(self, path, deleterotatedfiles=True, logpattern=".*", provider = None, target_path=None):
         self.path = path
         self.deleterotatedfiles = deleterotatedfiles
-
+	if self.deleterotatedfiles:
+		print "$true"
+	else:
+		print "$false"
         self.logpattern = logpattern
         self.regex = re.compile(self.logpattern)
 
@@ -124,16 +127,15 @@ if __name__ == '__main__':
         TARGET_PATH = sys.argv[4]
     else:
           TARGET_PATH = None
-    ConfigReader.setConfig(CONFIGFILE)
+    configReader = ConfigReader(CONFIGFILE)
 
     print "CONFIGFILE - ", CONFIGFILE
     print "SECTION - ", SECTION
 
-    LOGDIR =  ConfigReader.getValue(SECTION, "logdir")
-    BUCKET = ConfigReader.getValue(SECTION, "Bucket")
+    LOGDIR =  configReader.getValue(SECTION, "logdir")
+    BUCKET = configReader.getValue(SECTION, "Bucket")
     PATTERN = ".*\.log.*"
 
-    consumer = Consumer(LOGDIR, deleterotatedfiles = DELETE_FLAG, logpattern = PATTERN, target_path = TARGET_PATH, provider = Consumer.ObjectStorageAction(BUCKET, LOGDIR, TARGET_PATH))
+    consumer = Consumer(LOGDIR, deleterotatedfiles = eval(DELETE_FLAG), logpattern = PATTERN, target_path = TARGET_PATH, provider = Consumer.ObjectStorageAction(BUCKET, LOGDIR, TARGET_PATH))
 
-    while True:
-        consumer.consume()
+    consumer.consume()
