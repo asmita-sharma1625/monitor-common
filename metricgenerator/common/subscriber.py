@@ -16,13 +16,13 @@ if len(sys.argv) != 3:
 
 CONFIGFILE = sys.argv[1]
 SECTION = sys.argv[2]
-ConfigReader.setConfig(CONFIGFILE)
+configReader = ConfigReader(CONFIGFILE)
 #mySocket = ConfigReader.getValue("Constants", "Socket")
 
 print "CONFIGFILE - ", CONFIGFILE
 print "SECTION - ", SECTION
 
-#SERVICE = ConfigReader.getValue(SECTION, "Service") #sys.argv[1]
+SERVICE = ConfigReader.getValue(SECTION, "Service") #sys.argv[1]
 LOGDIR =  ConfigReader.getValue(SECTION, "LogDir") #sys.argv[2]
 FILENAME = ConfigReader.getValue(SECTION, "Filename") #sys.argv[3]
 SOCKET = ConfigReader.getValue(SECTION, "Socket") #sys.argv[4]

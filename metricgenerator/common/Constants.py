@@ -25,41 +25,39 @@ class Constants:
     METRIC_VALUE = "Metric Value"
     SEPARATOR = " : "
     DELIMITER = "\n"
+    
+    def __init__(self, configFile):
+        self.configReader = ConfigReader(configFile)
 
+    def setLogDir(self, logdir):
+        configWriter.CreateConfigFile("Constants", "LogDir", logdir)
 
-    @staticmethod
-    def setLogDir(logdir):
-        configWriter.updateConfigFile("Constants", "LogDir", logdir)
-
-    @staticmethod
-    def getLogDir():
+    def getLogDir(self):
         try:
-            logdir = ConfigReader.getValue("Constants", "LogDir")
+            logdir = self.configReader.getValue("Constants", "LogDir")
         except Exception as error:
             monitorLog.logError("Cannot get LogDir", error)
             raise error("Cannot get LogDir")
         return logdir
 
-    @staticmethod
-    def getFilename():
+    def getFilename(self):
         try:
-            filename = ConfigReader.getValue("Constants", "Filename")
+            filename = self.configReader.getValue("Constants", "Filename")
         except Exception as error:
             monitorLog.logError("Cannot get filename", error)
             raise error("Cannot get filename")
         return filename
 
-    @staticmethod
-    def getSocket():
+    def getSocket(self):
         try:
-            socket = ConfigReader.getValue("Constants", "Socket")
+            socket = self.configReader.getValue("Constants", "Socket")
         except Exception as error:
             monitorLog.logError("Cannot get socket", error)
             raise error("Cannot get socket")
         return socket
 
     '''
-        Get host from metadata.
+        Get hostname.
     '''
     @staticmethod
     def getHostname():
