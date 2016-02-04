@@ -19,13 +19,13 @@ class Constants:
     METRIC_TYPE = "Metric Type"
     METRIC_NAME = "Metric Name"
     HOST = "Host"
-    SERVICE = "service"
+    SERVICE = "Service"
     TIME = "Timestamp"
     SEVERITY = "Severity"
     METRIC_VALUE = "Metric Value"
     SEPARATOR = " : "
     DELIMITER = "\n"
-    
+
     def __init__(self, configFile):
         self.configReader = ConfigReader(configFile)
 
