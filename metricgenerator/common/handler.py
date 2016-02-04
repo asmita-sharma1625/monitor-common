@@ -16,7 +16,6 @@ import atexit
 class Handler:
 
     childProcess = None
-
     def __init__(self, service, configFile):
         print "config file******", configFile
         self.constants = Constants(configFile)
@@ -45,7 +44,7 @@ class Handler:
         context = zmq.Context()
         print "returning queue handler - ", context
         #socket = self.constants.getSocket()
-        print "connect to socket : ", self.socket
+        #print "connect to socket : ", self.socket
         return MyZeroMQHandler(self.socket, context).getZeroMQHandler()
 
     ''' Follwing methods are not used since subscriber is an independent process now '''

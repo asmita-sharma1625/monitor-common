@@ -25,7 +25,7 @@ class Constants:
     METRIC_VALUE = "Metric Value"
     SEPARATOR = " : "
     DELIMITER = "\n"
-    
+
     def __init__(self, configFile):
         self.configReader = ConfigReader(configFile)
 
@@ -93,10 +93,9 @@ class Constants:
         return string + Constants.SEVERITY + Constants.SEPARATOR + `severity` + Constants.DELIMITER
     '''
     @staticmethod
-    def createDictCommon (service):
+    def createDictCommon ():
         commonDict = {
-            Constants.HOST : Constants.getHostname(),
-            Constants.SERVICE : service
+            Constants.HOST : Constants.getHostname()
         }
         return commonDict
 
@@ -106,8 +105,11 @@ class Constants:
         return customDict
 
     @staticmethod
-    def toDictRuntime (name, mType, runtime, severity):
-        customDict = { Constants.METRIC_VALUE : runtime }
+    def toDictRuntime (topic, name, mType, runtime, severity):
+        customDict = {
+            Constants.SERVICE : topic,
+            Constants.METRIC_VALUE : runtime
+        }
         return Constants.addSeveriety ( Constants.addTimeStamp (
             Constants.addMetricInfo ( name, mType, customDict ) ), severity)
 
