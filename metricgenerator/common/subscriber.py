@@ -36,16 +36,15 @@ print "HOSTNAME - ", HOSTNAME
 
 subscriber = None
 
+c = statsd.StatsClient('localhost', 8125)
 def parseEmitMetrics (msg):
     customDict = json.loads(msg)
     metricName = customDict[Constants.SERVICE] + "." + \
             customDict[Constants.METRIC_NAME]
     #initializing statsd client (search from collectd on which port stasd is
     #running)
-    c = statsd.StatsClient('localhost', 8125)
     if customDict[Constants.METRIC_TYPE] == Constants.RUNTIME:
-        c.timing(metricName, \
-                 (customDict[Constants.METRIC_VALUE]))
+        c.timing(metricName, customDict[Constants.METRIC_VALUE])
     elif customDict[Constants.METRIC_TYPE] == Constants.COUNT:
         c.incr(metricName)
 
