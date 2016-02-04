@@ -18,10 +18,10 @@ class Logger:
             - Creates LogHandler instance to write metrics to log file.
             - Creates threading.local() instance to create thread specific variables.
     '''
-    def __init__ (self, configFile):
+    def __init__ (self, service, configFile):
         try:
             print "logger instantiated"
-            self.logHandler = LogHandler(configFile)
+            self.logHandler = LogHandler(service, configFile)
         except Exception as error:
             monitorLog.logError("Cannot Instantiate Logger with configFile : " + configFile, `error`)
             raise IncorrectConfigException("Cannot Instantiate Logger with configFile : " + configFile)
@@ -109,7 +109,7 @@ class Logger:
     '''
         Stops the thread local timer and logs the execution time.
     '''
-    def reportTime (self, topic, name, severity = 20, addOnInfoPairs = {}):
+    def reportTime (self, name, severity = 20, addOnInfoPairs = {}):
         endTime = time.time()
         runTime = endTime - self.threadLocal.startTime
         try:
@@ -117,7 +117,7 @@ class Logger:
             if runTime >= Logger.threshold_latency:
                 self.logHandler.appendTimeLog(name, runTime, 50)
             '''
-            self.logHandler.appendTimeLog(topic, name, runTime, severity, addOnInfoPairs)
+            self.logHandler.appendTimeLog(name, runTime, severity, addOnInfoPairs)
         except Exception as error:
             monitorLog.logError("Failed to append log for metric: " + name, `error`)
             raise LoggingException("Failed to append log for metric: " + name+traceback.format_exc())
@@ -125,9 +125,9 @@ class Logger:
     '''
         Logs the execution time of the given action and returns the value of action.
     '''
-    def reportLatency (self, topic,  name, action, severity = 20,listOfKeys = [], *args, **kwargs):
+    def reportLatency (self, name, action, severity = 20,listOfKeys = [], *args, **kwargs):
         keyValuePairs = self.logHandler.appendKeysToLog(listOfKeys, *args)
-        #print "key vaue pairs", keyValuePairs
+        print "key vaue pairs", keyValuePairs
         self.startTime()
         try:
             #print "inside report Latency for metric name - ", name
@@ -135,5 +135,5 @@ class Logger:
         except Exception as error:
             monitorLog.logError("Failed Action " + `action`, `error`)
             raise Exception("Failed Action :" + `action`)
-        self.reportTime(topic, name, severity, keyValuePairs)
+        self.reportTime(name, severity, keyValuePairs)
         return actualReturn
