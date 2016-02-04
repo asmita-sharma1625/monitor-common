@@ -14,7 +14,7 @@ def func(a,b,c):
      print b,c
 
 from metricgenerator import publish
-publish = publish.Publish("Test-1","test-config1.cfg")
+publish = publish.Publish("Test-1","config.cfg")
 
 @publish.ReportLatency("publish-1",20,[['a']])
 def f(a,b,c):
