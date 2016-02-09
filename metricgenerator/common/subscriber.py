@@ -22,13 +22,11 @@ configReader = ConfigReader(CONFIGFILE)
 print "CONFIGFILE - ", CONFIGFILE
 print "SECTION - ", SECTION
 
-SERVICE = configReader.getValue(SECTION, "Service") #sys.argv[1]
 LOGDIR =  configReader.getValue(SECTION, "LogDir") #sys.argv[2]
 FILENAME = configReader.getValue(SECTION, "Filename") #sys.argv[3]
 SOCKET = configReader.getValue(SECTION, "Socket") #sys.argv[4]
 HOSTNAME = socket.gethostname()
 
-print "SERVICE - ", SERVICE
 print "LOGDIR - ", LOGDIR
 print "FILENAME - ", FILENAME
 print "SOCKET - ", SOCKET
@@ -53,9 +51,9 @@ try:
     subscriber = ZeroMQSubscriber(SOCKET, multi = True)
     print "Subscriber bind to socket - ", SOCKET
 except zmq.error.ZMQError as error:
-    print "error in service " + SERVICE + " while binding to socket :" + SOCKET
-    raise zmq.error.ZMQError("error in service " + SERVICE + " while binding to socket :" + SOCKET)
-path = os.path.join(os.path.join(LOGDIR, HOSTNAME), SERVICE)
+    print "error while binding to socket :" + SOCKET
+    raise zmq.error.ZMQError("error while binding to socket :" + SOCKET)
+path = os.path.join(LOGDIR, HOSTNAME)
 path_with_filename = os.path.join(path, FILENAME)
 print "PATH - ", path
 
@@ -68,5 +66,5 @@ with TimedRotatingFileHandler(path_with_filename, date_format='%Y_%m_%d_%H_%M'):
         print "Log Received - ", record.message
         parseEmitMetrics(record.message)
         #subscriber.dispatch_forever()
-        dispatch_record(record)
+        dispatch_record(subscriber.recv())
 
