@@ -25,7 +25,6 @@ class LogHandler:
         Logs the msg with the specified logging level.
     '''
     def appendLog (self, msg, severity):
-        print "msg : ", msg
         try:
             logger = self.handler.getLogHandler()
             queueHandler = self.handler.getQueueHandler()
@@ -62,14 +61,11 @@ class LogHandler:
             raise Exception("Failure to append Count log: " + json.dumps(msg))
 
     def appendTimeLog(self, name, runtime, severity, addOnInfoPairs = {}):
-        #print "add ons : ", addOnInfoPairs
         #converting the runtime to ms
         runtime = runtime*1000
         msg = Constants.toDictRuntime(name, Constants.RUNTIME, runtime, severity)
         msg.update(addOnInfoPairs)
-        #print (json.dumps(msg))
         try:
-            #print (msg)
             self.appendLog(msg, severity)
         except Exception as error:
             monitorLog.logError("Failure to append Time Log: " + json.dumps(msg), `error`)
@@ -80,14 +76,10 @@ class LogHandler:
       list of keys is the keys corresponding to an argument to be looked for.
     '''
     def appendKeysToLog(self, listOfKeys, *args):
-        import pprint
-        pprint.pprint (args)
         customDict = {}
         for i in range(0,len(listOfKeys)):
-            print (i)
             if listOfKeys[i] is not []:
                 for key in listOfKeys[i]:
-                    print (key)
                     customDict = Constants.addKeyValue(key,
                                                        getattr(args[i], key), customDict)
         return customDict

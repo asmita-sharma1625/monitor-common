@@ -20,7 +20,7 @@ class Logger:
     '''
     def __init__ (self, service, configFile):
         try:
-            print "logger instantiated"
+            #print "logger instantiated"
             self.logHandler = LogHandler(service, configFile)
         except Exception as error:
             monitorLog.logError("Cannot Instantiate Logger with configFile : " + configFile, `error`)
@@ -36,7 +36,7 @@ class Logger:
         count = self.reportCountNE(expectedReturn, counter, action, *args, **kwargs)
         if count > 0:
             try:
-                print "logging failure"
+                #print "logging failure"
                 self.logHandler.appendFailCountLog(name, count, severity)
             except Exception as error:
                 monitorLog.logError("Failed to append log for metric: " + name, `error`)
@@ -51,7 +51,7 @@ class Logger:
                     self.logHandler.appendFailCountLog(name, counter,  50)
                 '''
                 self.logHandler.appendFailCountLog(name, counter, severity, addOnInfoPairs)
-                print "logging failure"
+                #print "logging failure"
             except Exception as error:
                 monitorLog.logError("Failed to append log for metric: " + name, `error`)
                 raise LoggingException("Failed to append log for metric: " + name)
@@ -61,7 +61,7 @@ class Logger:
     def logCount (self, name, counter, severity = 20, addOnInfoPairs = {}):
         if counter > 0:
             try:
-                print "inside logCount method for metric name - ", name
+                #print "inside logCount method for metric name - ", name
                 '''
                 if counter >= Logger.threshold_count:
                     self.logHandler.appendCountLog(name, counter,  50)
@@ -127,7 +127,7 @@ class Logger:
     '''
     def reportLatency (self, name, action, severity = 20,listOfKeys = [], *args, **kwargs):
         keyValuePairs = self.logHandler.appendKeysToLog(listOfKeys, *args)
-        print "key vaue pairs", keyValuePairs
+        #print "key vaue pairs", keyValuePairs
         self.startTime()
         try:
             #print "inside report Latency for metric name - ", name
