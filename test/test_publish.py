@@ -6,7 +6,7 @@ import time
 class TestPublish(unittest.TestCase): 
 
   SERVICE = "Test"
-  publish.setLogger(SERVICE, "config.cfg")
+  publish = publish.Publish(SERVICE, "config.cfg")
 
   def setUp(self):
     #cfgfile = "config.cfg"
@@ -16,7 +16,7 @@ class TestPublish(unittest.TestCase):
     configWriter.CreateConfigFile("pconfig.cfg", "Constants", "Filename", "metric.log")
     '''
     #democonfig.demoConfig(cfgfile).setConfig()
-    #publish.setLogger("demo_publish", cfgfile)
+    #publish = publish.Publish("demo_publish", cfgfile)
  
   def test_ReportLatency(self):
     print "testing publish"

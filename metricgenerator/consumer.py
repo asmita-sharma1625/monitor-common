@@ -42,18 +42,17 @@ class Consumer:
             if dest_path is  not None:
                 self.dest_path = dest_path
             else:
-                self.dest_path = None
+                self.dest_path = socket.gethostname()
             print "dest path:", dest_path
             self.s3Dao = s3Dao.S3Dao()
             self.s3Dao.setBucket(bucket)
 
         def doTask(self, filename, logfilename):
-            if self.dest_path is not None:
-                date = datetime.date.today()
-                print date
-                dateRecord = os.path.join(`date.year`, os.path.join(`date.month`, `date.day`))
-                print dateRecord
-                logfilename = os.path.join(self.dest_path, os.path.join(dateRecord, logfilename)) 
+            date = datetime.date.today()
+            print date
+            dateRecord = os.path.join(`date.year`, os.path.join(`date.month`, `date.day`))
+            print dateRecord
+            logfilename = os.path.join(self.dest_path, os.path.join(dateRecord, logfilename)) 
             filename = os.path.join(self.logdir, filename)
 
             print logfilename, "*******", filename

@@ -3,7 +3,7 @@ import re
 import os
 from metricgenerator.logHandler import LogHandler
 from metricgenerator.common.Constants import Constants
-from test import democonfig
+#from test import democonfig
 
 class TestLogHandler(unittest.TestCase):
 
@@ -19,6 +19,7 @@ class TestLogHandler(unittest.TestCase):
     configWriter.CreateConfigFile("config.cfg", "Constants", "Filename", "metric.log")
     '''
     #democonfig.demoConfig(self.cfgfile).setConfig()
+    self.constants = Constants("config.cfg")
 
   @unittest.skip("skip")
   def test_dirIfNotExists(self):
@@ -27,7 +28,7 @@ class TestLogHandler(unittest.TestCase):
 
   def test_dirIfExists(self):
     new_logHandler = LogHandler(TestLogHandler.SERVICE, "config.cfg")
-    self.assertTrue(os.path.exists(os.path.join(os.path.join(Constants.getLogDir(), Constants.getHostname()),TestLogHandler.SERVICE)))
+    self.assertTrue(os.path.exists(os.path.join(os.path.join(self.constants.getLogDir(), Constants.getHostname()),TestLogHandler.SERVICE)))
 
 if __name__ == '__main__':
   unittest.main()

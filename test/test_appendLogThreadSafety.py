@@ -10,7 +10,7 @@ mutex = threading.Lock()
 
 #class MultiThreading:
 
-#publish.setLogger("Test", "config.cfg")
+#publish = publish.Publish("Test", "config.cfg")
 logger = logger.Logger("Test","config.cfg")
 
 #@publish.ReportLatency("multi-thread-latency")
