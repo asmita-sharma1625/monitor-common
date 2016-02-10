@@ -66,5 +66,5 @@ with TimedRotatingFileHandler(path_with_filename, date_format='%Y_%m_%d_%H_%M'):
         print "Log Received - ", record.message
         parseEmitMetrics(record.message)
         #subscriber.dispatch_forever()
-        dispatch_record(subscriber.recv())
+        dispatch_record(record)
 
