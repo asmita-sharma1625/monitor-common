@@ -25,12 +25,10 @@ print "SECTION - ", SECTION
 LOGDIR =  configReader.getValue(SECTION, "LogDir") #sys.argv[2]
 FILENAME = configReader.getValue(SECTION, "Filename") #sys.argv[3]
 SOCKET = configReader.getValue(SECTION, "Socket") #sys.argv[4]
-HOSTNAME = socket.gethostname()
 
 print "LOGDIR - ", LOGDIR
 print "FILENAME - ", FILENAME
 print "SOCKET - ", SOCKET
-print "HOSTNAME - ", HOSTNAME
 
 subscriber = None
 
@@ -53,7 +51,7 @@ try:
 except zmq.error.ZMQError as error:
     print "error while binding to socket :" + SOCKET
     raise zmq.error.ZMQError("error while binding to socket :" + SOCKET)
-path = os.path.join(LOGDIR, HOSTNAME)
+path = LOGDIR
 path_with_filename = os.path.join(path, FILENAME)
 print "PATH - ", path
 

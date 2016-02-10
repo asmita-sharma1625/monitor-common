@@ -16,7 +16,7 @@ class TestConsumerIntegrationWithLogger(unittest.TestCase):
     self.src_path = "../logs"
     self.dest_path = "../consumer"
 
-  @unittest.skipUnless(os.path.exists(os.path.join("../logs", socket.gethostname())), "logger test case not run yet")
+  @unittest.skipUnless(os.path.exists("../logs"), "logger test case not run yet")
   def test_logConsumption(self):
     #configWriter.CreateConfigFile("config.cfg", "Constants", "LogDir", "./logs")
     #ConfigReader.setConfig("config.cfg")
@@ -24,4 +24,7 @@ class TestConsumerIntegrationWithLogger(unittest.TestCase):
     consumer = Consumer(self.src_path , deleterotatedfiles = False, logpattern = "metric.*\.log", target_path = self.dest_path)
     consumer.consume() 
     diff = filecmp.dircmp(self.src_path, self.dest_path)
-    self.assertEquals(diff.left_list, diff.right_list)
+    print "diff", diff
+    print "left diff", diff.left_list
+    print "right diff", diff.right_list
+    self.assertEquals(diff.left_list[1:], diff.right_list)

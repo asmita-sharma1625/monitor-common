@@ -1,2 +1,0 @@
-[2016-02-03 18:23:59.386879] INFO: Test-2: {"a": "a", "Severity": 20, "Service": "Test-2", "Metric Type": "Runtime", "Timestamp": 1454523839.385727, "Metric Value": 0.014066696166992188, "Host": "asmi-HP-ProBook-450-G2", "Metric Name": "latency"}
-[2016-02-03 18:23:59.388656] INFO: Test-2: {"a": "b", "c": "d", "Severity": 20, "Service": "Test-2", "Metric Type": "Counter", "Timestamp": 1454523839.388148, "Metric Value": 5, "Host": "asmi-HP-ProBook-450-G2", "Metric Name": "count"}

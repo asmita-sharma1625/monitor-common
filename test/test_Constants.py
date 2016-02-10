@@ -15,6 +15,7 @@ class TestConstants(unittest.TestCase):
   def test_getHostname (self):
     self.assertEqual(Constants.getHostname(), socket.gethostname())
 
+  @unittest.skip("skip")
   def test_toString (self):
     string = "Metric Name : " + self.NAME + "\n" + "Metric Type : " + self.TYPE + "\n" + self.VALUE_STRING
     self.assertNotEqual(re.match(string, Constants.prependMetricInfo(self.NAME, self.TYPE, self.VALUE_STRING)), None)
