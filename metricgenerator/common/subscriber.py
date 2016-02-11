@@ -1,5 +1,5 @@
 import sys
-import os
+import os, datetime
 import socket
 import statsd
 import zmq
@@ -44,6 +44,13 @@ def parseEmitMetrics (msg):
     elif customDict[Constants.METRIC_TYPE] == Constants.COUNT:
         c.incr(metricName)
 
+def  check_rotation (handler):
+    files_to_rotate = handler.files_to_delete()
+    if len(files_to_rotate) != 0:
+        print "NOT NULL : ", files_to_rotate
+        for obj in files_to_rotate:
+            fileobj = obj[1]
+            os.rename(fileobj, fileobj + "." + `datetime.datetime.now().minute`)
 
 try:
     subscriber = ZeroMQSubscriber(SOCKET, multi = True)
@@ -58,11 +65,13 @@ print "PATH - ", path
 if not os.path.exists(path):
     os.makedirs(path)
 
-with TimedRotatingFileHandler(path_with_filename, date_format='%Y_%m_%d_%H_%M'):
+handler = TimedRotatingFileHandler(path_with_filename, date_format='%Y_%m_%d_%H_%M', backup_count = 5) #60)
+
+with handler:
     while 1:
         record = subscriber.recv()
         print "Log Received - ", record.message
         parseEmitMetrics(record.message)
         #subscriber.dispatch_forever()
         dispatch_record(record)
-
+        check_rotation(handler)

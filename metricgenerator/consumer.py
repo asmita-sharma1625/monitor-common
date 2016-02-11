@@ -2,7 +2,7 @@ import sys
 import os
 import sqlite3
 import re
-import sys, datetime
+import sys, time, datetime
 import shutil, socket
 from metricgenerator.common.configReader import ConfigReader
 from metricgenerator import s3Dao
@@ -10,7 +10,7 @@ from metricgenerator import s3Dao
 class Consumer:
 
     suffixpattern = "metric\d{4}-\d{2}-\d{2} [0-2][0-9]:[0-5][0-9]"
-    fileextension = ""
+    fileextension = -1
 
     class ActionOnFile:
         def doTask(self, filename, relativepath):
@@ -83,10 +83,25 @@ class Consumer:
             self.provider = Consumer.DefaultAction(dest_path)
 
     def list_of_logs(self):
+        '''
         return [os.path.join(dirpath, files) \
                             for (dirpath, dirname, filename) in os.walk(self.path) \
                             for files in filename if files.endswith(Consumer.fileextension) and self.regex.search(files)]
-
+        '''
+        list_of_files = []
+        fileextension = -1
+        for (dirpath, dirname, filename) in os.walk(self.path):
+            for files in filename:
+                try:
+                    fileextension = int(files.rsplit(".",1)[1])
+                except:
+                    pass
+                if self.regex.search(files) and (fileextension > Consumer.fileextension):
+                    Consumer.fileextension = fileextension
+                    if fileextension == 59:
+                        Consumer.fileextension = -1
+                    list_of_files.append(os.path.join(dirpath, files))
+            return list_of_files
 
     def do_action(self, filename, relpath):
         #This is just for test of now. Later, it will be upgraded for object storage.
@@ -122,7 +137,7 @@ if __name__ == '__main__':
     if len(sys.argv) == 5:
         TARGET_PATH = sys.argv[4]
     else:
-          TARGET_PATH = None
+        TARGET_PATH = None
     configReader = ConfigReader(CONFIGFILE)
 
     print "CONFIGFILE - ", CONFIGFILE
@@ -130,8 +145,8 @@ if __name__ == '__main__':
 
     LOGDIR =  configReader.getValue(SECTION, "LogDir")
     BUCKET = configReader.getValue(SECTION, "Bucket")
-    PATTERN = ".*\.log.*"
+    PATTERN = ".*\.log.[0-9]+"
 
     consumer = Consumer(LOGDIR, deleterotatedfiles = eval(DELETE_FLAG), logpattern = PATTERN, target_path = TARGET_PATH, provider = Consumer.ObjectStorageAction(BUCKET, LOGDIR, TARGET_PATH))
-
-    consumer.consume()
+    while 1:
+        consumer.consume()
