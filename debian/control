@@ -1,0 +1,18 @@
+Source: monitor-common
+Section: utils
+Priority: optional
+Maintainer: Akash Agrawal <akash.agrawal1992@gmail.com>
+Build-Depends: debhelper (>= 8.0.0),python-setuptools,python-all, python-logbook,python-zmq
+Build-Depends-Indep: python-pbr (>= 0.6)
+Standards-Version: 3.9.5
+X-Python-Version: >=2.7
+#Homepage: <insert the upstream URL, if relevant>
+#Vcs-Git: git://git.debian.org/collab-maint/monitor-common.git
+#Vcs-Browser: http://git.debian.org/?p=collab-maint/monitor-common.git;a=summary
+
+Package: python-metricgenerator
+Architecture: all
+Section: python
+Depends: ${misc:Depends}
+Description: <insert up to 60 chars description>
+ <insert long description, indented with spaces>
