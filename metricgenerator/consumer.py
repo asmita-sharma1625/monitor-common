@@ -10,7 +10,7 @@ from metricgenerator import s3Dao
 class Consumer:
 
     suffixpattern = "metric\d{4}-\d{2}-\d{2} [0-2][0-9]:[0-5][0-9]"
-    fileextension = -1
+    fileextension = datetime.datetime.now()
 
     class ActionOnFile:
         def doTask(self, filename, relativepath):
@@ -52,7 +52,7 @@ class Consumer:
             print date
             dateRecord = os.path.join(`date.year`, os.path.join(`date.month`, `date.day`))
             print dateRecord
-            logfilename = os.path.join(self.dest_path, os.path.join(dateRecord, logfilename)) 
+            logfilename = os.path.join(self.dest_path, os.path.join(dateRecord, logfilename))
             filename = os.path.join(self.logdir, filename)
 
             print logfilename, "*******", filename
@@ -86,20 +86,23 @@ class Consumer:
         '''
         return [os.path.join(dirpath, files) \
                             for (dirpath, dirname, filename) in os.walk(self.path) \
-                            for files in filename if files.endswith(Consumer.fileextension) and self.regex.search(files)]
+                            for files in filename if files.endswith(Consumer.fileextension) and self.regex.search(files)
         '''
         list_of_files = []
-        fileextension = -1
         for (dirpath, dirname, filename) in os.walk(self.path):
             for files in filename:
                 try:
-                    fileextension = int(files.rsplit(".",1)[1])
+                    fileextension = datetime.datetime.strptime(files.rsplit("-")[1].rsplit(".")[0], "%Y_%m_%d_%H_%M")
                 except:
+                    print "error while retreiving timestamp from file"
                     pass
-                if self.regex.search(files) and (fileextension > Consumer.fileextension):
+                time_delta = (fileextension - Consumer.fileextension).total_seconds() / 600
+                if self.regex.search(files) and time_delta > 1:
+                    '''
                     Consumer.fileextension = fileextension
                     if fileextension == 59:
                         Consumer.fileextension = -1
+                    '''
                     list_of_files.append(os.path.join(dirpath, files))
             return list_of_files
 
@@ -109,7 +112,9 @@ class Consumer:
         #Temporary just make an entry into the file.
 
     def do_delete(self, filename):
-        os.unlink(filename)
+        print filename
+        os.rename(filename, "/tmp/archive/"+os.path.basename(filename))
+        #os.unlink(filename)
 
     def consume_each_file(self, filename):
         #Relative path from the given path to maintain hierarchy.
@@ -145,7 +150,7 @@ if __name__ == '__main__':
 
     LOGDIR =  configReader.getValue(SECTION, "LogDir")
     BUCKET = configReader.getValue(SECTION, "Bucket")
-    PATTERN = ".*\.log.[0-9]+"
+    PATTERN = ".*\.log$"
 
     consumer = Consumer(LOGDIR, deleterotatedfiles = eval(DELETE_FLAG), logpattern = PATTERN, target_path = TARGET_PATH, provider = Consumer.ObjectStorageAction(BUCKET, LOGDIR, TARGET_PATH))
     while 1:
