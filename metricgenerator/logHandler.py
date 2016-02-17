@@ -76,10 +76,11 @@ class LogHandler:
       list of keys is the keys corresponding to an argument to be looked for.
     '''
     def appendKeysToLog(self, listOfKeys, *args):
+        listOfKeys = json.loads(listOfKeys)
         customDict = {}
-        for i in range(0,len(listOfKeys)):
+        for i in listOfKeys:
             if listOfKeys[i] is not []:
                 for key in listOfKeys[i]:
                     customDict = Constants.addKeyValue(key,
-                                                       getattr(args[i], key), customDict)
+                                                       getattr(args[int(i)], key), customDict)
         return customDict
