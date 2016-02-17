@@ -10,7 +10,8 @@ from metricgenerator import s3Dao
 class Consumer:
 
     suffixpattern = "metric\d{4}-\d{2}-\d{2} [0-2][0-9]:[0-5][0-9]"
-    fileextension = datetime.datetime.now()
+    fileextension = ".log"
+    current_time = datetime.datetime.now()
 
     class ActionOnFile:
         def doTask(self, filename, relativepath):
@@ -49,9 +50,7 @@ class Consumer:
 
         def doTask(self, filename, logfilename):
             date = datetime.date.today()
-            print date
             dateRecord = os.path.join(`date.year`, os.path.join(`date.month`, `date.day`))
-            print dateRecord
             logfilename = os.path.join(self.dest_path, os.path.join(dateRecord, logfilename))
             filename = os.path.join(self.logdir, filename)
 
@@ -67,13 +66,13 @@ class Consumer:
             #  return False
             return True
 
-    def __init__(self, path, deleterotatedfiles=True, logpattern=".*", provider = None, target_path=None):
+    def __init__(self, path, dateformat, interval, deleterotatedfiles=True, logpattern=".*", provider = None, target_path=None):
         self.path = path
         self.deleterotatedfiles = deleterotatedfiles
-
+        self.interval = interval
         self.logpattern = logpattern
         self.regex = re.compile(self.logpattern)
-
+        self.dateformat = dateformat
         dest_path = "/tmp/backups/"
         if target_path:
             dest_path = target_path
@@ -83,28 +82,19 @@ class Consumer:
             self.provider = Consumer.DefaultAction(dest_path)
 
     def list_of_logs(self):
-        '''
-        return [os.path.join(dirpath, files) \
-                            for (dirpath, dirname, filename) in os.walk(self.path) \
-                            for files in filename if files.endswith(Consumer.fileextension) and self.regex.search(files)
-        '''
         list_of_files = []
         for (dirpath, dirname, filename) in os.walk(self.path):
-            for files in filename:
-                try:
-                    fileextension = datetime.datetime.strptime(files.rsplit("-")[1].rsplit(".")[0], "%Y_%m_%d_%H_%M")
-                except:
-                    print "error while retreiving timestamp from file"
-                    pass
-                time_delta = (fileextension - Consumer.fileextension).total_seconds() / 600
-                if self.regex.search(files) and time_delta > 1:
-                    '''
-                    Consumer.fileextension = fileextension
-                    if fileextension == 59:
-                        Consumer.fileextension = -1
-                    '''
-                    list_of_files.append(os.path.join(dirpath, files))
-            return list_of_files
+            if "archive" not in dirpath:
+                for files in filename:
+                    try:
+                        log_time = datetime.datetime.strptime(files.rsplit("-")[1].rsplit(".")[0], self.dateformat)
+                        time_delta = (Consumer.current_time - log_time).total_seconds() / self.interval
+                        if self.regex.search(files) and time_delta > 1:
+                            list_of_files.append(os.path.join(dirpath, files))
+                    except:
+                        if not files.endswith(Consumer.fileextension):
+                            list_of_files.append(os.path.join(dirpath, files))
+        return list_of_files
 
     def do_action(self, filename, relpath):
         #This is just for test of now. Later, it will be upgraded for object storage.
@@ -113,7 +103,10 @@ class Consumer:
 
     def do_delete(self, filename):
         print filename
-        os.rename(filename, "/tmp/archive/"+os.path.basename(filename))
+        archive_path = os.path.join(self.path, "archive")
+        if not os.path.exists(archive_path):
+            os.makedirs(archive_path)
+        os.rename(filename, os.path.join(archive_path, os.path.basename(filename)))
         #os.unlink(filename)
 
     def consume_each_file(self, filename):
@@ -132,26 +125,30 @@ class Consumer:
         map(self.consume_each_file, file_names)
 
 if __name__ == '__main__':
-    if len(sys.argv) < 4:
+    if len(sys.argv) < 3:
         raise SystemExit("Invalid Arguments - config path, section name and delete_flag required")
 
     CONFIGFILE = sys.argv[1]
     SECTION = sys.argv[2]
-    DELETE_FLAG = sys.argv[3]
 
-    if len(sys.argv) == 5:
-        TARGET_PATH = sys.argv[4]
+    if len(sys.argv) == 4:
+        TARGET_PATH = sys.argv[3]
     else:
         TARGET_PATH = None
-    configReader = ConfigReader(CONFIGFILE)
 
-    print "CONFIGFILE - ", CONFIGFILE
-    print "SECTION - ", SECTION
+    try:
+        configReader = ConfigReader(CONFIGFILE)
 
-    LOGDIR =  configReader.getValue(SECTION, "LogDir")
-    BUCKET = configReader.getValue(SECTION, "Bucket")
-    PATTERN = ".*\.log$"
+        print "CONFIGFILE - ", CONFIGFILE
+        print "SECTION - ", SECTION
 
-    consumer = Consumer(LOGDIR, deleterotatedfiles = eval(DELETE_FLAG), logpattern = PATTERN, target_path = TARGET_PATH, provider = Consumer.ObjectStorageAction(BUCKET, LOGDIR, TARGET_PATH))
-    while 1:
-        consumer.consume()
+        LOGDIR =  configReader.getValue(SECTION, "LogDir")
+        BUCKET = configReader.getValue(SECTION, "Bucket")
+        INTERVAL = configReader.getValue(SECTION, "Interval")
+        DATE_FORMAT = configReader.getValue(SECTION, "Dateformat")
+    except:
+        print "Config variables cannot be found"
+        raise Exception("Config variables cannot be found")
+
+    consumer = Consumer(LOGDIR, dateformat = DATE_FORMAT, interval = INTERVAL, target_path = TARGET_PATH, provider = Consumer.ObjectStorageAction(BUCKET, LOGDIR, TARGET_PATH))
+    consumer.consume()
