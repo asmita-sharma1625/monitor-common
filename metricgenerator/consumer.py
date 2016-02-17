@@ -66,13 +66,19 @@ class Consumer:
             #  return False
             return True
 
-    def __init__(self, path, dateformat, interval, deleterotatedfiles=True, logpattern=".*", provider = None, target_path=None):
+    def __init__(self, path, interval = None, dateformat = None, deleterotatedfiles=True, logpattern=".*", provider = None, target_path=None):
         self.path = path
         self.deleterotatedfiles = deleterotatedfiles
-        self.interval = interval
         self.logpattern = logpattern
         self.regex = re.compile(self.logpattern)
-        self.dateformat = dateformat
+
+        if interval is None and dateformat is None:
+            self.app_flag = True
+        else:
+            self.app_flag = False
+            self.interval = int(interval)
+            self.dateformat = dateformat
+
         dest_path = "/tmp/backups/"
         if target_path:
             dest_path = target_path
@@ -81,7 +87,7 @@ class Consumer:
         else:
             self.provider = Consumer.DefaultAction(dest_path)
 
-    def list_of_logs(self):
+    def list_of_metric_logs(self):
         list_of_files = []
         for (dirpath, dirname, filename) in os.walk(self.path):
             if "archive" not in dirpath:
@@ -92,9 +98,17 @@ class Consumer:
                         if self.regex.search(files) and time_delta > 1:
                             list_of_files.append(os.path.join(dirpath, files))
                     except:
-                        if not files.endswith(Consumer.fileextension):
-                            list_of_files.append(os.path.join(dirpath, files))
+                        pass
         return list_of_files
+
+    def list_of_application_logs(self):
+         list_of_files = []
+         for (dirpath, dirname, filename) in os.walk(self.path):
+             if "archive" not in dirpath:
+                 for files in filename:
+                    if not files.endswith(Consumer.fileextension):
+                        list_of_files.append(os.path.join(dirpath, files))
+         return list_of_files
 
     def do_action(self, filename, relpath):
         #This is just for test of now. Later, it will be upgraded for object storage.
@@ -121,7 +135,11 @@ class Consumer:
 
     def consume(self):
         #Get list of file names
-        file_names = self.list_of_logs()
+        file_names = []
+        if self.app_flag:
+            file_names = self.list_of_application_logs()
+        else:
+            file_names = self.list_of_metric_logs()
         map(self.consume_each_file, file_names)
 
 if __name__ == '__main__':
@@ -136,6 +154,11 @@ if __name__ == '__main__':
     else:
         TARGET_PATH = None
 
+    LOGDIR = None
+    BUCKET = None
+    INTERVAL = None
+    DATE_FORMAT = None
+
     try:
         configReader = ConfigReader(CONFIGFILE)
 
@@ -144,8 +167,11 @@ if __name__ == '__main__':
 
         LOGDIR =  configReader.getValue(SECTION, "LogDir")
         BUCKET = configReader.getValue(SECTION, "Bucket")
-        INTERVAL = configReader.getValue(SECTION, "Interval")
-        DATE_FORMAT = configReader.getValue(SECTION, "Dateformat")
+        try:
+            INTERVAL = configReader.getValue(SECTION, "Interval")
+            DATE_FORMAT = configReader.getValue(SECTION, "Dateformat")
+        except:
+            pass
     except:
         print "Config variables cannot be found"
         raise Exception("Config variables cannot be found")
