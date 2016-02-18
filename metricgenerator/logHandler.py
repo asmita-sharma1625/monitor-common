@@ -60,7 +60,7 @@ class LogHandler:
             monitorLog.logError("Failure append Count Log: " + json.dumps(msg), `error`)
             raise Exception("Failure to append Count log: " + json.dumps(msg))
 
-    def appendTimeLog(self, name, runtime, severity, addOnInfoPairs = {}):
+    def appendTimeLog(self, name, runtime, severity = 20, addOnInfoPairs = {}):
         #converting the runtime to ms
         runtime = runtime*1000
         msg = Constants.toDictRuntime(name, Constants.RUNTIME, runtime, severity)
