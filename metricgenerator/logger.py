@@ -32,19 +32,6 @@ class Logger:
         If the given action is failed, then it will log the failure count uptil now.
         It will also return the updated counter value.
     '''
-    '''
-    def logIfFail (self, name, expectedReturn, counter, action, severity = 20, *args, **kwargs):
-        count = self.reportCountNE(expectedReturn, counter, action, *args, **kwargs)
-        if count > 0:
-            try:
-                #print "logging failure"
-                self.logHandler.appendFailCountLog(name, count, severity)
-            except Exception as error:
-                monitorLog.logError("Failed to append log for metric: " + name, `error`)
-                raise LoggingException("Failed to append log for metric: " + name)
-        return count
-    '''
-
     def logFailure (self, name, counter, severity = 20, addOnInfoPairs = {}):
         if counter > 0:
             try:
@@ -127,16 +114,13 @@ class Logger:
     '''
         Logs the execution time of the given action and returns the value of action.
     '''
-    def reportLatency (self, name, action, severity = 20,listOfKeys = [], *args, **kwargs):
-        if listOfKeys is not []:
+    def reportLatency (self, name, action, severity = 20,listOfKeys = '{}', *args, **kwargs):
+        if listOfKeys is not '{}':
             keyValuePairs = self.logHandler.appendKeysToLog(listOfKeys, *args)
         #print "key vaue pairs", keyValuePairs
         self.startTime()
-        try:
-            #print "inside report Latency for metric name - ", name
-            actualReturn = action(*args, **kwargs)
-        except Exception as error:
-            monitorLog.logError("Failed Action " + `action`, `error`)
-            raise Exception("Failed Action :" + `action`)
+        #print "inside report Latency for metric name - ", name
+        actualReturn = action(*args, **kwargs)
+        #raise Exception("Failed Action :" + `action`)
         self.reportTime(name, severity, keyValuePairs)
         return actualReturn

@@ -13,7 +13,7 @@ class Publish:
             return wrapper
         return real_decorator
 
-    def ReportLatency(self, name, severity = 20, listOfKeys = []):
+    def ReportLatency(self, name, severity = 20, listOfKeys = '{}'):
         def real_decorator(function):
             def wrapper(*args, **kwargs):
                 return self.logger.reportLatency(name, function, severity,\

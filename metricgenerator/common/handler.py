@@ -29,7 +29,8 @@ class Handler:
         self.service = service
         self.logger = logging.getLogger(self.service)
         self.logger.setLevel(logging.INFO)
-        self.logger.addHandler(RedirectLoggingHandler())
+        if not len(self.logger.handlers):
+            self.logger.addHandler(RedirectLoggingHandler())
         self.socket = self.constants.getSocket()
         #self.context = zmq.Context()
 
