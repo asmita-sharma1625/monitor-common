@@ -43,15 +43,7 @@ def parseEmitMetrics (msg):
         c.timing(metricName, customDict[Constants.METRIC_VALUE])
     elif customDict[Constants.METRIC_TYPE] == Constants.COUNT:
         c.incr(metricName)
-'''
-def  check_rotation (handler):
-    files_to_rotate = handler.files_to_delete()
-    if len(files_to_rotate) != 0:
-        print "NOT NULL : ", files_to_rotate
-        for obj in files_to_rotate:
-            fileobj = obj[1]
-            os.rename(fileobj, fileobj + "." + `datetime.datetime.now().minute`)
-'''
+
 try:
     subscriber = ZeroMQSubscriber(SOCKET, multi = True)
     print "Subscriber bind to socket - ", SOCKET
@@ -72,6 +64,4 @@ with handler:
         record = subscriber.recv()
         print "Log Received - ", record.message
         parseEmitMetrics(record.message)
-        #subscriber.dispatch_forever()
         dispatch_record(record)
-        #check_rotation(handler)

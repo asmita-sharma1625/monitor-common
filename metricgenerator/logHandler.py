@@ -5,19 +5,17 @@ import json
 from common.Constants import Constants
 from common.handler import Handler
 from common.monitorLog import monitorLog
+import traceback
 
 class LogHandler:
 
     def __init__ (self, service, configFile):
         try:
             self.handler = Handler(service, configFile)
-        except Exception as error:
-            monitorLog.logError("Cannot Instantiate Handler with configFile : " + configFile, `error`)
-            raise Exception("Cannot Instantiate Handler with configFile : " + configFile)
+        except Exception:
+            monitorLog.logError("Cannot Instantiate Handler with configFile : " + `configFile` + traceback.format_exc())
+            raise Exception("Cannot Instantiate Handler with configFile : " + `configFile`)
         ''' Subscriber is now an independent process , hence following lines are commented '''
-        # start queue subscriber for logging
-        # self.handler.startQueueSubscriber()
-        #self.commonLog = Constants.toStringCommon(service)
         self.commonLog = Constants.createDictCommon(service)
 
     '''
@@ -28,8 +26,8 @@ class LogHandler:
         try:
             logger = self.handler.getLogHandler()
             queueHandler = self.handler.getQueueHandler()
-        except Exception as error:
-            monitorLog.logError("Cannot instanstiate ZMQ handler with given context", `error`)
+        except Exception:
+            monitorLog.logError("Cannot instanstiate ZMQ handler with given context" + traceback.format_exc())
             raise Exception("Cannot instanstiate ZMQ handler with given context")
         try:
             with queueHandler:
@@ -38,8 +36,8 @@ class LogHandler:
                 customLogDict.update(msg)
                 logger.log(severity,
                            json.dumps(customLogDict))
-        except Exception as error:
-            monitorLog.logError("Failure to append Log: " + json.dumps(msg), `error`)
+        except Exception:
+            monitorLog.logError("Failure to append Log: " + json.dumps(msg) + traceback.format_exc())
             raise Exception("Failure to append log: " + json.dumps(msg))
 
     def appendFailCountLog(self, name, count, severity, addOnInfoPairs = {}):
@@ -47,8 +45,8 @@ class LogHandler:
         msg.update(addOnInfoPairs)
         try:
             self.appendLog(msg, severity)
-        except Exception as error:
-            monitorLog.logError("Failure to append Count Log: " + json.dumps(msg), `error`)
+        except Exception:
+            monitorLog.logError("Failure to append Count Log: " + json.dumps(msg) + traceback.format_exc())
             raise Exception("Failure to append Count log: " + json.dumps(msg))
 
     def appendCountLog(self, name, count, severity, addOnInfoPairs = {}):
@@ -56,8 +54,8 @@ class LogHandler:
         msg.update(addOnInfoPairs)
         try:
             self.appendLog(msg, severity)
-        except Exception as error:
-            monitorLog.logError("Failure append Count Log: " + json.dumps(msg), `error`)
+        except Exception:
+            monitorLog.logError("Failure append Count Log: " + json.dumps(msg) + traceback.format_exc())
             raise Exception("Failure to append Count log: " + json.dumps(msg))
 
     def appendTimeLog(self, name, runtime, severity = 20, addOnInfoPairs = {}):
@@ -67,8 +65,8 @@ class LogHandler:
         msg.update(addOnInfoPairs)
         try:
             self.appendLog(msg, severity)
-        except Exception as error:
-            monitorLog.logError("Failure to append Time Log: " + json.dumps(msg), `error`)
+        except Exception:
+            monitorLog.logError("Failure to append Time Log: " + json.dumps(msg) + traceback.format_exc())
             raise Exception("Failure to append Time log: " + json.dumps(msg))
 
     '''
@@ -78,9 +76,13 @@ class LogHandler:
     def appendKeysToLog(self, listOfKeys, *args):
         listOfKeys = json.loads(listOfKeys)
         customDict = {}
-        for i in listOfKeys:
-            if listOfKeys[i] is not []:
-                for key in listOfKeys[i]:
-                    customDict = Constants.addKeyValue(key,
+        try:
+            for i in listOfKeys:
+                if listOfKeys[i] is not []:
+                    for key in listOfKeys[i]:
+                        customDict = Constants.addKeyValue(key,
                                                        getattr(args[int(i)], key), customDict)
+        except:
+            monitorLog.logError("Error while appending keys to log record :" + `listOfKeys` + traceback.format_exc())
+            raise Exception("Error while appending keys to log record :" + `listOfKeys`)
         return customDict

@@ -6,7 +6,7 @@ import time
 class TestPublish(unittest.TestCase): 
 
   SERVICE = "Test"
-  publish = publish.Publish(SERVICE, "config.cfg")
+  publish = publish.Publish(SERVICE)
 
   def setUp(self):
     #cfgfile = "config.cfg"
