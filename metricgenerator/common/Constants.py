@@ -2,8 +2,10 @@ import time
 import socket
 from configReader import ConfigReader
 import configWriter
-from monitorLog import monitorLog
-import traceback
+import logging
+import monitorLog
+
+log = logging.getLogger("metricgenerator")
 
 '''
 		Declares constants.
@@ -31,7 +33,7 @@ class Constants:
         try:
             self.configReader = ConfigReader(configFile)
         except:
-            monitorLog.logError("Cannot find config file : " + `configFile` + traceback.format_exc())
+            log.error("Cannot find config file : " + `configFile`)
             self.logdir = "var/log/metricgenerator"
             self.filename = "metric.log"
             self.socket = "tcp://127.0.0.1:5522"
@@ -41,14 +43,14 @@ class Constants:
         try:
             configWriter.CreateConfigFile("Constants", "LogDir", logdir)
         except:
-            monitorLog.logError("Cannot update config file : " + `configFile` + traceback.format_exc())
+            log.error("Cannot update config file : " + `configFile`)
             pass
 
     def getLogDir(self):
         try:
             self.logdir = self.configReader.getValue("Constants", "LogDir")
         except Exception:
-            monitorLog.logError("Cannot get LogDir" + traceback.format_exc())
+            log.error("Cannot get LogDir")
             pass
         return self.logdir
 
@@ -56,7 +58,7 @@ class Constants:
         try:
             self.filename = self.configReader.getValue("Constants", "Filename")
         except Exception:
-            monitorLog.logError("Cannot get filename from config file" + traceback.format_exc())
+            log.error("Cannot get filename from config file")
             pass
         return self.filename
 
@@ -64,7 +66,7 @@ class Constants:
         try:
             self.socket = self.configReader.getValue("Constants", "Socket")
         except Exception:
-            monitorLog.logError("Cannot get socket" + traceback.format_exc())
+            log.error("Cannot get socket")
             pass
         return self.socket
 
@@ -73,7 +75,7 @@ class Constants:
         try:
             return socket.gethostname()
         except:
-            monitorLog.logError("Cannot get hostname" + traceback.format_exc())
+            log.error("Cannot get hostname")
             return None
 
     @staticmethod

@@ -1,0 +1,2 @@
+Modify log file path in file "metricgenerator" to '<log-directory>/archive'. log-directory as specified in consumer.cfg
+copy file "metricgenerator" to "/etc/logrotate.d" to enable file rotation and archival of old logs.
