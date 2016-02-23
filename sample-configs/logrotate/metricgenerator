@@ -1,0 +1,10 @@
+/home/asmi/monitor-common/test/logs/archive/*[^\.][^g][^z] {
+    missingok
+    daily
+    rotate 7
+    maxage 30
+    compress
+    dateext
+    nocreate
+    notifempty
+}
