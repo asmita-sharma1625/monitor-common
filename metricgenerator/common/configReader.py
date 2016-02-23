@@ -1,6 +1,7 @@
 import ConfigParser
-#import configWriter
-from monitorLog import monitorLog
+import logging
+
+log = logging.getLogger("metricgenerator")
 
 class ConfigReader:
     config = ConfigParser.RawConfigParser()
@@ -15,7 +16,7 @@ class ConfigReader:
         try:
             value = self.config.get(section, key)
         except ConfigParser.NoSectionError as error:
-            monitorLog.logError("Cannot get LogDir", error)
+            log.error("Cannot get LogDir", error)
             raise Exception("Cannot get LogDir")
         return value
 

@@ -4,8 +4,8 @@ import socket
 import json
 from common.Constants import Constants
 from common.handler import Handler
-from common.monitorLog import monitorLog
-import traceback
+
+log = logging.getLogger("metricgenerator")
 
 class LogHandler:
 
@@ -13,7 +13,7 @@ class LogHandler:
         try:
             self.handler = Handler(service, configFile)
         except Exception:
-            monitorLog.logError("Cannot Instantiate Handler with configFile : " + `configFile` + traceback.format_exc())
+            log.error("Cannot Instantiate Handler with configFile : " + `configFile`)
             raise Exception("Cannot Instantiate Handler with configFile : " + `configFile`)
         ''' Subscriber is now an independent process , hence following lines are commented '''
         self.commonLog = Constants.createDictCommon(service)
@@ -27,7 +27,7 @@ class LogHandler:
             logger = self.handler.getLogHandler()
             queueHandler = self.handler.getQueueHandler()
         except Exception:
-            monitorLog.logError("Cannot instanstiate ZMQ handler with given context" + traceback.format_exc())
+            log.error("Cannot instanstiate ZMQ handler with given context")
             raise Exception("Cannot instanstiate ZMQ handler with given context")
         try:
             with queueHandler:
@@ -37,7 +37,7 @@ class LogHandler:
                 logger.log(severity,
                            json.dumps(customLogDict))
         except Exception:
-            monitorLog.logError("Failure to append Log: " + json.dumps(msg) + traceback.format_exc())
+            log.error("Failure to append Log: " + json.dumps(msg))
             raise Exception("Failure to append log: " + json.dumps(msg))
 
     def appendFailCountLog(self, name, count, severity, addOnInfoPairs = {}):
@@ -46,7 +46,7 @@ class LogHandler:
         try:
             self.appendLog(msg, severity)
         except Exception:
-            monitorLog.logError("Failure to append Count Log: " + json.dumps(msg) + traceback.format_exc())
+            log.error("Failure to append Count Log: " + json.dumps(msg))
             raise Exception("Failure to append Count log: " + json.dumps(msg))
 
     def appendCountLog(self, name, count, severity, addOnInfoPairs = {}):
@@ -55,7 +55,7 @@ class LogHandler:
         try:
             self.appendLog(msg, severity)
         except Exception:
-            monitorLog.logError("Failure append Count Log: " + json.dumps(msg) + traceback.format_exc())
+            log.error("Failure append Count Log: " + json.dumps(msg))
             raise Exception("Failure to append Count log: " + json.dumps(msg))
 
     def appendTimeLog(self, name, runtime, severity = 20, addOnInfoPairs = {}):
@@ -66,7 +66,7 @@ class LogHandler:
         try:
             self.appendLog(msg, severity)
         except Exception:
-            monitorLog.logError("Failure to append Time Log: " + json.dumps(msg) + traceback.format_exc())
+            log.error("Failure to append Time Log: " + json.dumps(msg))
             raise Exception("Failure to append Time log: " + json.dumps(msg))
 
     '''
@@ -83,6 +83,6 @@ class LogHandler:
                         customDict = Constants.addKeyValue(key,
                                                        getattr(args[int(i)], key), customDict)
         except:
-            monitorLog.logError("Error while appending keys to log record :" + `listOfKeys` + traceback.format_exc())
+            log.error("Error while appending keys to log record :" + `listOfKeys`)
             raise Exception("Error while appending keys to log record :" + `listOfKeys`)
         return customDict

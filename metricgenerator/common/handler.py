@@ -4,9 +4,9 @@ from metricgenerator.common.Constants import Constants
 from logbook.compat import RedirectLoggingHandler
 from metricgenerator.common.zeroMQHandler import MyZeroMQHandler
 from metricgenerator.common.configReader import ConfigReader
-from metricgenerator.common.monitorLog import monitorLog
 import zmq
-import traceback
+
+log = logging.getLogger("metricgenerator")
 
 class Handler:
 
@@ -17,7 +17,7 @@ class Handler:
             self.constants = Constants(configFile)
             self.directory = os.path.join(self.constants.getLogDir(), os.path.join(Constants.getHostname(), service))
         except Exception:
-            monitorLog.logError("Could not retrieve logging directory from config file :" + `configFile` + traceback.format_exc())
+            log.error("Could not retrieve logging directory from config file :" + `configFile`)
             pass
         if not os.path.exists(self.directory):
                 os.makedirs(self.directory)

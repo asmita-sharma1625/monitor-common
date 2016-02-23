@@ -1,6 +1,8 @@
 from logbook.queues import ZeroMQHandler
-from monitorLog import monitorLog
 import zmq
+import logging
+
+log = logging.getLogger("metricgenerator")
 
 class MyZeroMQHandler:
     def __init__(self, socket, zmqcontext):
@@ -11,7 +13,7 @@ class MyZeroMQHandler:
             self.handler = ZeroMQHandler(socket, context = zmqcontext, multi = True)
             #print "ZeroMQHandler instantiated"
         except zmq.error.ZMQError as error:
-            monitorLog.logError("Incorrect Context to ZMQ Handler : " + socket, error)
+            log.error("Incorrect Context to ZMQ Handler : " + socket, error)
             raise Exception("Incorrect Context to ZMQ Handler : " + socket)
 
     def getZeroMQHandler(self):

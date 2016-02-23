@@ -8,7 +8,7 @@ from metricgenerator.common.configReader import ConfigReader
 from metricgenerator import s3Dao
 import logging, logging.handlers
 import sys
-import traceback
+
 
 log = logging.getLogger('Consumer')
 log.addHandler(logging.NullHandler())

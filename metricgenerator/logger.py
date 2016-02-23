@@ -1,11 +1,10 @@
-
-#Any common dependencies
 import time
 import threading
+import logging
 from logHandler import LogHandler
-from common.monitorLog import monitorLog
 from common.exceptions import IncorrectConfigException, LoggingException
-import traceback
+
+log = logging.getLogger("metricgenerator")
 
 class Logger:
     '''
@@ -24,8 +23,8 @@ class Logger:
             #print "logger instantiated"
             self.logHandler = LogHandler(service, configFile)
         except Exception:
-            monitorLog.logError("Cannot Instantiate Logger with configFile : " + `configFile` + traceback.format_exc())
-            raise IncorrectConfigException("Cannot Instantiate Logger with configFile : " + `configFile` + traceback.format_exc())
+            log.error("Cannot Instantiate Logger with configFile : " + `configFile`)
+            raise IncorrectConfigException("Cannot Instantiate Logger with configFile : " + `configFile`)
         self.threadLocal = threading.local()
         self.counter = 0;
 
@@ -41,7 +40,7 @@ class Logger:
                 #print "logging failure"
                 self.logHandler.appendFailCountLog(name, count, severity)
             except Exception:
-                monitorLog.logError("Failed to append log for metric: " + name + traceback.format_exc())
+                log.error("Failed to append log for metric: " + name)
                 raise LoggingException("Failed to append log for metric: " + name)
         return count
     '''
@@ -56,7 +55,7 @@ class Logger:
                 self.logHandler.appendFailCountLog(name, counter, severity, addOnInfoPairs)
                 #print "logging failure"
             except Exception:
-                monitorLog.logError("Failed to append log for metric: " + name + traceback.format_exc())
+                log.error("Failed to append log for metric: " + name)
                 raise LoggingException("Failed to append log for metric: " + name)
             return 1
         return 0
@@ -71,7 +70,7 @@ class Logger:
                 '''
                 self.logHandler.appendCountLog(name, counter, severity, addOnInfoPairs)
             except Exception:
-                monitorLog.logError("Failed to append log for metric: " + name + traceback.format_exc())
+                log.error("Failed to append log for metric: " + name)
                 raise LoggingException("Failed to append log for metric: " + name)
             return 1
         return 0
@@ -122,7 +121,7 @@ class Logger:
             '''
             self.logHandler.appendTimeLog(name, runTime, severity, addOnInfoPairs)
         except Exception:
-            monitorLog.logError("Failed to append log for metric: " + name + traceback.format_exc())
+            log.error("Failed to append log for metric: " + name)
             raise LoggingException("Failed to append log for metric: " + name)
 
     '''
@@ -133,13 +132,13 @@ class Logger:
             if listOfKeys is not '{}':
                 keyValuePairs = self.logHandler.appendKeysToLog(listOfKeys, *args)
         except: 
-            monitorLog("Error while appending keys to log record :" + `listOfKeys` + traceback.format_exc())
+            log.error("Error while appending keys to log record :" + `listOfKeys`)
             pass
         self.startTime()
         try:
             actualReturn = action(*args, **kwargs)
         except Exception:
-            monitorLog.logError("Failed Action " + `action` + traceback.format_exc())
+            log.error("Failed Action " + `action`)
             raise Exception("Failed Action :" + `action`)
         self.reportTime(name, severity, keyValuePairs)
         return actualReturn
