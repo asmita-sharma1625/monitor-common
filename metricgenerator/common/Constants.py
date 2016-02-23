@@ -3,6 +3,7 @@ import socket
 from configReader import ConfigReader
 import configWriter
 from monitorLog import monitorLog
+import traceback
 
 '''
 		Declares constants.
@@ -27,71 +28,54 @@ class Constants:
     DELIMITER = "\n"
 
     def __init__(self, configFile):
-        self.configReader = ConfigReader(configFile)
+        try:
+            self.configReader = ConfigReader(configFile)
+        except:
+            monitorLog.logError("Cannot find config file : " + `configFile` + traceback.format_exc())
+            self.logdir = "var/log/metricgenerator"
+            self.filename = "metric.log"
+            self.socket = "tcp://127.0.0.1:5522"
+            pass
 
     def setLogDir(self, logdir):
-        configWriter.CreateConfigFile("Constants", "LogDir", logdir)
+        try:
+            configWriter.CreateConfigFile("Constants", "LogDir", logdir)
+        except:
+            monitorLog.logError("Cannot update config file : " + `configFile` + traceback.format_exc())
+            pass
 
     def getLogDir(self):
         try:
-            logdir = self.configReader.getValue("Constants", "LogDir")
-        except Exception as error:
-            monitorLog.logError("Cannot get LogDir", error)
-            raise error("Cannot get LogDir")
-        return logdir
+            self.logdir = self.configReader.getValue("Constants", "LogDir")
+        except Exception:
+            monitorLog.logError("Cannot get LogDir" + traceback.format_exc())
+            pass
+        return self.logdir
 
     def getFilename(self):
         try:
-            filename = self.configReader.getValue("Constants", "Filename")
-        except Exception as error:
-            monitorLog.logError("Cannot get filename", error)
-            raise error("Cannot get filename")
-        return filename
+            self.filename = self.configReader.getValue("Constants", "Filename")
+        except Exception:
+            monitorLog.logError("Cannot get filename from config file" + traceback.format_exc())
+            pass
+        return self.filename
 
     def getSocket(self):
         try:
-            socket = self.configReader.getValue("Constants", "Socket")
-        except Exception as error:
-            monitorLog.logError("Cannot get socket", error)
-            raise error("Cannot get socket")
-        return socket
+            self.socket = self.configReader.getValue("Constants", "Socket")
+        except Exception:
+            monitorLog.logError("Cannot get socket" + traceback.format_exc())
+            pass
+        return self.socket
 
-    '''
-        Get hostname.
-    '''
     @staticmethod
     def getHostname():
         try:
-            hostname = socket.gethostname()
-        except Exception as error:
-            monitorLog.logError("Cannot get hostname", error)
-            raise error("Cannot get hostname")
-        return hostname
-    '''
-    @staticmethod
-    def toStringCommon (service):
-        return Constants.HOST + Constants.SEPARATOR + Constants.getHostname() + Constants.DELIMITER + Constants.SERVICE + Constants.SEPARATOR + service + Constants.DELIMITER
+            return socket.gethostname()
+        except:
+            monitorLog.logError("Cannot get hostname" + traceback.format_exc())
+            return None
 
-    @staticmethod
-    def appendTimestamp (string):
-        return string + Constants.TIME + Constants.SEPARATOR + `time.time()` + Constants.DELIMITER
-
-    @staticmethod
-    def toStringRuntime (name, mType, runtime, severity):
-        return Constants.appendSeverity ( Constants.appendTimestamp ( Constants.prependMetricInfo ( name, mType, Constants.METRIC_VALUE + Constants.SEPARATOR + `runtime` + Constants.DELIMITER ) ), severity )
-
-    @staticmethod
-    def toStringCount (name, mType, count, severity):
-        return Constants.appendSeverity ( Constants.appendTimestamp ( Constants.prependMetricInfo ( name, mType, Constants.METRIC_VALUE + Constants.SEPARATOR + `count` + Constants.DELIMITER) ), severity )
-
-    @staticmethod
-    def prependMetricInfo(name, mType, string):
-        return Constants.METRIC_NAME + Constants.SEPARATOR + name + Constants.DELIMITER + Constants.METRIC_TYPE + Constants.SEPARATOR + mType + Constants.DELIMITER + string
-
-    @staticmethod
-    def appendSeverity(string, severity):
-        return string + Constants.SEVERITY + Constants.SEPARATOR + `severity` + Constants.DELIMITER
-    '''
     @staticmethod
     def createDictCommon (service):
         commonDict = {

@@ -6,9 +6,9 @@ import logging
 from logging import handlers
 
 class monitorLog:
-    logger = logging.getLogger("metric-generator")
+    logger = logging.getLogger("metricgenerator")
     logger.setLevel(logging.INFO)
-    directory = "/tmp/metric-generator/"
+    directory = "/var/log/metricgenerator/metricgenerator"
     if not os.path.exists(directory):
                 os.makedirs(directory)
     #logger.addHandler(logging.FileHandler())
@@ -19,5 +19,5 @@ class monitorLog:
         monitorLog.logger.info(msg)
 
     @staticmethod
-    def logError(msg, error):
-        monitorLog.logger.error("Message: " + msg + "Error: " + `logging.exception(error)`)
+    def logError(msg):
+        monitorLog.logger.error(msg)
