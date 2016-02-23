@@ -6,6 +6,7 @@ from logHandler import LogHandler
 from common.monitorLog import monitorLog
 from common.exceptions import IncorrectConfigException, LoggingException
 import traceback
+
 class Logger:
     '''
     #beyond these, email will be triggered.
@@ -18,13 +19,13 @@ class Logger:
             - Creates LogHandler instance to write metrics to log file.
             - Creates threading.local() instance to create thread specific variables.
     '''
-    def __init__ (self, service, configFile):
+    def __init__ (self, service, configFile = None):
         try:
             #print "logger instantiated"
             self.logHandler = LogHandler(service, configFile)
-        except Exception as error:
-            monitorLog.logError("Cannot Instantiate Logger with configFile : " + configFile, `error`)
-            raise IncorrectConfigException("Cannot Instantiate Logger with configFile : " + configFile)
+        except Exception:
+            monitorLog.logError("Cannot Instantiate Logger with configFile : " + `configFile` + traceback.format_exc())
+            raise IncorrectConfigException("Cannot Instantiate Logger with configFile : " + `configFile` + traceback.format_exc())
         self.threadLocal = threading.local()
         self.counter = 0;
 
@@ -39,8 +40,8 @@ class Logger:
             try:
                 #print "logging failure"
                 self.logHandler.appendFailCountLog(name, count, severity)
-            except Exception as error:
-                monitorLog.logError("Failed to append log for metric: " + name, `error`)
+            except Exception:
+                monitorLog.logError("Failed to append log for metric: " + name + traceback.format_exc())
                 raise LoggingException("Failed to append log for metric: " + name)
         return count
     '''
@@ -54,8 +55,8 @@ class Logger:
                 '''
                 self.logHandler.appendFailCountLog(name, counter, severity, addOnInfoPairs)
                 #print "logging failure"
-            except Exception as error:
-                monitorLog.logError("Failed to append log for metric: " + name, `error`)
+            except Exception:
+                monitorLog.logError("Failed to append log for metric: " + name + traceback.format_exc())
                 raise LoggingException("Failed to append log for metric: " + name)
             return 1
         return 0
@@ -69,8 +70,8 @@ class Logger:
                     self.logHandler.appendCountLog(name, counter,  50)
                 '''
                 self.logHandler.appendCountLog(name, counter, severity, addOnInfoPairs)
-            except Exception as error:
-                monitorLog.logError("Failed to append log for metric: " + name, `error`)
+            except Exception:
+                monitorLog.logError("Failed to append log for metric: " + name + traceback.format_exc())
                 raise LoggingException("Failed to append log for metric: " + name)
             return 1
         return 0
@@ -120,23 +121,27 @@ class Logger:
                 self.logHandler.appendTimeLog(name, runTime, 50)
             '''
             self.logHandler.appendTimeLog(name, runTime, severity, addOnInfoPairs)
-        except Exception as error:
-            monitorLog.logError("Failed to append log for metric: " + name, `error`)
-            raise LoggingException("Failed to append log for metric: " + name+traceback.format_exc())
+        except Exception:
+            monitorLog.logError("Failed to append log for metric: " + name + traceback.format_exc())
+            raise LoggingException("Failed to append log for metric: " + name)
 
     '''
         Logs the execution time of the given action and returns the value of action.
     '''
     def reportLatency (self, name, action, severity = 20,listOfKeys = [], *args, **kwargs):
-        if listOfKeys is not []:
-            keyValuePairs = self.logHandler.appendKeysToLog(listOfKeys, *args)
+        try:
+            if listOfKeys is not []:
+                keyValuePairs = self.logHandler.appendKeysToLog(listOfKeys, *args)
+        except:
+            monitorLog("Error while appending keys to log record :" + `listOfKeys` + traceback.format_exc())
+            pass
         #print "key vaue pairs", keyValuePairs
         self.startTime()
         try:
             #print "inside report Latency for metric name - ", name
             actualReturn = action(*args, **kwargs)
-        except Exception as error:
-            monitorLog.logError("Failed Action " + `action`, `error`)
+        except Exception:
+            monitorLog.logError("Failed Action " + `action` + traceback.format_exc())
             raise Exception("Failed Action :" + `action`)
         self.reportTime(name, severity, keyValuePairs)
         return actualReturn

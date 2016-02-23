@@ -2,7 +2,7 @@ from metricgenerator.logger import Logger
 
 class Publish:
 
-    def __init__(self, service, configFile):
+    def __init__(self, service, configFile = None):
         self.logger = Logger(service, configFile)
 
     #TODO :  make changes for logIfFAil
