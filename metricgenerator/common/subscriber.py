@@ -43,6 +43,8 @@ def parseEmitMetrics (msg):
         c.timing(metricName, customDict[Constants.METRIC_VALUE])
     elif customDict[Constants.METRIC_TYPE] == Constants.COUNT:
         c.incr(metricName)
+    elif customDict[Constants.METRIC_TYPE] == Constants.FAILCOUNT:
+        c.incr(metricName)
 
 try:
     subscriber = ZeroMQSubscriber(SOCKET, multi = True)

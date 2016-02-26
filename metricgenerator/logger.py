@@ -46,7 +46,7 @@ class Logger:
         return count
     '''
 
-    def logFailure (self, name, counter, severity = 20, addOnInfoPairs = {}):
+    def logFailure (self, name, counter = 1, severity = 20, addOnInfoPairs = {}):
         if counter > 0:
             try:
                 '''
@@ -61,7 +61,7 @@ class Logger:
             return 1
         return 0
 
-    def logCount (self, name, counter, severity = 20, addOnInfoPairs = {}):
+    def logCount (self, name, counter = 1, severity = 20, addOnInfoPairs = {}):
         if counter > 0:
             try:
                 #print "inside logCount method for metric name - ", name
@@ -133,7 +133,7 @@ class Logger:
         try:
             if listOfKeys is not '{}':
                 keyValuePairs = self.logHandler.appendKeysToLog(listOfKeys, *args)
-        except: 
+        except:
             log.error("Error while appending keys to log record :" + `listOfKeys`)
             pass
         self.startTime()

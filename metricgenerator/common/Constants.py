@@ -18,7 +18,7 @@ class Constants:
     #FILENAME = ConfigReader.getValue("Constants", "Filename")
     #SOCKET = ConfigReader.getValue("Constants", "Socket")
     RUNTIME = "Runtime" #this will be measured in miliseconds
-    FAILCOUNT = "Failure Count"
+    FAILCOUNT = "Failure"
     COUNT = "Counter"
 # Use constants for metric type
     METRIC_TYPE = "Metric Type"
