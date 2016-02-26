@@ -6,7 +6,7 @@ from logging import handlers
 def configure_logging(logformat, logfile):
     logger = logging.getLogger("metricgenerator")
     open(logfile, "a").close()
-    os.chmod(logfile, 0666)
+    #os.chmod(logfile, 0666)
     logger.setLevel(logging.DEBUG)
     ''' configure logger'''
     formatter = logging.Formatter(logformat)
