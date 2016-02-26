@@ -137,10 +137,7 @@ class Logger:
             log.error("Error while appending keys to log record :" + `listOfKeys`)
             pass
         self.startTime()
-        try:
-            actualReturn = action(*args, **kwargs)
-        except Exception:
-            log.error("Failed Action " + `action`)
-            #raise Exception("Failed Action :" + `action`)
+        actualReturn = action(*args, **kwargs)
+        #raise Exception("Failed Action :" + `action`)
         self.reportTime(name, severity, keyValuePairs)
         return actualReturn
