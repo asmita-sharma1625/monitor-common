@@ -6,7 +6,7 @@ log = logging.getLogger("metricgenerator")
 
 class MyZeroMQHandler:
     def __init__(self, socket, zmqcontext):
-        print "queue socket : ", socket
+        #print "queue socket : ", socket
         # multi = True to for connect() instead of bind() call on socket
         try:
             #print "@@@@@@@@@@@@@@ not using socket"
