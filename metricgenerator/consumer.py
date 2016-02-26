@@ -26,7 +26,7 @@ class Consumer(object):
             return False
         return True
 
-    def __init__(self, path, interval = None, deleterotatedfiles=True, target_path=None):
+    def __init__(self, path, interval = 600, deleterotatedfiles=True, target_path=None):
         log.debug("Consumer instantiated")
         self.path = path
         self.deleterotatedfiles = deleterotatedfiles
@@ -89,7 +89,7 @@ class Consumer(object):
 
 
 class ObjectStorageConsumer(Consumer):
-    def __init__(self, bucket, path, interval = None, deleterotatedfiles=True, target_path=None):
+    def __init__(self, bucket, path, interval = 600, deleterotatedfiles=True, target_path=None):
         super(ObjectStorageConsumer, self).__init__(path, interval, deleterotatedfiles, target_path)
         log.debug("Object Store Consumer instantiated")
         self.s3Dao = s3Dao.S3Dao()

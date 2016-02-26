@@ -1,9 +1,11 @@
 import time
 import socket
+import os
 from configReader import ConfigReader
 import configWriter
 import logging
 import monitorLog
+import traceback
 
 log = logging.getLogger("metricgenerator")
 
@@ -28,47 +30,72 @@ class Constants:
     METRIC_VALUE = "Metric Value"
     SEPARATOR = " : "
     DELIMITER = "\n"
+    logdir = "/var/log/metricgenerator"
+    filename = "metric.log"
+    mylogpath = "/var/log/metricgenerator/metricgenerator.log"
+    socket = "tcp://127.0.0.1:5522"
+    mylogformat = "%(asctime)s - %(name)s - %(pathname)s - %(funcName)s -%(thread)d - %(levelname)s - %(message)s"
 
     def __init__(self, configFile):
         try:
             self.configReader = ConfigReader(configFile)
         except:
-            log.error("Cannot find config file : " + `configFile`)
-            self.logdir = "var/log/metricgenerator"
-            self.filename = "metric.log"
-            self.socket = "tcp://127.0.0.1:5522"
-            pass
-
-    def setLogDir(self, logdir):
-        try:
-            configWriter.CreateConfigFile("Constants", "LogDir", logdir)
-        except:
-            log.error("Cannot update config file : " + `configFile`)
-            pass
+            print "ERROR: Unable to find config file : " + `configFile`
+            raise Exception("ERROR: Unable to find config file : " + `configFile`)
+        finally:
+            try:
+                monitorLog.configure_logging(self.getMyLogFormat(), self.getMyLogPath())
+            except:
+                print "ERROR : Unable to configure logging.", traceback.format_exc()
+                raise Exception("ERROR : Unable to configure logging.")
 
     def getLogDir(self):
         try:
-            self.logdir = self.configReader.getValue("Constants", "LogDir")
+            logdir = self.configReader.getValue("Constants", "LogDir")
         except Exception:
             log.error("Cannot get LogDir")
+            logdir = Constants.logdir
             pass
-        return self.logdir
+        return logdir
 
     def getFilename(self):
         try:
-            self.filename = self.configReader.getValue("Constants", "Filename")
+            filename = self.configReader.getValue("Constants", "filename")
         except Exception:
-            log.error("Cannot get filename from config file")
+            log.error("Cannot get filename from config")
+            filename = Constants.filename
             pass
-        return self.filename
+        return filename
+
+
+    def getMyLogFormat(self):
+        try:
+            mylogformat = self.configReader.getValue("Constants", "MyLogFormat")
+        except Exception:
+            log.error("Cannot get my log format")
+            mylogformat = Constants.mylogformat
+            pass
+        return mylogformat
+
+    def getMyLogPath(self):
+        try:
+            mylogdir = self.configReader.getValue("Constants", "MyLogDir")
+            mylogfile = self.configReader.getValue("Constants", "MyLogFile")
+            mylogpath = os.path.join(mylogdir, mylogfile)
+        except:
+            log.error("Cannot get my log path")
+            mylogpath = Constants.mylogpath
+            pass
+        return mylogpath
 
     def getSocket(self):
         try:
-            self.socket = self.configReader.getValue("Constants", "Socket")
+            socket = self.configReader.getValue("Constants", "Socket")
         except Exception:
             log.error("Cannot get socket")
+            socket = Constants.socket
             pass
-        return self.socket
+        return socket
 
     @staticmethod
     def getHostname():

@@ -20,11 +20,12 @@ class Logger:
     '''
     def __init__ (self, service, configFile = None):
         try:
-            #print "logger instantiated"
             self.logHandler = LogHandler(service, configFile)
+            log.debug("logger instantiated")
         except Exception:
             log.error("Cannot Instantiate Logger with configFile : " + `configFile`)
-            raise IncorrectConfigException("Cannot Instantiate Logger with configFile : " + `configFile`)
+            #raise IncorrectConfigException("Cannot Instantiate Logger with configFile : " + `configFile`)
+            pass
         self.threadLocal = threading.local()
         self.counter = 0;
 
@@ -56,7 +57,7 @@ class Logger:
                 #print "logging failure"
             except Exception:
                 log.error("Failed to append log for metric: " + name)
-                raise LoggingException("Failed to append log for metric: " + name)
+                #raise LoggingException("Failed to append log for metric: " + name)
             return 1
         return 0
 
@@ -71,7 +72,7 @@ class Logger:
                 self.logHandler.appendCountLog(name, counter, severity, addOnInfoPairs)
             except Exception:
                 log.error("Failed to append log for metric: " + name)
-                raise LoggingException("Failed to append log for metric: " + name)
+                #raise LoggingException("Failed to append log for metric: " + name)
             return 1
         return 0
 
@@ -122,12 +123,13 @@ class Logger:
             self.logHandler.appendTimeLog(name, runTime, severity, addOnInfoPairs)
         except Exception:
             log.error("Failed to append log for metric: " + name)
-            raise LoggingException("Failed to append log for metric: " + name)
+            #raise LoggingException("Failed to append log for metric: " + name)
 
     '''
         Logs the execution time of the given action and returns the value of action.
     '''
     def reportLatency (self, name, action, severity = 20,listOfKeys = '{}', *args, **kwargs):
+        keyValuePairs = {}
         try:
             if listOfKeys is not '{}':
                 keyValuePairs = self.logHandler.appendKeysToLog(listOfKeys, *args)
@@ -139,6 +141,6 @@ class Logger:
             actualReturn = action(*args, **kwargs)
         except Exception:
             log.error("Failed Action " + `action`)
-            raise Exception("Failed Action :" + `action`)
+            #raise Exception("Failed Action :" + `action`)
         self.reportTime(name, severity, keyValuePairs)
         return actualReturn
