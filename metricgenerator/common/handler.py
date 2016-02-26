@@ -15,10 +15,10 @@ class Handler:
     def __init__(self, service, configFile):
         try:
             self.constants = Constants(configFile)
-            self.directory = os.path.join(self.constants.getLogDir(), os.path.join(Constants.getHostname(), service))
+            self.directory = self.constants.getLogDir()
         except Exception:
             log.error("Could not retrieve logging directory from config file :" + `configFile`)
-            pass
+            raise Exception("Could not retrieve logging directory from config file :" + `configFile`)
         if not os.path.exists(self.directory):
                 os.makedirs(self.directory)
         self.service = service
