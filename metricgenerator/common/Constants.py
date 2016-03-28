@@ -32,7 +32,7 @@ class Constants:
     DELIMITER = "\n"
     logdir = "/var/log/metricgenerator"
     filename = "metric.log"
-    mylogpath = "/var/log/metricgenerator/metricgenerator.log"
+    mylogpath = "/tmp/metricgenerator.log"
     socket = "tcp://127.0.0.1:5522"
     mylogformat = "%(asctime)s - %(name)s - %(pathname)s - %(funcName)s -%(thread)d - %(levelname)s - %(message)s"
 

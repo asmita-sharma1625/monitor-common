@@ -23,6 +23,7 @@ class Handler:
                 os.makedirs(self.directory)
         self.service = service
         self.logger = logging.getLogger(self.service)
+        self.logger.propagate = False
         self.logger.setLevel(logging.INFO)
         if not len(self.logger.handlers):
             self.logger.addHandler(RedirectLoggingHandler())
@@ -30,6 +31,7 @@ class Handler:
 
     def getLogHandler(self):
         logger = logging.getLogger(self.service)
+        #print "Handlers:", logger.handlers()
         return logger
 
 
