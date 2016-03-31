@@ -8,11 +8,12 @@ from metricgenerator.common.configReader import ConfigReader
 from metricgenerator import s3Dao
 import logging, logging.handlers
 import sys
-
+import traceback
 
 log = logging.getLogger('Consumer')
 log.addHandler(logging.NullHandler())
 log.setLevel(logging.DEBUG)
+
 
 class Consumer(object):
 
@@ -35,7 +36,6 @@ class Consumer(object):
         if not os.path.exists(self.archive_path):
             os.makedirs(self.archive_path)
 
-        self.current_time = time.time()
         self.interval = int(interval)
 
         if target_path is not None:
@@ -44,6 +44,7 @@ class Consumer(object):
             self.dest_path = socket.gethostname()
 
     def list_of_logs(self):
+        #current_time = time.time()
         log.debug("Searching for files")
         list_of_files = []
         for (dirpath, dirname, filename) in os.walk(self.path):
@@ -52,7 +53,7 @@ class Consumer(object):
                     abs_file = os.path.join(dirpath, files)
                     try:
                         log_time = os.path.getmtime(abs_file)
-                        time_delta = (self.current_time - log_time) / self.interval
+                        time_delta = (time.time() - log_time) / self.interval
                         if time_delta > 1:
                             list_of_files.append(abs_file)
                     except os.error:
@@ -68,8 +69,11 @@ class Consumer(object):
         return self.doTask(filename, relpath)
         #Temporary just make an entry into the file.
 
-    def do_delete(self, filename):
+    def do_rename(self, filename):
         os.rename(filename, os.path.join(self.archive_path, os.path.basename(filename)))
+
+    def do_delete(self, filename):
+        os.remove(filename)
 
     def consume_each_file(self, filename):
         #Relative path from the given path to maintain hierarchy.
@@ -80,6 +84,8 @@ class Consumer(object):
         else:
             if self.deleterotatedfiles:
                 self.do_delete(filename)
+            else:
+                self.do_rename(filename)
 
     def consume(self):
         #Get list of file names
@@ -87,9 +93,16 @@ class Consumer(object):
         log.debug("Files to be consumed : - " + `file_names`)
         map(self.consume_each_file, file_names)
 
+    def filesplitter(self, filename, target_path):
+        path = os.path.join(target_path, os.path.relpath(filename, self.path))
+        dirname = os.path.dirname(path)
+        if not os.path.exists(dirname):
+            os.makedirs(dirname)
+        print "-----------------------------------", filename, path
+        os.system('split --lines=10000 --numeric-suffixes --suffix-length=4' + " " +  filename + " " + path)
 
 class ObjectStorageConsumer(Consumer):
-    def __init__(self, bucket, path, interval = 600, deleterotatedfiles=True, target_path=None):
+    def __init__(self, bucket, path, interval = 600, deleterotatedfiles=False, target_path=None):
         super(ObjectStorageConsumer, self).__init__(path, interval, deleterotatedfiles, target_path)
         log.debug("Object Store Consumer instantiated")
         self.s3Dao = s3Dao.S3Dao()
@@ -168,8 +181,19 @@ if __name__ == '__main__':
     log.debug("LOGFILE  : " + `LOGFILE`)
     log.debug("TARGET_PATH : " + `TARGET_PATH`)
 
+    splitter_temp_dir = "/tmp/consumer"
+    if not os.path.exists(splitter_temp_dir):
+        os.makedirs(splitter_temp_dir)
+
+    chunk_bucket = BUCKET+"-chunked"
+
     log.debug("Instantiating Consumer")
     '''instantiate consumer'''
+    chunk_consumer = ObjectStorageConsumer(chunk_bucket, splitter_temp_dir, interval = 1, target_path = TARGET_PATH, deleterotatedfiles = True)
     consumer = ObjectStorageConsumer(BUCKET, SOURCE_DIR, interval = INTERVAL, target_path = TARGET_PATH)
-    consumer.consume()
+    list_of_files = consumer.list_of_logs()
+    for filename in list_of_files:
+        consumer.filesplitter(filename, splitter_temp_dir)
+        consumer.consume_each_file(filename)
+    chunk_consumer.consume()
     log.debug("Consumer finished successfully")
